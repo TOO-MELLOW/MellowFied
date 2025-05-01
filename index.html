@@ -11,9 +11,13 @@
 
   <style>
     :root {
-      --text-color: #ffffff;
-      --section-radius: 16px;
-    }
+  --primary: #00B4D8;
+  --secondary: #90E0EF;
+  --accent: #0077B6;
+  --light-bg: rgba(255, 255, 255, 0.1);
+  --text-light: #ffffff;
+  --dark-bg: #1e1e2f;
+}
 
     * {
       box-sizing: border-box;
@@ -21,12 +25,25 @@
       padding: 0;
     }
 
+/* Animated Background */
+.animated-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  overflow: hidden;
+  background: linear-gradient(-45deg, #FF0080); 
+  background-size: 400% 400%;
+  animation: gradientBG 20s ease infinite;
+}
     html, body {
       font-family: 'Poppins', sans-serif;
       height: 100%;
       overflow-x: hidden;
       color: var(--text-color);
-      background: linear-gradient(-45deg,#1B1464, #4BCFFA, #FF6B00,rgb(23,164,162),#f56c20cc,#eff49bcc,#62d45be3,rgb(233,87,87),rgb(217,241,106),rgb(249,225,191),rgb(108,110,7),rgba(48,200,94,0.863),rgba(169,45,185,0.863), #FF0080);
+      background: linear-gradient(-45deg,#1B1464,#4BCFFA,#FF6B00,rgb(23,164,162),rgb(233,87,87),rgb(217,241,106),rgb(249,225,191),rgb(108,110,7),#f436eaca, #FF0080);
       background-size: 400% 400%;
       animation: gradientBG 20s ease infinite;
     }
@@ -35,7 +52,15 @@
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
+        
     }
+    .icon {
+  position: absolute;
+  font-size: 2rem;
+  color: white;
+  opacity: 0.2;
+  pointer-events: none;
+}
 
     section {
       background: rgba(0, 0, 0, 0.5);
@@ -77,6 +102,66 @@
       margin-bottom: 1.5rem;
       font-size: 1.8rem;
     }
+    .floating-logo {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+}
+
+.floating-logo img {
+  height: 80px;
+  width: auto;
+  animation: float 4s ease-in-out infinite;
+}
+
+.about-section {
+  padding: 4rem 2rem;
+  background: #df227aca,#df2255ca;
+  color: #49df22ca;
+  font-family: 'Inter', sans-serif;
+  animation: fadeIn 1s ease;
+}
+
+.about-section h2,
+.about-section h3 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.vision-mission-values {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.vision-mission-values .item {
+  background: #789ce4ca,#26d6a1ca,#f14db4ca;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.service-card {
+  background: #ffffff;
+  padding: 1rem;
+  border-radius: 1rem;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  font-weight: bold;
+}
+
+.contact-cta {
+  text-align: center;
+  margin-top: 3rem;
+}
 
     .services-grid {
       display: grid;
@@ -174,6 +259,34 @@
   </style>
 </head>
 <body>
+<!-- Floating Logo in Top Left -->
+<div class="floating-logo">
+  <img src="logo-no-background.png" alt="Mellow Tech Logo">
+</div>
+
+<div class="animated-background">
+  <div class="icon"><i class="fab fa-windows"></i></div>
+  <div class="icon"><i class="fas fa-file-word"></i></div>
+  <div class="icon"><i class="fas fa-paint-brush"></i></div>
+  <div class="icon"><i class="fas fa-file-alt"></i></div>
+  <div class="icon"><i class="fas fa-globe"></i></div>
+  <div class="icon"><i class="fas fa-book"></i></div>
+  <div class="icon"><i class="fas fa-unlock-alt"></i></div>
+  <div class="icon"><i class="fas fa-shield-alt"></i></div>
+  <div class="icon"><i class="fas fa-server"></i></div>
+  <div class="icon"><i class="fas fa-tools"></i></div>
+  <div class="icon"><i class="fas fa-database"></i></div>
+  <div class="icon"><i class="fas fa-download"></i></div>
+  <div class="icon"><i class="fas fa-cogs"></i></div>
+  <div class="icon"><i class="fas fa-tachometer-alt"></i></div>
+  <div class="icon"><i class="fas fa-envelope-open-text"></i></div>
+  <div class="icon"><i class="fas fa-briefcase"></i></div>
+  <div class="icon"><i class="fas fa-palette"></i></div>
+  <div class="icon"><i class="fas fa-hashtag"></i></div>
+  <div class="icon"><i class="fas fa-file-powerpoint"></i></div>
+  <div class="icon"><i class="fas fa-poll"></i></div>
+  <div class="icon"><i class="fas fa-file-pdf"></i></div>
+</div>
 
 <header>
   <h1>MellowFied Tech Solutions</h1>
@@ -185,6 +298,33 @@
   <p>Let’s CTRL + ALT + DEL your worries.</p>
 </header>
 
+<section id="about-mellowtech" class="about-section">
+  <div class="container">
+    <h2>About Mellowfied Tech Solutions</h2>
+    <p class="intro">
+      We are a digital innovation hub providing sharp, creative, and mellow technology solutions for the modern world.
+    </p>
+
+    <div class="vision-mission-values">
+      <div class="item">
+        <h3>🌟 Vision</h3>
+        <p>To be the most creative and trusted tech partner in Africa, bringing ideas to life with digital brilliance.</p>
+      </div>
+      <div class="item">
+        <h3>🎯 Mission</h3>
+        <p>Delivering innovative, user-friendly, and futuristic solutions that solve real-world problems.</p>
+      </div>
+      <div class="item">
+        <h3>💡 Core Values</h3>
+        <ul>
+          <li>Creativity</li>
+          <li>Integrity</li>
+          <li>Efficiency</li>
+          <li>Customer Obsession</li>
+        </ul>
+      </div>
+    </div>
+</section>
 <section>
   <h2 class="section-title">👨‍💻 Our Gloriously Nerdy 🤓 Services</h2>
   <div class="services-grid">
@@ -196,16 +336,11 @@
     <div class="service-card"><i class="fas fa-book"></i><span>Assignment Help</span></div>
     <div class="service-card"><i class="fas fa-unlock-alt"></i><span>Password Removal</span></div>
     <div class="service-card"><i class="fas fa-lock-open"></i><span>FRP/Google Lock Bypass</span></div>
-    <div class="service-card"><i class="fas fa-globe-africa"></i><span>Domain Setup</span></div>
     <div class="service-card"><i class="fas fa-tools"></i><span>PC Troubleshooting</span></div>
-    <div class="service-card"><i class="fas fa-database"></i><span>Data Recovery</span></div>
     <div class="service-card"><i class="fas fa-cogs"></i><span>Software Config</span></div>
     <div class="service-card"><i class="fas fa-download"></i><span>Driver Updates</span></div>
-    <div class="service-card"><i class="fas fa-broom"></i><span>System Cleaning</span></div>
-    <div class="service-card"><i class="fas fa-envelope-open-text"></i><span>Email Setup</span></div>
     <div class="service-card"><i class="fas fa-map-marker-alt"></i><span>Google Business Setup</span></div>
     <div class="service-card"><i class="fas fa-palette"></i><span>Logo & Branding</span></div>
-    <div class="service-card"><i class="fas fa-hashtag"></i><span>Social Media Setup</span></div>
     <div class="service-card"><i class="fas fa-file-powerpoint"></i><span>PowerPoint Makeovers</span></div>
     <div class="service-card"><i class="fas fa-poll"></i><span>Forms & Surveys</span></div>
     <div class="service-card"><i class="fas fa-file-pdf"></i><span>PDF Editing</span></div>
@@ -258,6 +393,36 @@
     const whatsappURL = `https://wa.me/27720465993?text=${message}`;
     window.open(whatsappURL, '_blank');
   });
+  
+  // Floating Icon Animation Script
+const icons = document.querySelectorAll('.icon');
+
+icons.forEach(icon => {
+  const size = icon.offsetWidth;
+  let x = Math.random() * (window.innerWidth - size);
+  let y = Math.random() * (window.innerHeight - size);
+  let dx = (Math.random() - 0.5) * 1.2;
+  let dy = (Math.random() - 0.5) * 1.2;
+
+  icon.style.left = x + 'px';
+  icon.style.top = y + 'px';
+
+  function move() {
+    x += dx;
+    y += dy;
+
+    if (x <= 0 || x >= window.innerWidth - size) dx *= -1;
+    if (y <= 0 || y >= window.innerHeight - size) dy *= -1;
+
+    icon.style.left = x + 'px';
+    icon.style.top = y + 'px';
+
+    requestAnimationFrame(move);
+  }
+
+  move();
+});
+
 </script>
 
 </body>
