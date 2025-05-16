@@ -941,15 +941,59 @@
 
 <script>
   // Service Accordion Functionality
-  function toggleService(serviceNumber) {
+  function toggleService(serviceNumber, event) {
+    if (event) event.stopPropagation();
+    
     const content = document.getElementById(`service-${serviceNumber}`);
     const icon = document.getElementById(`icon-${serviceNumber}`);
+    
+    // Close all other services when opening a new one
+    if (!content.classList.contains('active')) {
+      document.querySelectorAll('.service-content.active').forEach(activeContent => {
+        if (activeContent !== content) {
+          activeContent.classList.remove('active');
+          const activeIcon = document.getElementById(`icon-${activeContent.id.split('-')[1]}`);
+          if (activeIcon) activeIcon.style.transform = 'rotate(0deg)';
+        }
+      });
+    }
     
     content.classList.toggle('active');
     icon.style.transform = content.classList.contains('active') ? 'rotate(180deg)' : 'rotate(0deg)';
   }
 
-  // Form Submission
+  // Close services when clicking outside
+  document.addEventListener('click', function(event) {
+    if (!event.target.closest('.service-accordion')) {
+      document.querySelectorAll('.service-content.active').forEach(content => {
+        content.classList.remove('active');
+        const icon = document.getElementById(`icon-${content.id.split('-')[1]}`);
+        if (icon) icon.style.transform = 'rotate(0deg)';
+      });
+    }
+  });
+
+  // Close services when scrolling past them
+  let scrollTimeout;
+  window.addEventListener('scroll', function() {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(function() {
+      const windowHeight = window.innerHeight;
+      document.querySelectorAll('.service-content.active').forEach(content => {
+        const service = content.closest('.service-accordion');
+        if (service) {
+          const rect = service.getBoundingClientRect();
+          if (rect.bottom < 0 || rect.top > windowHeight) {
+            content.classList.remove('active');
+            const icon = document.getElementById(`icon-${content.id.split('-')[1]}`);
+            if (icon) icon.style.transform = 'rotate(0deg)';
+          }
+        }
+      });
+    }, 100);
+  }, { passive: true });
+
+  // Form Submission (unchanged)
   document.getElementById('whatsappForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const name = encodeURIComponent(document.getElementById('name').value);
@@ -960,7 +1004,7 @@
     window.open(whatsappURL, '_blank');
   });
 
-  // Floating Icons Animation
+  // Floating Icons Animation (unchanged)
   const icons = document.querySelectorAll('.icon');
   icons.forEach(icon => {
     const size = icon.offsetWidth;
@@ -988,7 +1032,7 @@
     move();
   });
 
-  // Animate sections on scroll
+  // Animate sections on scroll (unchanged)
   const observerOptions = {
     threshold: 0.1
   };
