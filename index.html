@@ -71,7 +71,8 @@
 
     header {
       text-align: center;
-      padding: 6rem 3rem 3rem;
+      padding: 1rem 3rem 3rem;
+      margin-top:90px;
     }
 
     header h1 {
@@ -82,7 +83,7 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       animation: animatedText 12s ease infinite;
-      margin-bottom: 1rem;
+      margin-bottom: 3rem;
     }
 
     @keyframes animatedText {
@@ -94,12 +95,12 @@
     header p {
       font-size: 1.1rem;
       font-weight: 550;
-      background: linear-gradient(270deg, #8e0437f0, #000000f0, #94d135f0, #141413e7, #f01e8ccc, #faff3fc9, #9aeff2f0,#58ff3fca,#4f351bf0,#071967f0, #ff2525,#fffffff0,#48083bf0, #00f2ff);
+      background: linear-gradient(270deg, #000000f0, #000000, #060606f0, #5e1b31);
       background-size: 800% 800%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       animation: animatedText 12s ease infinite;
-      max-width: 800px;
+      max-width: 600px;
       margin: 0 auto;
       line-height: 1.6;
     }
@@ -113,15 +114,8 @@
       -webkit-text-fill-color: transparent;
     }
 
-    .floating-logo {
-      position: fixed;
-      top: 30px;
-      left: 40px;
-      z-index: 100;
-    }
-
     .floating-logo img {
-      height: 80px;
+      height: 60px;
       width: auto;
       animation: float 6s ease-in-out infinite;
       filter: drop-shadow(0 0 10px rgba(0, 180, 216, 0.5));
@@ -167,7 +161,7 @@
     /* Portfolio Section Styles */
     .portfolio-section {
       padding: 3rem;
-      background: rgba(0, 0, 0, 0.7);
+      background: #f6222ff0;
       border-radius: 20px;
       margin: 2rem auto;
       border: 1px solid rgba(0, 180, 216, 0.3);
@@ -200,7 +194,7 @@
     .service-title {
       font-size: 1.3rem;
       font-weight: 600;
-      background: linear-gradient(90deg, #00f2ff, #4BCFFA);
+      background: linear-gradient(90deg, #fffffff0, #ffffff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       display: flex;
@@ -211,7 +205,7 @@
     .service-icon {
       font-size: 1.2rem;
       transition: transform 0.3s ease;
-      color: #4BCFFA;
+      color: #7ffa4b;
     }
 
     .service-content {
@@ -230,13 +224,14 @@
 
     .service-description {
       padding: 1rem 0;
-      line-height: 1.7;
+      line-height: 1.5;
       color: rgba(255, 255, 255, 0.8);
     }
 
     .service-features {
       list-style: none;
       padding: 1rem 0;
+      margin-bottom:0;
     }
 
     .service-features li {
@@ -244,36 +239,115 @@
       display: flex;
       align-items: flex-start;
       gap: 1rem;
+      font-size:12.5px;
       border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
     }
 
     .feature-icon {
       color: #4BCFFA;
-      font-size: 0.9rem;
+      font-size: 1.5rem;
       margin-top: 0.3rem;
     }
 
-    .tech-stack {
-      display: flex;
-      gap: 0.8rem;
-      flex-wrap: wrap;
-      padding: 1.5rem 0 0;
-    }
+  .tech-stack {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  padding: 1.5rem 0 0;
+  align-items: center; /* Added for vertical alignment */
+}
 
     .tech-pill {
-      background: rgba(0, 180, 216, 0.2);
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      border: 1px solid #00B4D8;
-      color: #90E0EF;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
+  background: rgba(0, 180, 216, 0.2);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid #00B4D8;
+  color: #90E0EF;
+  display: inline-flex; /* Changed from flex */
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap; /* Prevents text wrapping */
+}
+#service-1 .tech-stack {
+  display: flex;
+  gap: 10px;
+  padding: 15px 0 0;
+  flex-wrap: wrap;
+}
 
+#service-2 .tech-pill {
+  background: rgba(0, 180, 216, 0.2);
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid #00B4D8;
+  color: #90E0EF;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+}
+#service-2 .tech-stack {
+  display: flex;
+  gap: 10px;
+  padding: 15px 0 0;
+  flex-wrap: wrap;
+}
+
+#service-9 .tech-pill {
+  background: rgba(0, 180, 216, 0.2);
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid #00B4D8;
+  color: #90E0EF;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+}
+#service-9 .tech-stack {
+  display: flex;
+  gap: 10px;
+  padding: 15px 0 0;
+  flex-wrap: wrap;
+}
+
+#service-1 .tech-pill {
+  background: rgba(0, 180, 216, 0.2);
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid #00B4D8;
+  color: #90E0EF;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+}
+/* Ensure proper spacing for longer feature lists */
+#service-14 .service-features {
+  column-count: 1; /* Single column for better readability */
+}
+
+@media (min-width: 768px) {
+  #service-14 .service-features {
+    column-count: 2; /* Two columns on wider screens */
+  }
+}
+/* Service-specific styling */
+#service- .service-title {
+  color: #00B4D8; /* Matching your color scheme */
+}
+
+#service- .tech-pill {
+  background: rgba(0, 180, 216, 0.15);
+  border: 1px solid #00B4D8;
+}
+
+@media (min-width: 768px) {
+  #service- .service-features {
+    column-count: 2; /* Two-column layout on desktop */
+    column-gap: 2rem;
+  }
+}
     .tech-pill i {
-      font-size: 0.9rem;
+      font-size: 1rem;
     }
 
     .testimonial {
@@ -286,6 +360,24 @@
       margin: 2rem 0;
       border-left: 4px solid #00B4D8;
     }
+        .social-icons {
+            display: inline-flex;
+            gap: 1.8rem; /* Smaller gap on mobile */
+            margin-top: 1rem;
+        }
+
+        .social-icon {
+            font-size: clamp(1.5rem, 8vw, 2.5rem); /* Responsive icon size */
+            color: #4ce8c5e3,#d75151e3,#f63f6af2;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+
+        .social-icon:hover {
+            transform: scale(1.2);
+            color: #FF6B00;
+            text-shadow: 0 0 20px #FF6B00;
+        } 
 
     form {
       max-width: 600px;
@@ -338,7 +430,8 @@
     footer {
       text-align: center;
       padding: 3rem 1rem;
-      font-size: 0.9rem;
+      font-size: 1rem;
+      font-style:bold;
       opacity: 0.8;
       margin-top: 2rem;
     }
@@ -351,6 +444,7 @@
       
       header h1 {
         font-size: 2rem;
+
       }
       
       header p {
@@ -358,12 +452,14 @@
       }
       
       .floating-logo {
-        left: 20px;
+        left: 130px;
         top: 20px;
+        position:relative;
       }
       
       .floating-logo img {
-        height: 60px;
+        height: 130px;
+        position:absolute;
       }
       
       section {
@@ -377,6 +473,7 @@
       
       .service-title {
         font-size: 1.1rem;
+        color:#0aee10f0
       }
       
       .service-content {
@@ -386,14 +483,56 @@
       .service-content.active {
         padding: 0 1rem 1rem;
       }
+              /* Social Media Links */
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background-color: #34495e;
+            border-radius: 50%;
+            color: white;
+            font-size: 24px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        /* Individual social media colors */
+        .social-link.facebook{ background-color: #3b5998; }
+        .social-link.Whatsapp{ background-color: #74f21de0; }
+        .social-link.tiktok { 
+            background: linear-gradient(45deg, #000000, #4139d1, #833ab4, #c13584, #e1306c, #fd1d1d);
+            
+        @media (max-width: 600px) {
+            .social-links {
+                gap: 15px;
+            }
+            
+            .social-link {
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+            }
+            
+
     }
   </style>
 </head>
 <body>
 <!-- Floating Logo in Top Left -->
 <div class="floating-logo">
-  <img src="logo-no-background.png">
+  <a href"google.com"><img src="logo-no-background.png"></a>
 </div>
+
 
 <div class="animated-background">
   <div class="icon"><i class="fab fa-windows"></i></div>
@@ -420,6 +559,17 @@
 </div>
 
 <header>
+  <div class="social-icons">
+    <a href="https://wa.me/+27734666595" class="social-icon" target="_blank" title="WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+    <a href="https://www.facebook.com/profile.php?id=61573067285701" class="social-icon" target="_blank" title="Facebook">
+        <i class="fab fa-facebook"></i>
+    </a>
+    <a href="https://www.tiktok.com/@dotgodelivery" class="social-icon" target="_blank" title="TikTok">
+        <i class="fab fa-tiktok"></i>
+    </a>
+</div>
   <h1>Digitally Mellow Technically Sharp</h1>
   <p>
     Need a new website? Let us help you design it. We’ll make it responsive, responsible, and ridiculously good looking. <br>
@@ -443,7 +593,7 @@
     </div>
 </section>
 <section>
-  <h2 class="section-title">👨‍💻 Our Gloriously Nerdy  Services</h2>
+  <h2 class="section-title"> What we Offer</h2>
   <div class="services-grid">
   <!-- 1. Windows Installation -->
   <div class="service-accordion">
@@ -461,12 +611,13 @@
         <li><i class="fas fa-tachometer-alt feature-icon"></i><span>Performance-optimized installations</span></li>
         <li><i class="fas fa-magic feature-icon"></i><span>Driver integration so you don't spend days hunting them</span></li>
       </ul>
-      <div class="tech-stack">
-        <span class="tech-pill"><i class="fab fa-windows"></i> Win 10/11</span>
-        <span class="tech-pill"><i class="fas fa-key"></i> Activation</span>
+      <div class="tech-stack">  <!-- Changed from tech-pills-container -->
+  <span class="tech-pill"><i class="fab fa-windows"></i> Win 7,10/11</span>
+  <span class="tech-pill"><i class="fas fa-key"></i> Activation</span>
+      
       </div>
     </div>
-  </div>
+ </div>
 
   <!-- 2. Office Installation -->
   <div class="service-accordion">
@@ -498,7 +649,7 @@
     </div>
     <div class="service-content" id="service-3">
       <p class="service-description">
-        We make things pretty while making sure they actually work. Unlike your ex's promises.
+       We design creative and stunning works of art, even Mona Lisa would require our services
       </p>
       <ul class="service-features">
         <li><i class="fas fa-palette feature-icon"></i><span>Logo design that doesn't look like clipart</span></li>
@@ -506,8 +657,8 @@
         <li><i class="fas fa-magic feature-icon"></i><span>Brand identity development</span></li>
       </ul>
       <div class="tech-stack">
-        <span class="tech-pill"><i class="fab fa-adobe"></i> Photoshop</span>
-        <span class="tech-pill"><i class="fab fa-adobe"></i> Illustrator</span>
+        <span class="tech-pill"><i class="fas fa-file-pdf"></i> Photoshop</span>
+        <span class="tech-pill"><i class="fas fa-brush"></i> Illustrator</span>
         <span class="tech-pill"><i class="fas fa-paint-brush"></i> Canva Pro</span>
       </div>
     </div>
@@ -521,40 +672,17 @@
     </div>
     <div class="service-content" id="service-4">
       <p class="service-description">
-        We turn "meh" into "marvelous" - because "able to make coffee" shouldn't be your most impressive skill.
+        We turn dull resumes into marvellous CV's that really stand out from the rest
       </p>
       <ul class="service-features">
         <li><i class="fas fa-magic feature-icon"></i><span>ATS-friendly formatting that beats the robots</span></li>
-        <li><i class="fas fa-chart-line feature-icon"></i><span>Career trajectory optimization</span></li>
-        <li><i class="fas fa-eye feature-icon"></i><span>Design that makes recruiters actually read it</span></li>
+        <li><i class="fas fa-chart-line feature-icon"></i><span>Career launching resume</span></li>
+        <li><i class="fas fa-eye feature-icon"></i><span>Design that makes recruiters actually want to hire you</span></li>
       </ul>
       <div class="tech-stack">
         <span class="tech-pill"><i class="fas fa-file-word"></i> Word</span>
         <span class="tech-pill"><i class="fab fa-adobe"></i> InDesign</span>
         <span class="tech-pill"><i class="fas fa-file-pdf"></i> PDF</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- 5. Static Websites -->
-  <div class="service-accordion">
-    <div class="service-header" onclick="toggleService(5)">
-      <span class="service-title"><i class="fas fa-globe"></i> Static Website Build</span>
-      <i class="fas fa-chevron-down service-icon" id="icon-5"></i>
-    </div>
-    <div class="service-content" id="service-5">
-      <p class="service-description">
-        Fast, beautiful websites that won't break the bank or your patience.
-      </p>
-      <ul class="service-features">
-        <li><i class="fas fa-mobile-alt feature-icon"></i><span>Fully responsive design</span></li>
-        <li><i class="fas fa-bolt feature-icon"></i><span>Lightning fast loading</span></li>
-        <li><i class="fas fa-search feature-icon"></i><span>SEO optimized</span></li>
-      </ul>
-      <div class="tech-stack">
-        <span class="tech-pill"><i class="fab fa-html5"></i> HTML5</span>
-        <span class="tech-pill"><i class="fab fa-css3-alt"></i> CSS3</span>
-        <span class="tech-pill"><i class="fab fa-js"></i> JavaScript</span>
       </div>
     </div>
   </div>
@@ -567,7 +695,7 @@
     </div>
     <div class="service-content" id="service-6">
       <p class="service-description">
-        Because sometimes you'd rather binge Netflix than figure out quantum physics.
+        Because sometimes you'd rather binge Netflix than figure out the square root of 90.
       </p>
       <ul class="service-features">
         <li><i class="fas fa-edit feature-icon"></i><span>Research and writing assistance</span></li>
@@ -577,7 +705,7 @@
       <div class="tech-stack">
         <span class="tech-pill"><i class="fas fa-file-word"></i> Word</span>
         <span class="tech-pill"><i class="fas fa-file-excel"></i> Excel</span>
-        <span class="tech-pill"><i class="fas fa-chart-pie"></i> SPSS</span>
+        <span class="tech-pill"><i class="fas fa-chart-pie"></i> Powerpoint</span>
       </div>
     </div>
   </div>
@@ -598,7 +726,7 @@
         <li><i class="fas fa-database feature-icon"></i><span>Data preservation where possible</span></li>
       </ul>
       <div class="tech-stack">
-        <span class="tech-pill"><i class="fas fa-tools"></i> Hiren's BootCD</span>
+        <span class="tech-pill"><i class="fas fa-tools"></i> Reset Options</span>
         <span class="tech-pill"><i class="fas fa-key"></i> Password Tools</span>
       </div>
     </div>
@@ -625,26 +753,29 @@
       </div>
     </div>
   </div>
-
-  <!-- 9. Domain Setup -->
   <div class="service-accordion">
-    <div class="service-header" onclick="toggleService(9)">
-      <span class="service-title"><i class="fas fa-globe-africa"></i> Domain Name Setup</span>
-      <i class="fas fa-chevron-down service-icon" id="icon-9"></i>
-    </div>
-    <div class="service-content" id="service-9">
-      <p class="service-description">
-        Claim your corner of the internet before someone else takes yourname.sucks
-      </p>
-      <ul class="service-features">
-        <li><i class="fas fa-search feature-icon"></i><span>Domain availability research</span></li>
-        <li><i class="fas fa-shopping-cart feature-icon"></i><span>Registration assistance</span></li>
-        <li><i class="fas fa-cog feature-icon"></i><span>DNS configuration</span></li>
-      </ul>
+  <div class="service-header" onclick="toggleService(09)">
+    <span class="service-title"><i class="fas fa-globe"></i> Website & Domain Setup</span>
+    <i class="fas fa-chevron-down service-icon" id="icon-23"></i>
+  </div>
+  <div class="service-content" id="service-9">
+    <p class="service-description">
+      Complete package to establish your online presence - we handle domain registration and 
+      build your professional website so you can focus on your business.
+    </p>
+    
+    <ul class="service-features">
+      <!-- Domain Features -->
+      <li><i class="fas fa-shopping-cart feature-icon"></i><span>Domain registration/renewal</span></li>
+      
+      <!-- Website Features -->
+      <li><i class="fas fa-mobile-alt feature-icon"></i><span>Mobile-friendly responsive design</span></li>
+      <li><i class="fas fa-paint-brush feature-icon"></i><span>Custom styling to match your brand</span></li>
+    </ul>
+    
       <div class="tech-stack">
-        <span class="tech-pill"><i class="fas fa-globe"></i> .com</span>
-        <span class="tech-pill"><i class="fas fa-globe"></i> .co.za</span>
-        <span class="tech-pill"><i class="fas fa-globe"></i> Custom TLDs</span>
+        <span class="tech-pill"><i class="fas fa-search"></i> yourdomain.com</span>
+        <span class="tech-pill"><i class="fas fa-globe"></i> website</span>
       </div>
     </div>
   </div>
@@ -671,247 +802,49 @@
     </div>
   </div>
 
-  <!-- 11. Data Recovery -->
-  <div class="service-accordion">
-    <div class="service-header" onclick="toggleService(11)">
-      <span class="service-title"><i class="fas fa-hdd"></i> Data Recovery & Backup</span>
-      <i class="fas fa-chevron-down service-icon" id="icon-11"></i>
-    </div>
-    <div class="service-content" id="service-11">
-      <p class="service-description">
-        When your precious files disappear faster than your motivation on Monday morning.
-      </p>
-      <ul class="service-features">
-        <li><i class="fas fa-undo feature-icon"></i><span>Deleted file recovery</span></li>
-        <li><i class="fas fa-database feature-icon"></i><span>Corrupted drive recovery</span></li>
-        <li><i class="fas fa-cloud feature-icon"></i><span>Backup system setup</span></li>
-      </ul>
-      <div class="tech-stack">
-        <span class="tech-pill"><i class="fas fa-tools"></i> Recuva</span>
-        <span class="tech-pill"><i class="fas fa-hdd"></i> Disk Drill</span>
-      </div>
-    </div>
-  </div>
-
   <!-- 12. Software Installation -->
   <div class="service-accordion">
     <div class="service-header" onclick="toggleService(12)">
-      <span class="service-title"><i class="fas fa-download"></i> Software Installation</span>
+      <span class="service-title"><i class="fas fa-download"></i> Software Installation & Driver Updates</span>
       <i class="fas fa-chevron-down service-icon" id="icon-12"></i>
     </div>
     <div class="service-content" id="service-12">
       <p class="service-description">
-        We install software so you don't have to click through 47 "Next" buttons.
+        We install software so you don't have to click through 47 "Next" buttons and also fix those annoying "Device not recognized" errors.
       </p>
       <ul class="service-features">
-        <li><i class="fas fa-cogs feature-icon"></i><span>Custom software configuration</span></li>
         <li><i class="fas fa-paint-brush feature-icon"></i><span>Creative suite installation</span></li>
+        <li><i class="fas fa-search feature-icon"></i><span>Driver identification</span></li>
         <li><i class="fas fa-calculator feature-icon"></i><span>Business software setup</span></li>
       </ul>
       <div class="tech-stack">
-        <span class="tech-pill"><i class="fab fa-adobe"></i> Adobe</span>
-        <span class="tech-pill"><i class="fas fa-cube"></i> AutoCAD</span>
+        <span class="tech-pill"><i class="fab fa-check-circle"></i> Driver Updates </span>
+        <span class="tech-pill"><i class="fas fa-envelope-open-text"></i> Adobe Suite</span>
       </div>
     </div>
   </div>
-
-  <!-- 13. Driver Updates -->
-  <div class="service-accordion">
-    <div class="service-header" onclick="toggleService(13)">
-      <span class="service-title"><i class="fas fa-plug"></i> Driver Installation & Updates</span>
-      <i class="fas fa-chevron-down service-icon" id="icon-13"></i>
-    </div>
-    <div class="service-content" id="service-13">
-      <p class="service-description">
-        Fixing those annoying "Device not recognized" errors since forever.
-      </p>
-      <ul class="service-features">
-        <li><i class="fas fa-search feature-icon"></i><span>Driver identification</span></li>
-        <li><i class="fas fa-download feature-icon"></i><span>Safe download sources</span></li>
-        <li><i class="fas fa-cog feature-icon"></i><span>Proper configuration</span></li>
-      </ul>
-      <div class="tech-stack">
-        <span class="tech-pill"><i class="fas fa-tools"></i> Driver Booster</span>
-        <span class="tech-pill"><i class="fas fa-plug"></i> Chipset</span>
-      </div>
+<div class="service-accordion">
+  <div class="service-header" onclick="toggleService(22)">
+    <span class="service-title"><i class="fas fa-briefcase"></i> Business Digital Setup</span>
+    <i class="fas fa-chevron-down service-icon" id="icon-22"></i>
+  </div>
+  <div class="service-content" id="service-22">
+    <p class="service-description">
+      Complete digital foundation for your business.Get your business on the web, and grow your online presence all in one package.
+    </p>
+    <ul class="service-features">
+      <!-- Google Business Features -->
+      <li><i class="fas fa-map-marked-alt feature-icon"></i><span>Google Business Profile setup & verification</span></li>
+      
+      <!-- Email Setup Features -->
+      <li><i class="fas fa-at feature-icon"></i><span>Custom domain email (you@yourbusiness.co.za)</span></li>
+    </ul>
+    <div class="tech-stack">
+      <span class="tech-pill"><i class="fab fa-google"></i> Google Business</span>
+      <span class="tech-pill"><i class="fas fa-envelope"></i> Email Hosting</span>
     </div>
   </div>
-
-  <!-- 14. System Optimization -->
-  <div class="service-accordion">
-    <div class="service-header" onclick="toggleService(14)">
-      <span class="service-title"><i class="fas fa-broom"></i> System Cleaning & Optimization</span>
-      <i class="fas fa-chevron-down service-icon" id="icon-14"></i>
-    </div>
-    <div class="service-content" id="service-14">
-      <p class="service-description">
-        Making your computer faster than your ex moved on.
-      </p>
-      <ul class="service-features">
-        <li><i class="fas fa-trash feature-icon"></i><span>Junk file removal</span></li>
-        <li><i class="fas fa-magic feature-icon"></i><span>Startup optimization</span></li>
-        <li><i class="fas fa-shield-alt feature-icon"></i><span>Malware cleanup</span></li>
-      </ul>
-      <div class="tech-stack">
-        <span class="tech-pill"><i class="fas fa-tools"></i> CCleaner</span>
-        <span class="tech-pill"><i class="fas fa-magic"></i> Optimization</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- 15. Email Setup -->
-  <div class="service-accordion">
-    <div class="service-header" onclick="toggleService(15)">
-      <span class="service-title"><i class="fas fa-envelope"></i> Email Setup & Signature Design</span>
-      <i class="fas fa-chevron-down service-icon" id="icon-15"></i>
-    </div>
-    <div class="service-content" id="service-15">
-      <p class="service-description">
-        Professional email that doesn't end with @gmail.com
-      </p>
-      <ul class="service-features">
-        <li><i class="fas fa-at feature-icon"></i><span>Custom domain email</span></li>
-        <li><i class="fas fa-signature feature-icon"></i><span>Branded signatures</span></li>
-        <li><i class="fas fa-sync-alt feature-icon"></i><span>Multi-device setup</span></li>
-      </ul>
-      <div class="tech-stack">
-        <span class="tech-pill"><i class="fas fa-envelope"></i> Outlook</span>
-        <span class="tech-pill"><i class="fas fa-envelope"></i> Gmail</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- 16. Google Business -->
-  <div class="service-accordion">
-    <div class="service-header" onclick="toggleService(16)">
-      <span class="service-title"><i class="fab fa-google"></i> Google Business Profile Setup</span>
-      <i class="fas fa-chevron-down service-icon" id="icon-16"></i>
-    </div>
-    <div class="service-content" id="service-16">
-      <p class="service-description">
-        Get found on Google before your competitors do.
-      </p>
-      <ul class="service-features">
-        <li><i class="fas fa-map-marked-alt feature-icon"></i><span>Google Maps listing</span></li>
-        <li><i class="fas fa-star feature-icon"></i><span>Review management</span></li>
-        <li><i class="fas fa-chart-line feature-icon"></i><span>Performance insights</span></li>
-      </ul>
-      <div class="tech-stack">
-        <span class="tech-pill"><i class="fab fa-google"></i> My Business</span>
-        <span class="tech-pill"><i class="fas fa-search"></i> SEO</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- 17. Logo Design -->
-  <div class="service-accordion">
-    <div class="service-header" onclick="toggleService(17)">
-      <span class="service-title"><i class="fas fa-palette"></i> Logo Design & Branding</span>
-      <i class="fas fa-chevron-down service-icon" id="icon-17"></i>
-    </div>
-    <div class="service-content" id="service-17">
-      <p class="service-description">
-        Because your business deserves better than clipart.
-      </p>
-      <ul class="service-features">
-        <li><i class="fas fa-pencil-alt feature-icon"></i><span>Custom logo design</span></li>
-        <li><i class="fas fa-brush feature-icon"></i><span>Brand identity</span></li>
-        <li><i class="fas fa-file-download feature-icon"></i><span>Full file package</span></li>
-      </ul>
-      <div class="tech-stack">
-        <span class="tech-pill"><i class="fab fa-adobe"></i> Illustrator</span>
-        <span class="tech-pill"><i class="fas fa-vector-square"></i> Vector</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- 18. Social Media Setup -->
-  <div class="service-accordion">
-    <div class="service-header" onclick="toggleService(18)">
-      <span class="service-title"><i class="fas fa-hashtag"></i> Social Media Page Setup</span>
-      <i class="fas fa-chevron-down service-icon" id="icon-18"></i>
-    </div>
-    <div class="service-content" id="service-18">
-      <p class="service-description">
-        Because "just post something" isn't a marketing strategy.
-      </p>
-      <ul class="service-features">
-        <li><i class="fab fa-facebook feature-icon"></i><span>Facebook page setup</span></li>
-        <li><i class="fab fa-instagram feature-icon"></i><span>Instagram optimization</span></li>
-        <li><i class="fab fa-linkedin feature-icon"></i><span>LinkedIn profile</span></li>
-      </ul>
-      <div class="tech-stack">
-        <span class="tech-pill"><i class="fab fa-facebook"></i> Facebook</span>
-        <span class="tech-pill"><i class="fab fa-instagram"></i> Instagram</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- 19. PowerPoint Design -->
-  <div class="service-accordion">
-    <div class="service-header" onclick="toggleService(19)">
-      <span class="service-title"><i class="fas fa-file-powerpoint"></i> PowerPoint Presentation Design</span>
-      <i class="fas fa-chevron-down service-icon" id="icon-19"></i>
-    </div>
-    <div class="service-content" id="service-19">
-      <p class="service-description">
-        Slides that don't make your audience wish for death by PowerPoint.
-      </p>
-      <ul class="service-features">
-        <li><i class="fas fa-sliders-h feature-icon"></i><span>Professional templates</span></li>
-        <li><i class="fas fa-chart-pie feature-icon"></i><span>Data visualization</span></li>
-        <li><i class="fas fa-magic feature-icon"></i><span>Animation effects</span></li>
-      </ul>
-      <div class="tech-stack">
-        <span class="tech-pill"><i class="fas fa-file-powerpoint"></i> PowerPoint</span>
-        <span class="tech-pill"><i class="fas fa-chart-bar"></i> Charts</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- 20. Form Creation -->
-  <div class="service-accordion">
-    <div class="service-header" onclick="toggleService(20)">
-      <span class="service-title"><i class="fas fa-poll"></i> Online Form Creation</span>
-      <i class="fas fa-chevron-down service-icon" id="icon-20"></i>
-    </div>
-    <div class="service-content" id="service-20">
-      <p class="service-description">
-        Forms that people actually want to fill out (as much as anyone wants to fill out forms).
-      </p>
-      <ul class="service-features">
-        <li><i class="fab fa-google feature-icon"></i><span>Google Forms setup</span></li>
-        <li><i class="fas fa-cog feature-icon"></i><span>Custom logic and branching</span></li>
-        <li><i class="fas fa-database feature-icon"></i><span>Response management</span></li>
-      </ul>
-      <div class="tech-stack">
-        <span class="tech-pill"><i class="fab fa-google"></i> Forms</span>
-        <span class="tech-pill"><i class="fas fa-table"></i> Sheets</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- 21. PDF Editing -->
-  <div class="service-accordion">
-    <div class="service-header" onclick="toggleService(21)">
-      <span class="service-title"><i class="fas fa-file-pdf"></i> PDF Editing & Conversion</span>
-      <i class="fas fa-chevron-down service-icon" id="icon-21"></i>
-    </div>
-    <div class="service-content" id="service-21">
-      <p class="service-description">
-        Making PDFs do things Adobe wishes they could.
-      </p>
-      <ul class="service-features">
-        <li><i class="fas fa-edit feature-icon"></i><span>Text and image editing</span></li>
-        <li><i class="fas fa-exchange-alt feature-icon"></i><span>Format conversion</span></li>
-        <li><i class="fas fa-lock feature-icon"></i><span>Password protection</span></li>
-      </ul>
-      <div class="tech-stack">
-        <span class="tech-pill"><i class="fab fa-adobe"></i> Acrobat</span>
-        <span class="tech-pill"><i class="fas fa-file-word"></i> Word</span>
-      </div>
-    </div>
-  </div>
+</div>
 </section>
 
 <section>
@@ -933,8 +866,23 @@
     <button type="submit">Summon the Tech Wizards 🧙‍♂️</button>
   </form>
 </section>
-
 <footer>
+        <div class="footer-content">
+            <h3>Connect With Us</h3>
+            <p>Follow our social media for updates and news</p>
+            
+            <div class="social-links">
+                <a href="https://facebook.com" class="social-link facebook" target="_blank" aria-label="Facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="https://twitter.com" class="social-link Whatsapp" target="_blank" aria-label="Whatsapp">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+
+                <a href="https://youtube.com" class="social-link tiktok" target="_blank" aria-label="tiktok">
+                    <i class="fab fa-tiktok"></i>
+                </a>
+            </div>
   <p>© 2025 Mellow Tech Services. All rights reserved.</p>
   <p>Powered by Coffee ☕ and Cookies🍪</p>
 </footer>
