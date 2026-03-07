@@ -3,14 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us – MellowTech in Observatory, Cape Town</title>
-    <meta name="description" content="Visit MellowTech in Observatory, Cape Town. Call, email, or send us a message. We're here to help with all your tech needs.">
+    <title>MellowTech – Local Tech Experts with a Warm Heart</title>
+    <meta name="description" content="Professional Windows installation, Microsoft Office setup, graphic design, CV revamp, password reset, website design and more in Cape Town.">
+    
+    <!-- Critical CSS fix - absolute path from root -->
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <!-- Fonts & Icons (these are CDN links, they'll work) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- AOS Animation -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- Fallback inline style to ensure basic styling even if CSS fails -->
+    <style>
+        /* Emergency fallback - only applies if external CSS fails */
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        .header { background: #0A2F44; color: white; padding: 1rem; }
+        .logo { color: white; font-size: 1.5rem; font-weight: bold; text-decoration: none; }
+        .logo span { color: #F26419; }
+        .nav-menu { display: flex; list-style: none; gap: 2rem; }
+        .nav-menu a { color: white; text-decoration: none; }
+        @media (max-width: 768px) { .nav-menu { display: none; } }
+    </style>
 </head>
 <body>
     <header class="header">
