@@ -1,565 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mellow Tech Services - Reliable Tech Services for Work, Study, and Business</title>
-    <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nkgamas Project | Construction & Renovation in Polokwane</title>
+<link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
-    <!-- Particle Background Canvas -->
-    <canvas id="particleCanvas"></canvas>
 
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="logo-container">
-                <img src="mellowtechs.png" alt="Mellow Tech Services Logo" class="logo-image">
-            </div>
-        <div class="menu-toggle" id="menuToggle">
-    <span></span>
-    <span></span>
-    <span></span>
+<header>
+<nav class="container">
+<h1 class="logo">Nkgamas Project</h1>
+<ul>
+<li><a href="index.html">Home</a></li>
+<li><a href="services.html">Services</a></li>
+<li><a href="projects.html">Projects</a></li>
+<li><a href="about.html">About</a></li>
+<li><a href="contact.html" class="cta">Get Quote</a></li>
+</ul>
+</nav>
+</header>
+
+<section class="hero">
+<div class="container">
+<h2>Reliable Construction & Renovation Services in Polokwane</h2>
+<p>Paving, roof repair, painting, tiling and carpentry with over 7 years of experience.</p>
+<a href="contact.html" class="btn">Get Free Quote</a>
+<a href="tel:+27766058539" class="btn secondary">Call Now</a>
 </div>
-            </div>    
-            
-        
-    </nav>
+</section>
 
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="hero-background-image"></div>
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <div class="hero-badge">
-                <span class="pulse-dot"></span>
-                Available for Projects
-            </div>
-            <h1 class="hero-title">
-                <span class="gradient-text">Reliable Tech Services</span>
-                <br>For Work, Study, and Business
-            </h1>
-            <p class="hero-subtitle">Helping businesses and individuals with smart, modern tech solutions. From Windows installs to full digital setups.</p>
-            <div class="hero-buttons">
-                <a href="#services" class="btn btn-primary">
-                    <span>Explore Services</span>
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                        <path d="M7 4L13 10L7 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </a>
-                <a href="#contact" class="btn btn-secondary">
-                    <span>Contact Us</span>
-                </a>
-            </div>
-            
-            <div class="stats-row">
-                <div class="stat-item">
-                    <div class="stat-number" data-target="100">0</div>
-                    <div class="stat-label">Happy Clients</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number" data-target="12">0</div>
-                    <div class="stat-label">Services Offered</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number" data-target="99">0</div>
-                    <div class="stat-label">Success Rate %</div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="hero-image">
-            <div class="floating-card card-1">
-                <div class="card-icon">💻</div>
-                <div class="card-text">Windows Installation</div>
-            </div>
-            <div class="floating-card card-2">
-                <div class="card-icon">🎨</div>
-                <div class="card-text">Graphic Design</div>
-            </div>
-            <div class="floating-card card-3">
-                <div class="card-icon">🌐</div>
-                <div class="card-text">Web Development</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Services Section -->
-    <section class="services-section" id="services">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-badge">What We Offer</span>
-                <h2 class="section-title">Our <span class="gradient-text">Premium Services</span></h2>
-                <p class="section-subtitle">Comprehensive digital solutions tailored to your needs</p>
-            </div>
-
-            <div class="services-grid">
-                <!-- Service 1 -->
-                <div class="service-card" data-tilt>
-                    <div class="service-header">
-                        <div class="service-icon-wrapper icon-blue">
-                            <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <rect x="2" y="3" width="20" height="14" rx="2" stroke-width="2"/>
-                                <path d="M8 21h8M12 17v4" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </div>
-                        <span class="service-badge">Most Popular</span>
-                    </div>
-                    <h3 class="service-title">Windows Installation & Activation</h3>
-                    <p class="service-description">Professional Windows setup with legitimate, permanent activation that survives all updates.</p>
-                    <ul class="service-features">
-                        <li><span class="check-icon">✓</span>Performance-optimized installations</li>
-                        <li><span class="check-icon">✓</span>Complete driver integration</li>
-                        <li><span class="check-icon">✓</span>Windows 7, 10, 11 support</li>
-                        <li><span class="check-icon">✓</span>Genuine activation guarantee</li>
-                    </ul>
-                    <div class="service-footer">
-                        <a href="#contact" class="service-link">Learn More →</a>
-                    </div>
-                </div>
-
-                <!-- Service 2 -->
-                <div class="service-card" data-tilt>
-                    <div class="service-header">
-                        <div class="service-icon-wrapper icon-green">
-                            <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <path d="M9 2v2m6-2v2M3 8h18M5 4h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z" stroke-width="2" stroke-linecap="round"/>
-                                <path d="M8 12h8M8 16h5" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <h3 class="service-title">Microsoft Office Suite</h3>
-                    <p class="service-description">Complete Office installation with email setup and automatic update configuration.</p>
-                    <ul class="service-features">
-                        <li><span class="check-icon">✓</span>Full suite (Word, Excel, PowerPoint)</li>
-                        <li><span class="check-icon">✓</span>Outlook email configuration</li>
-                        <li><span class="check-icon">✓</span>Automatic updates enabled</li>
-                        <li><span class="check-icon">✓</span>Office 2021 latest version</li>
-                    </ul>
-                    <div class="service-footer">
-                        <a href="#contact" class="service-link">Learn More →</a>
-                    </div>
-                </div>
-
-                <!-- Service 3 -->
-                <div class="service-card" data-tilt>
-                    <div class="service-header">
-                        <div class="service-icon-wrapper icon-pink">
-                            <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </div>
-                        <span class="service-badge">Creative</span>
-                    </div>
-                    <h3 class="service-title">Graphic Designing</h3>
-                    <p class="service-description">Professional design solutions for your brand identity and marketing materials.</p>
-                    <ul class="service-features">
-                        <li><span class="check-icon">✓</span>Custom logo design</li>
-                        <li><span class="check-icon">✓</span>Marketing materials & ads</li>
-                        <li><span class="check-icon">✓</span>Complete brand identity</li>
-                        <li><span class="check-icon">✓</span>Adobe Suite + Canva Pro</li>
-                    </ul>
-                    <div class="service-footer">
-                        <a href="#contact" class="service-link">Learn More →</a>
-                    </div>
-                </div>
-
-                <!-- Service 4 -->
-                <div class="service-card" data-tilt>
-                    <div class="service-header">
-                        <div class="service-icon-wrapper icon-orange">
-                            <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M14 2v6h6M16 13H8m8 4H8m2-8H8" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <h3 class="service-title">CV Design & Revamp</h3>
-                    <p class="service-description">ATS-optimized resumes that get you noticed by recruiters and hiring systems.</p>
-                    <ul class="service-features">
-                        <li><span class="check-icon">✓</span>ATS-friendly formatting</li>
-                        <li><span class="check-icon">✓</span>Career-focused content</li>
-                        <li><span class="check-icon">✓</span>Professional layouts</li>
-                        <li><span class="check-icon">✓</span>Multiple format exports</li>
-                    </ul>
-                    <div class="service-footer">
-                        <a href="#contact" class="service-link">Learn More →</a>
-                    </div>
-                </div>
-
-                <!-- Service 5 -->
-                <div class="service-card" data-tilt>
-                    <div class="service-header">
-                        <div class="service-icon-wrapper icon-purple">
-                            <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <path d="M4 19.5A2.5 2.5 0 016.5 17H20M4 19.5A2.5 2.5 0 016.5 22H20M4 19.5v-15A2.5 2.5 0 016.5 2H20v20M20 2v20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M8 7h8M8 11h5" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <h3 class="service-title">Assignment Assistance</h3>
-                    <p class="service-description">Academic support with research, analysis, and professional presentation design.</p>
-                    <ul class="service-features">
-                        <li><span class="check-icon">✓</span>Research & writing support</li>
-                        <li><span class="check-icon">✓</span>Data analysis & visualization</li>
-                        <li><span class="check-icon">✓</span>Professional presentations</li>
-                        <li><span class="check-icon">✓</span>Expert tools & templates</li>
-                    </ul>
-                    <div class="service-footer">
-                        <a href="#contact" class="service-link">Learn More →</a>
-                    </div>
-                </div>
-
-                <!-- Service 6 -->
-                <div class="service-card" data-tilt>
-                    <div class="service-header">
-                        <div class="service-icon-wrapper icon-red">
-                            <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke-width="2"/>
-                                <path d="M7 11V7a5 5 0 0110 0v4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <h3 class="service-title">Password Removal</h3>
-                    <p class="service-description">Safe password recovery for Windows and mobile devices with data preservation.</p>
-                    <ul class="service-features">
-                        <li><span class="check-icon">✓</span>Windows password reset</li>
-                        <li><span class="check-icon">✓</span>Phone pattern/PIN removal</li>
-                        <li><span class="check-icon">✓</span>Data preservation priority</li>
-                        <li><span class="check-icon">✓</span>Multiple recovery methods</li>
-                    </ul>
-                    <div class="service-footer">
-                        <a href="#contact" class="service-link">Learn More →</a>
-                    </div>
-                </div>
-
-                <!-- Service 7 -->
-                <div class="service-card" data-tilt>
-                    <div class="service-header">
-                        <div class="service-icon-wrapper icon-blue">
-                            <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <rect x="5" y="2" width="14" height="20" rx="2" ry="2" stroke-width="2"/>
-                                <path d="M12 18h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </div>
-                    </div>
-               
-                    <h3 class="service-title">Website & Domain Setup</h3>
-                    <p class="service-description">Complete online presence with custom design and domain management.</p>
-                    <ul class="service-features">
-                        <li><span class="check-icon">✓</span>Domain registration & renewal</li>
-                        <li><span class="check-icon">✓</span>Mobile-responsive design</li>
-                        <li><span class="check-icon">✓</span>Custom brand styling</li>
-                        <li><span class="check-icon">✓</span>SEO optimization included</li>
-                    </ul>
-                    <div class="service-footer">
-                        <a href="#contact" class="service-link">Learn More →</a>
-                    </div>
-                </div>
-
-                <!-- Service 9 -->
-                <div class="service-card" data-tilt>
-                    <div class="service-header">
-                        <div class="service-icon-wrapper icon-pink">
-                            <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" stroke-width="2"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <h3 class="service-title">PC Troubleshooting</h3>
-                    <p class="service-description">Comprehensive diagnostics and repair for optimal computer performance.</p>
-                    <ul class="service-features">
-                        <li><span class="check-icon">✓</span>Virus & malware removal</li>
-                        <li><span class="check-icon">✓</span>Performance optimization</li>
-                        <li><span class="check-icon">✓</span>Hardware diagnostics</li>
-                        <li><span class="check-icon">✓</span>Antivirus setup & protection</li>
-                    </ul>
-                    <div class="service-footer">
-                        <a href="#contact" class="service-link">Learn More →</a>
-                    </div>
-                </div>
-
-                <!-- Service 10 -->
-                <div class="service-card" data-tilt>
-                    <div class="service-header">
-                        <div class="service-icon-wrapper icon-orange">
-                            <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <circle cx="12" cy="12" r="3" stroke-width="2"/>
-                                <path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m5.08 5.08l4.24 4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m5.08-5.08l4.24-4.24" stroke-width="2" stroke-linecap="round"/>
- service                   </svg>
-                        </div>
-                    </div>
-                    <h3 class="service-title">Software & Driver Updates</h3>
-                    <p class="service-description">Professional software installation and driver management for seamless operation.</p>
-                    <ul class="service-features">
-                        <li><span class="check-icon">✓</span>Creative suite installation</li>
-                        <li><span class="check-icon">✓</span>Driver identification & updates</li>
-                        <li><span class="check-icon">✓</span>Business software setup</li>
-                        <li><span class="check-icon">✓</span>Adobe Suite specialists</li>
-                    </ul>
-                    <div class="service-footer">
-                        <a href="#contact" class="service-link">Learn More →</a>
-                    </div>
-                </div>
-
-                <!-- Service 11 -->
-                <div class="service-card" data-tilt>
-                    <div class="service-header">
-                        <div class="service-icon-wrapper icon-purple">
-                            <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" stroke-width="2"/>
-                                <path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </div>
-                        <span class="service-badge">Enterprise</span>
-                    </div>
-                    <h3 class="service-title">Business Digital Setup</h3>
-                    <p class="service-description">Complete digital transformation with workflow optimization and tool implementation.</p>
-                    <ul class="service-features">
-                        <li><span class="check-icon">✓</span>Digital transformation roadmap</li>
-                        <li><span class="check-icon">✓</span>Workflow optimization</li>
-                        <li><span class="check-icon">✓</span>Tool implementation & training</li>
-                        <li><span class="check-icon">✓</span>Ongoing support & maintenance</li>
-                    </ul>
-                    <div class="service-footer">
-                        <a href="#contact" class="service-link">Learn More →</a>
-                    </div>
-                </div>
-
-                <!-- Service 12 -->
-                <div class="service-card" data-tilt>
-                    <div class="service-header">
-                        <div class="service-icon-wrapper icon-red">
-                            <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M9 12l2 2 4-4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </div>
-                        <span class="service-badge">New</span>
-                    </div>
-                    <h3 class="service-title">Nano Screen Coating</h3>
-                    <p class="service-description">Advanced liquid screen protection with molecular-level bonding for ultimate durability.</p>
-                    <ul class="service-features">
-                        <li><span class="check-icon">✓</span>Invisible scratch-resistant coating</li>
-                        <li><span class="check-icon">✓</span>All devices (phones, tablets, watches)</li>
-                        <li><span class="check-icon">✓</span>Enhanced touch sensitivity</li>
-                        <li><span class="check-icon">✓</span>Long-lasting protection</li>
-                    </ul>
-                    <div class="service-footer">
-                        <a href="#contact" class="service-link">Learn More →</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section class="about-section" id="about">
-        <div class="container">
-            <div class="about-grid">
-                <div class="about-content">
-                    <span class="section-badge">Who We Are</span>
-                    <h2 class="section-title">Trusted By Hundreds of <span class="gradient-text">Satisfied Clients</span></h2>
-                    <p class="about-text">At Mellow Tech Services, we're not just service providers, we're your technology partners. With years of expertise in digital solutions, we've transformed countless businesses and individuals with our comprehensive tech services.</p>
-                    
-                    <p class="about-text">Our mission is simple: make technology accessible, reliable, and effective for everyone. From small fixes to complete digital transformations, we deliver excellence in every project.</p>
-
-                    <div class="features-grid">
-                        <div class="feature-item">
-                            <div class="feature-icon">🏆</div>
-                            <div class="feature-content">
-                                <h4>Expert Team</h4>
-                                <p>Certified professionals with years of experience</p>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-icon">⚡</div>
-                            <div class="feature-content">
-                                <h4>Fast Delivery</h4>
-                                <p>Quick turnaround without compromising quality</p>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-icon">💎</div>
-                            <div class="feature-content">
-                                <h4>Premium Quality</h4>
-                                <p>Top-tier service that exceeds expectations</p>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-icon">🛡️</div>
-                            <div class="feature-content">
-                                <h4>Guaranteed Support</h4>
-                                <p>Ongoing assistance and customer satisfaction</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <a href="#contact" class="btn btn-primary">
-                        <span>Start Your Project</span>
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                            <path d="M7 4L13 10L7 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </a>
-                </div>
-
-                <div class="about-visual">
-                    <div class="visual-card">
-                        <div class="card-header">
-                            <div class="dots">
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="code-line"><span class="code-purple">const</span> <span class="code-blue">mellowTech</span> = {</div>
-                            <div class="code-line">  <span class="code-blue">services</span>: <span class="code-green">"12+"</span>,</div>
-                            <div class="code-line">  <span class="code-blue">clients</span>: <span class="code-green">"500+"</span>,</div>
-                            <div class="code-line">  <span class="code-blue">experience</span>: <span class="code-green">"Expert"</span>,</div>
-                            <div class="code-line">  <span class="code-blue">quality</span>: <span class="code-green">"Premium"</span></div>
-                            <div class="code-line">};</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section class="contact-section" id="contact">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-badge">Get In Touch</span>
-                <h2 class="section-title">Ready to Start Your <span class="gradient-text">Project?</span></h2>
-                <p class="section-subtitle">Let's discuss how we can help transform your digital presence</p>
-            </div>
-
-            <div class="contact-grid">
-                <div class="contact-info">
-                    <div class="contact-card">
-                        <div class="contact-icon">📱</div>
-                        <h4>Call Us</h4>
-                        <p>Available 24/7 for your convenience</p>
-                        <a href="tel:+27720465993" class="contact-link">+27 (720) 465-993</a>
-                    </div>
-                    <div class="contact-card">
-                        <div class="contact-icon">✉️</div>
-                        <h4>Email Us</h4>
-                        <p>We'll respond within 24 hours</p>
-                        <a href="mailto:info@mellowtech.co.za" class="contact-link">info@mellowtech.co.za</a>
-                    </div>
-              
-                <div class="contact-form-wrapper">
-    <div class="form-card">
-        <h3>Send us a message</h3>
-        <div class="form-group">
-            <input type="text" placeholder="Your Name" class="form-input" id="userName">
-        </div>
-        <div class="form-group">
-            <input type="email" placeholder="Your Email" class="form-input" id="userEmail">
-        </div>
-        <div class="form-group">
-            <select class="form-input" id="userService">
-                <option value="">Select a Service</option>
-                <option>Windows Installation</option>
-                <option>Microsoft Office</option>
-                <option>Graphic Design</option>
-                <option>CV Design</option>
-                <option>Assignment Help</option>
-                <option>Password Recovery</option>
-                <option>FRP Bypass</option>
-                <option>Website Development</option>
-                <option>PC Repair</option>
-                <option>Software Installation</option>
-                <option>Business Setup</option>
-                <option>Nano Screen Coating</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <textarea placeholder="Your Message" class="form-input form-textarea" rows="4" id="userMessage"></textarea>
-        </div>
-        <button class="btn btn-primary btn-full" id="sendBtn">
-            <span>Send Message</span>
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <path d="M18 2L9 11M18 2L12 18L9 11M18 2L2 8L9 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-        </button>
-    </div>
+<section class="services container">
+<h2>Our Services</h2>
+<div class="grid">
+<div class="card"><h3>Paving</h3><p>Driveways, walkways and patios built to last.</p></div>
+<div class="card"><h3>Roof Repair</h3><p>Leak repairs and roof maintenance.</p></div>
+<div class="card"><h3>Painting</h3><p>Interior and exterior painting solutions.</p></div>
+<div class="card"><h3>Tiling</h3><p>Professional floor and wall tiling.</p></div>
+<div class="card"><h3>Carpentry</h3><p>Custom cabinets and wood structures.</p></div>
+<div class="card"><h3>Renovation</h3><p>Complete home improvement solutions.</p></div>
 </div>
+</section>
 
-            </div>
-        </div>
-    </section>
+<section class="trust">
+<div class="container grid">
+<div>
+<h3>7+ Years Experience</h3>
+<p>Serving Polokwane and surrounding Limpopo areas.</p>
+</div>
+<div>
+<h3>Quality Workmanship</h3>
+<p>We use high quality materials and skilled labour.</p>
+</div>
+<div>
+<h3>Affordable Pricing</h3>
+<p>Competitive and transparent pricing.</p>
+</div>
+</div>
+</section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <div class="logo-container">
-                        <img src="mellowtechs.png" alt="Mellow Tech Services Logo" class="logo-image">
-                    </div>
-                    <p class="footer-description">Your trusted partner in digital transformation. Delivering premium tech solutions with excellence.</p>
-                    <div class="social-links">
-                        <a href="#" class="social-link">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                            </svg>
-                        </a>
-                        <a href="#" class="social-link">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
-                            </svg>
-                        </a>
-                        <a href="#" class="social-link">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121L7.473 13.08l-2.88-.9c-.63-.198-.64-.63.135-.93l11.566-4.458c.538-.196 1.006.128.832.941z"/>
-                            </svg>
-                        </a>
-                        <a href="#" class="social-link">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
+<section class="cta-section">
+<h2>Need Construction Services?</h2>
+<a href="contact.html" class="btn">Request a Quote</a>
+</section>
 
-                <div class="footer-links">
-                    <div class="footer-column">
-                        <h4>Services</h4>
-                        <ul>
-                            <li><a href="#Windows Installation">Windows Installation</a></li>
-                            <li><a href="#">Microsoft Office</a></li>
-                            <li><a href="#Graphic Design">Graphic Design</a></li>
-                            <li><a href="#Web Development">Web Development</a></li>
-                        </ul>
-                    </div>
-                    <div class="footer-column">
-                        <h4>Company</h4>
-                        <ul>
-                            <li><a href="#about">About Us</a></li>
-                            <li><a href="#services">Our Services</a></li>
-                            <li><a href="#contact">Contact</a></li>
-                            <li><a 
-                        </ul>
-                    </div>
-                    <div class="footer-column">
+<footer>
+<div class="container">
+<p>© 2025 Nkgamas Project | Polokwane Construction Services</p>
+</div>
+</footer>
 
-            <div class="footer-bottom">
-                <p>&copy; 2025 Mellow Tech Services. All rights reserved.</p>
-                <p>Crafted with <span class="heart">❤️</span> for excellence</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Scroll to Top Button -->
-    <button class="scroll-top" id="scrollTop">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M18 15l-6-6-6 6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-    </button>
-
-    <script src="script.js"></script>
 </body>
 </html>
