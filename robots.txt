@@ -1,0 +1,8 @@
+# Generated with robots.txt generator tool by ServerAvatar.com
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /wp-admin/
+
+Sitemap: https://mellowtech.co.za//sitemap.xml
