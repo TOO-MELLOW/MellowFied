@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Updates in Progress - Mellow Tech</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0a0f1e, #0d1320);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* Simple background */
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(rgba(59,130,246,0.03) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(59,130,246,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 700px;
+            width: 90%;
+            background: rgba(20, 28, 43, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 32px;
+            padding: 2.5rem 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Progress section */
+        .progress-card {
+            background: rgba(0,0,0,0.3);
+            border-radius: 24px;
+            padding: 1.8rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .progress-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #94a3b8;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .progress-percent {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #3b82f6;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 20px;
+            background: rgba(0,0,0,0.4);
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 75%;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        /* Timer */
+        .timer-container {
+            text-align: center;
+        }
+
+        .timer-label {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.8rem;
+        }
+
+        .timer-grid {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .timer-block {
+            text-align: center;
+        }
+
+        .timer-number {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1;
+            font-family: monospace;
+        }
+
+        .timer-text {
+            font-size: 0.75rem;
+            color: #64748b;
+            text-transform: uppercase;
+        }
+
+        /* Activity log */
+        .activity-log {
+            background: rgba(0,0,0,0.2);
+            border-radius: 20px;
+            padding: 1.2rem;
+            margin: 1.5rem 0;
+            border: 1px solid rgba(255,255,255,0.05);
+            max-height: 180px;
+            overflow-y: auto;
+        }
+
+        .log-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.5rem 0;
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+        }
+
+        .log-item:last-child {
+            border-bottom: none;
+        }
+
+        .log-icon {
+            width: 20px;
+            color: #3b82f6;
+            font-size: 0.8rem;
+        }
+
+        .log-progress {
+            margin-left: auto;
+            color: #3b82f6;
+            font-size: 0.8rem;
+            font-weight: 600;
+            min-width: 45px;
+            text-align: right;
+        }
+
+        .spinner {
+            width: 12px;
+            height: 12px;
+            border: 2px solid rgba(59,130,246,0.3);
+            border-top-color: #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 1rem;
+            background: rgba(59,130,246,0.1);
+            border: 1px solid rgba(59,130,246,0.2);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .footer-badges {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 500px) {
+            .container { padding: 1.8rem 1.2rem; }
+            h1 { font-size: 1.5rem; }
+            .timer-grid { gap: 1rem; }
+            .timer-number { font-size: 1.8rem; }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="bg-grid"></div>
+
+    <div class="container">
+        <h1>We're currently working on updates</h1>
+        <p class="subtitle">Please stay tuned — we're making things better!</p>
+
+        <!-- Progress Card -->
+        <div class="progress-card">
+            <div class="progress-header">
+                <div class="progress-title">
+                    <i class="fas fa-sync-alt fa-spin" style="font-size: 0.8rem;"></i>
+                    <span>Update Progress</span>
+                </div>
+                <div class="progress-percent" id="progressPercent">75%</div>
+            </div>
+
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progressBar" style="width: 75%"></div>
+            </div>
+
+            <!-- Timer -->
+            <div class="timer-container">
+                <div class="timer-label">
+                    <i class="far fa-clock" style="margin-right: 0.3rem;"></i> Estimated completion
+                </div>
+                <div class="timer-grid" id="timer">
+                    <div class="timer-block">
+                        <div class="timer-number" id="hours">48</div>
+                        <div class="timer-text">Hours</div>
+                    </div>
+                    <div class="timer-block">
+                        <div class="timer-number" id="minutes">00</div>
+                        <div class="timer-text">Minutes</div>
+                    </div>
+                    <div class="timer-block">
+                        <div class="timer-number" id="seconds">00</div>
+                        <div class="timer-text">Seconds</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity Log (static but realistic) -->
+        <div class="activity-log" id="activityLog">
+            <div class="log-item">
+                <div class="log-icon"><i class="fas fa-file-archive"></i></div>
+                <span>Downloading core-files.zip</span>
+                <span class="log-progress">75%</span>
+            </div>
+            <div class="log-item">
+                <div class="log-icon"><i class="fas fa-code"></i></div>
+                <span>Installing dependencies.json</span>
+                <span class="log-progress">62%</span>
+            </div>
+            <div class="log-item">
+                <div class="log-icon"><i class="fas fa-database"></i></div>
+                <span>Updating database schema</span>
+                <span class="log-progress">88%</span>
+            </div>
+            <div class="log-item">
+                <div class="log-icon"><i class="fas fa-file-code"></i></div>
+                <span>Compiling assets-bundle.js</span>
+                <span class="log-progress">43%</span>
+            </div>
+            <div class="log-item">
+                <div class="log-icon"><i class="fas fa-shield-alt"></i></div>
+                <span>Applying security patches</span>
+                <span class="log-progress">57%</span>
+            </div>
+        </div>
+
+        <!-- Status Badges -->
+        <div class="footer-badges">
+            <span class="status-badge">
+                <span class="status-dot"></span>
+                Downloading files
+            </span>
+            <span class="status-badge">
+                <span class="spinner"></span>
+                Installing
+            </span>
+            <span class="status-badge">
+                <span class="status-dot"></span>
+                Optimizing
+            </span>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // ========== STABLE COUNTDOWN TIMER ==========
+            let totalSeconds = 48 * 60 * 60; // 48 hours
+            
+            const hoursEl = document.getElementById('hours');
+            const minutesEl = document.getElementById('minutes');
+            const secondsEl = document.getElementById('seconds');
+            
+            function updateTimer() {
+                if (totalSeconds <= 0) {
+                    hoursEl.textContent = '00';
+                    minutesEl.textContent = '00';
+                    secondsEl.textContent = '00';
+                    return;
+                }
+                
+                const hours = Math.floor(totalSeconds / 3600);
+                const minutes = Math.floor((totalSeconds % 3600) / 60);
+                const seconds = totalSeconds % 60;
+                
+                hoursEl.textContent = hours.toString().padStart(2, '0');
+                minutesEl.textContent = minutes.toString().padStart(2, '0');
+                secondsEl.textContent = seconds.toString().padStart(2, '0');
+                
+                totalSeconds--;
+            }
+            
+            // Update immediately, then every second
+            updateTimer();
+            setInterval(updateTimer, 1000);
+            
+            // ========== SLOW PROGRESS UPDATE (ONCE PER MINUTE) ==========
+            let progress = 75;
+            const progressBar = document.getElementById('progressBar');
+            const progressPercent = document.getElementById('progressPercent');
+            
+            setInterval(() => {
+                if (progress < 100) {
+                    progress += 0.2; // Very slow increase
+                    if (progress > 100) progress = 100;
+                    progressBar.style.width = progress + '%';
+                    progressPercent.textContent = Math.floor(progress) + '%';
+                }
+            }, 60000); // Update every minute
+            
+            // ========== ACTIVITY LOG ROTATION (ONCE PER MINUTE) ==========
+            const activityLog = document.getElementById('activityLog');
+            const activities = [
+                { name: 'core-files.zip', progress: '75%', icon: 'fa-file-archive' },
+                { name: 'dependencies.json', progress: '62%', icon: 'fa-code' },
+                { name: 'database-schema.sql', progress: '88%', icon: 'fa-database' },
+                { name: 'assets-bundle.js', progress: '43%', icon: 'fa-file-code' },
+                { name: 'security-patches', progress: '57%', icon: 'fa-shield-alt' },
+                { name: 'styles.min.css', progress: '91%', icon: 'fa-css3-alt' },
+                { name: 'api-routes.js', progress: '69%', icon: 'fa-plug' },
+                { name: 'ui-components', progress: '82%', icon: 'fa-paint-brush' }
+            ];
+            
+            let activityIndex = 0;
+            
+            function rotateActivity() {
+                if (activityLog.children.length > 0) {
+                    // Remove first item
+                    if (activityLog.firstChild) {
+                        activityLog.removeChild(activityLog.firstChild);
+                    }
+                    
+                    // Add new item at the end
+                    const newItem = document.createElement('div');
+                    newItem.className = 'log-item';
+                    const act = activities[activityIndex % activities.length];
+                    newItem.innerHTML = `
+                        <div class="log-icon"><i class="fas ${act.icon}"></i></div>
+                        <span>Downloading ${act.name}</span>
+                        <span class="log-progress">${act.progress}</span>
+                    `;
+                    activityLog.appendChild(newItem);
+                    
+                    activityIndex++;
+                }
+            }
+            
+            // Rotate every 30 seconds
+            setInterval(rotateActivity, 30000);
+        })();
+    </script>
+</body>
+</html>
