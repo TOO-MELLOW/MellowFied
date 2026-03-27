@@ -260,5 +260,36 @@
   <span class="wa-tooltip">Chat on WhatsApp</span>
 </a>
 <script src="main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+<script>
+(function(){
+  emailjs.init("xS49JkhsNjH8-uBMZ");
+})();
+
+const form = document.getElementById("contactForm");
+const btn = document.getElementById("submitBtn");
+
+form.addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  // UI loading state
+  btn.querySelector(".btn-text").style.display = "none";
+  btn.querySelector(".btn-loading").style.display = "inline";
+
+  emailjs.sendForm("service_ee5shgv", "template_2gco1gg", this)
+    .then(() => {
+      form.style.display = "none";
+      document.getElementById("formSuccess").style.display = "block";
+    })
+    .catch((err) => {
+      alert("Failed to send: " + JSON.stringify(err));
+    })
+    .finally(() => {
+      btn.querySelector(".btn-text").style.display = "inline";
+      btn.querySelector(".btn-loading").style.display = "none";
+    });
+});
+</script>
 </body>
 </html>
