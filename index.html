@@ -1035,6 +1035,9 @@ triggerReveals();
 <!-- ✅ EmailJS v4 SDK (official, latest) -->
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
+ <!-- ✅ EmailJS v4 SDK (official, latest) -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
   // ─── EmailJS Config ────────────────────────────────────────────────────────
   const EMAILJS_PUBLIC_KEY  = "xS49JkhsNjH8-uBMZ";   // Your Public Key
   const EMAILJS_SERVICE_ID  = "service_ee5shgv";       // Your Service ID
@@ -1050,12 +1053,22 @@ triggerReveals();
   const btnText    = submitBtn.querySelector(".btn-text");
   const btnLoading = submitBtn.querySelector(".btn-loading");
 
+  // ─── Prevent duplicate submissions ─────────────────────────────────────────
+  let isSending = false;
+
   form.addEventListener("submit", async function (e) {
     e.preventDefault();
+
+    if (isSending) {
+      console.log("Blocked duplicate submit");
+      return;
+    }
+    isSending = true;
 
     // Basic client-side guard — email is required for auto-reply
     if (!form.email.value.trim()) {
       alert("Please enter your email address so we can reply to you.");
+      isSending = false;
       return;
     }
 
@@ -1075,10 +1088,12 @@ triggerReveals();
     };
 
     try {
-      // 1️⃣  Notification email → your Gmail inbox
+      console.log("NOTIFY SENDING");
+      // 1️⃣ Notification email → your Gmail inbox
       await emailjs.send(EMAILJS_SERVICE_ID, TEMPLATE_NOTIFY, templateParams);
 
-      // 2️⃣  Auto-reply → user's email (From: Gmail, Reply-To: info@mellowtech.co.za)
+      console.log("AUTOREPLY SENDING");
+      // 2️⃣ Auto-reply → user's email
       await emailjs.send(EMAILJS_SERVICE_ID, TEMPLATE_AUTOREPLY, templateParams);
 
       // Both sent — show success popup, hide form
@@ -1092,9 +1107,13 @@ triggerReveals();
       // Restore button so user can retry
       btnText.style.display    = "inline";
       btnLoading.style.display = "none";
-      submitBtn.disabled       = true;
+      submitBtn.disabled       = false;
+
+    } finally {
+      // Unlock sending in case user retries
+      isSending = false;
     }
   });
-</script>  
+</script> 
 </body>
 </html>
