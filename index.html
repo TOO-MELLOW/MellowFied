@@ -1032,85 +1032,193 @@ _Submitted via mellowtech.co.za_
 }
 triggerReveals();
 </script>
- <!-- ✅ EmailJS v4 SDK (official, latest) -->
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+ <!-- EmailJS v4 SDK — loaded once, guarded against double-inclusion -->
+  <script>
+    if (!window.__emailjsLoaded) {
+      window.__emailjsLoaded = true;
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
+      s.onload = () => emailjs.init({ publicKey: 'xS49JkhsNjH8-uBMZ' });
+      document.head.appendChild(s);
+    }
+  </script>
+  
+I have a web form that uses EmailJS v4 to send a notification email to my Gmail and an auto-reply to the user. My current implementation has multiple issues:
+
+**Duplicate emails**: Only the notification email sometimes sends twice, even though the auto-reply works correctly. The EmailJS template body is fine; the duplication is caused by the JS submit handler firing multiple times or the browser sending two requests.
+
+**Event listener firing twice**: In development (e.g., React Strict Mode) or due to script inclusion, the submit event may be triggered twice, causing two requests to EmailJS.
+
+**Button / form issues**: A <button> inside a form may trigger both click and submit events if not set correctly.
+
+**Async safety**: We need a guard to prevent double submissions, especially during slow network connections.
+
+**Validation**: The email field must be required for the auto-reply to work.
+
+**Loading state**: While sending, the submit button should show a loading indicator and prevent further clicks.
+
+**Script inclusion**: The script may be included multiple times; the code should be robust even if that happens.
+
+I want you to generate a **fully bulletproof HTML + JS solution** that:
+
+Uses EmailJS v4 SDK (latest)
+Sends exactly **one notification email** to my Gmail and **one auto-reply** to the user
+Ensures the submit handler cannot fire twice under any circumstances (script reload, React Strict Mode, double clicks)
+Includes a loading state for the button (btn-text / btn-loading)
+Validates that the email field is filled
+Uses proper type="submit" for the button
+Prevents any other potential problems in the future (async issues, multiple listeners, multiple script loads)
+Is clean, readable, and ready to paste into an HTML page
+Assume the following variables for EmailJS:
+
+EMAILJS_PUBLIC_KEY = "xS49JkhsNjH8-uBMZ"
+EMAILJS_SERVICE_ID = "service_ee5shgv"
+TEMPLATE_NOTIFY = "template_2gco1gg" (notification to my Gmail)
+TEMPLATE_AUTOREPLY = "template_49mvvnh" (auto-reply to the user)
+Also assume the HTML structure:
+
+<form id="contactForm">
+  <input type="text" name="name" />
+  <input type="email" name="email" />
+  <input type="text" name="phone" />
+  <select name="service"></select>
+  <textarea name="message"></textarea>
+  <button type="submit" id="submitBtn">
+    <span class="btn-text">Send</span>
+    <span class="btn-loading" style="display:none;">Sending...</span>
+  </button>
+</form>
+<div id="formSuccess" style="display:none;">Thank you! Your message has been sent.</div>
+Your solution should produce a **single, self-contained HTML + JS snippet** that addresses **all possible causes of duplicate emails and any other potential issues**, including proper async handling, double-click prevention, and robust validation.
+---
+
+Show more
+21:40
+Here's a bulletproof implementation addressing every issue you described:
+
+html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Contact Form</title>
+
+  <!-- EmailJS v4 SDK — loaded once, guarded against double-inclusion -->
+  <script>
+    if (!window.__emailjsLoaded) {
+      window.__emailjsLoaded = true;
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
+      s.onload = () => emailjs.init({ publicKey: 'xS49JkhsNjH8-uBMZ' });
+      document.head.appendChild(s);
+    }
+  </script>
+</head>
+<body>
+
+<form id="contactForm" novalidate>
+  <input type="text"  name="name"    placeholder="Name" />
+  <input type="email" name="email"   placeholder="Email" required />
+  <input type="text"  name="phone"   placeholder="Phone" />
+  <select name="service">
+    <option value="">Select a service</option>
+    <option value="web">Web Development</option>
+    <option value="design">Design</option>
+  </select>
+  <textarea name="message" placeholder="Message"></textarea>
+
+  <button type="submit" id="submitBtn">
+    <span class="btn-text">Send</span>
+    <span class="btn-loading" style="display:none;">Sending…</span>
+  </button>
+</form>
+
+<div id="formSuccess" style="display:none;">
+  ✅ Thank you! Your message has been sent.
+</div>
+
 <script>
-  // ─── EmailJS Config ────────────────────────────────────────────────────────
-  const EMAILJS_PUBLIC_KEY  = "xS49JkhsNjH8-uBMZ";   // Your Public Key
-  const EMAILJS_SERVICE_ID  = "service_ee5shgv";       // Your Service ID
-  const TEMPLATE_NOTIFY     = "template_2gco1gg";      // Notification → your Gmail
-  const TEMPLATE_AUTOREPLY  = "template_49mvvnh";      // Auto-reply → the user
-  // ──────────────────────────────────────────────────────────────────────────
+// ─── Guard: only ever register this handler ONCE per page lifetime ──────────
+if (!window.__contactFormBound) {
+  window.__contactFormBound = true;
 
-  emailjs.init(EMAILJS_PUBLIC_KEY);
+  // ─── Constants ─────────────────────────────────────────────────────────────
+  const SERVICE_ID      = 'service_ee5shgv';
+  const TEMPLATE_NOTIFY = 'template_2gco1gg';   // → your Gmail
+  const TEMPLATE_REPLY  = 'template_49mvvnh';   // → user auto-reply
 
-  const form       = document.getElementById("contactForm");
-  const successBox = document.getElementById("formSuccess");
-  const submitBtn  = document.getElementById("submitBtn");
-  const btnText    = submitBtn.querySelector(".btn-text");
-  const btnLoading = submitBtn.querySelector(".btn-loading");
+  // ─── State flag: true while a submission is in flight ──────────────────────
+  let isSubmitting = false;
 
-  // ─── Prevent duplicate submissions ─────────────────────────────────────────
-  let isSending = false;
+  // ─── Helpers ───────────────────────────────────────────────────────────────
+  function setLoading(on) {
+    const btn     = document.getElementById('submitBtn');
+    const txtSpan = btn.querySelector('.btn-text');
+    const ldgSpan = btn.querySelector('.btn-loading');
 
-  form.addEventListener("submit", async function (e) {
-    e.preventDefault();
+    btn.disabled      = on;          // blocks every interaction (click, keyboard)
+    txtSpan.style.display = on ? 'none'   : '';
+    ldgSpan.style.display = on ? 'inline' : 'none';
+  }
 
-    if (isSending) {
-      console.log("Blocked duplicate submit");
+  function showSuccess() {
+    document.getElementById('contactForm').style.display = 'none';
+    document.getElementById('formSuccess').style.display = 'block';
+  }
+
+  function getFormData(form) {
+    const fd = new FormData(form);
+    return Object.fromEntries(fd.entries());   // { name, email, phone, … }
+  }
+
+  // ─── Submit handler ────────────────────────────────────────────────────────
+  async function handleSubmit(e) {
+    e.preventDefault();       // stop native browser POST
+    e.stopImmediatePropagation(); // stop any other listeners on this element
+
+    // 1. Async-safety guard — rejects concurrent / double-click calls
+    if (isSubmitting) return;
+
+    const form  = e.target;
+    const data  = getFormData(form);
+
+    // 2. Email validation (required for auto-reply to have a destination)
+    if (!data.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+      alert('Please enter a valid email address.');
       return;
     }
-    isSending = true;
 
-    // Basic client-side guard — email is required for auto-reply
-    if (!form.email.value.trim()) {
-      alert("Please enter your email address so we can reply to you.");
-      isSending = false;
-      return;
-    }
-
-    // Show loading state
-    btnText.style.display    = "none";
-    btnLoading.style.display = "inline";
-    submitBtn.disabled       = true;
-
-    // Shared template variables — names match {{variable}} in both templates
-    const templateParams = {
-      name     : form.name.value.trim(),
-      email    : form.email.value.trim(),
-      phone    : form.phone.value.trim(),
-      service  : form.service.value,
-      message  : form.message.value.trim(),
-      reply_to : "info@mellowtech.co.za"   // Set as Reply-To in your auto-reply template
-    };
+    // 3. Lock the form
+    isSubmitting = true;
+    setLoading(true);
 
     try {
-      console.log("NOTIFY SENDING");
-      // 1️⃣ Notification email → your Gmail inbox
-      await emailjs.send(EMAILJS_SERVICE_ID, TEMPLATE_NOTIFY, templateParams);
+      // 4. Fire both sends in parallel — one awaited Promise.all call = exactly
+      //    one network attempt per template, no chance of a second invocation
+      await Promise.all([
+        emailjs.send(SERVICE_ID, TEMPLATE_NOTIFY, data),  // → your Gmail
+        emailjs.send(SERVICE_ID, TEMPLATE_REPLY,  data),  // → user
+      ]);
 
-      console.log("AUTOREPLY SENDING");
-      // 2️⃣ Auto-reply → user's email
-      await emailjs.send(EMAILJS_SERVICE_ID, TEMPLATE_AUTOREPLY, templateParams);
-
-      // Both sent — show success popup, hide form
-      form.style.display       = "none";
-      successBox.style.display = "block";
+      showSuccess();
 
     } catch (err) {
-      console.error("EmailJS error:", err);
-      alert("Something went wrong sending your message. Please try again or WhatsApp us directly.");
+      console.error('EmailJS error:', err);
+      alert('Something went wrong. Please try again.');
 
-      // Restore button so user can retry
-      btnText.style.display    = "inline";
-      btnLoading.style.display = "none";
-      submitBtn.disabled       = false;
-
-    } finally {
-      // Unlock sending in case user retries
-      isSending = false;
+      // 5. Release the lock so the user can retry
+      isSubmitting = false;
+      setLoading(false);
     }
-  });
-</script> 
+    // Note: on success we intentionally leave isSubmitting = true and the
+    // button disabled — the form is hidden, so there's nothing left to submit.
+  }
+
+  // ─── Attach listener (runs once thanks to the outer guard) ─────────────────
+  //    Using 'once: false' deliberately — we handle deduplication ourselves.
+  document.getElementById('contactForm')
+          .addEventListener('submit', handleSubmit);
+}
+</script>
 </body>
 </html>
