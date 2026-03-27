@@ -261,42 +261,44 @@
 </a>
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 <script>
-(function(){
-  emailjs.init("xS49JkhsNjH8-uBMZ");
-})();
+  // Initialize EmailJS
+  emailjs.init("xS49JkhsNjH8-uBMZ"); // <-- replace with your EmailJS public key
 
-const form = document.getElementById("contactForm");
-const btn = document.getElementById("submitBtn");
+  const form = document.getElementById("contactForm");
+  const btn = document.getElementById("submitBtn");
 
-form.addEventListener("submit", function(e) {
-  e.preventDefault();
+  form.addEventListener("submit", function(e) {
+    e.preventDefault();
 
-  // Show loading
-  btn.querySelector(".btn-text").style.display = "none";
-  btn.querySelector(".btn-loading").style.display = "inline";
+    // Show loading spinner
+    btn.querySelector(".btn-text").style.display = "none";
+    btn.querySelector(".btn-loading").style.display = "inline";
 
-  // 1️⃣ Send email to you
-  emailjs.sendForm("service_ee5shgv", "template_2gco1gg", form)
-    .then(() => {
-      console.log("Notification sent to you");
+    // 1️⃣ Send notification email to your Gmail
+    emailjs.sendForm("service_ee5shgv", "template_2gco1gg", form)
+      .then(() => console.log("Notification sent to you"))
+      .catch(err => console.log("Notification error:", err));
+
+    // 2️⃣ Send auto-reply to user (From Gmail, Reply-To = info@mellowtech.co.za)
+    emailjs.send("service_ee5shgv", "template_49mvvnh", {
+      name: form.name.value,
+      email: form.email.value,
+      phone: form.phone.value,
+      service: form.service.value,
+      message: form.message.value,
+      reply_to: "info@mellowtech.co.za" // Reply-To header
     })
-    .catch(err => console.log(err));
-
-  // 2️⃣ Send auto-reply to user
-  emailjs.sendForm("service_ee5shgv", "template_49mvvnh", form)
-    .then(() => {
-      console.log("Auto-reply sent to user");
-    })
-    .catch(err => console.log(err))
+    .then(() => console.log("Auto-reply sent to user"))
+    .catch(err => console.log("Auto-reply error:", err))
     .finally(() => {
-      // Reset UI
+      // Reset UI & show success popup
       btn.querySelector(".btn-text").style.display = "inline";
       btn.querySelector(".btn-loading").style.display = "none";
 
       form.style.display = "none";
       document.getElementById("formSuccess").style.display = "block";
     });
-});
+  });
 </script>
 </body>
 </html>
