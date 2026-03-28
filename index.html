@@ -50,59 +50,7 @@ h1,h2,h3,h4,h5{font-family:'Syne',sans-serif;line-height:1.1;letter-spacing:-0.0
 .btn-outline:hover{background:var(--ink);color:var(--lime);transform:translateY(-2px)}
 .btn-lime{background:var(--lime);color:var(--ink)}
 .btn-lime:hover{background:var(--lime-dark);transform:translateY(-2px);box-shadow:0 16px 40px rgba(200,244,90,0.4)}
-#chatbot-panel {
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
-  width: 340px;
-  height: 480px;
-  background: #0f0f0f;
-  color: #fff;
-  border-radius: 16px;
-  display: none;
-  flex-direction: column;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-  border: 1px solid #222;
-}
 
-#chat-header {
-  display: flex;
-  justify-content: space-between;
-  padding: 12px;
-  background: #25D366;
-  border-radius: 16px 16px 0 0;
-}
-
-#messages {
-  flex: 1;
-  padding: 10px;
-  overflow-y: auto;
-}
-
-#input-area {
-  display: flex;
-  padding: 10px;
-}
-
-#input-area input {
-  flex: 1;
-  padding: 8px;
-  background: #1a1a1a;
-  border: none;
-  color: white;
-}
-
-#open-chat {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  padding: 12px 18px;
-  border-radius: 30px;
-  background: #25D366;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
 
 /* NAV */
 nav {
@@ -475,6 +423,342 @@ footer{background:#080a0f;color:white;padding:80px 0 40px}
 @media(prefers-reduced-motion:reduce){
   .marquee-track{animation:none}
   .reveal{transition:none}
+}
+/* ═══════════════════════════════════════════════════
+   MT-CHATBOT STYLES  (all prefixed mt- — zero clashes)
+════════════════════════════════════════════════════ */
+:root {
+  --mt-bg: #0a0a0f;
+  --mt-surface: #13131c;
+  --mt-surface2: #1c1c2a;
+  --mt-border: #2a2a3d;
+  --mt-accent: #00e5a0;
+  --mt-accent2: #7b5ea7;
+  --mt-text: #e8e8f0;
+  --mt-muted: #7070a0;
+  --mt-dim: #4a4a70;
+  --mt-user-bg: #1e1e30;
+  --mt-bot-bg: #0f1a16;
+  --mt-font-mono: 'DM Mono', monospace;
+}
+
+/* Open button */
+.mt-open-btn {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 8000;
+  width: 58px;
+  height: 58px;
+  background: linear-gradient(135deg, var(--mt-accent), var(--mt-accent2));
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  font-size: 22px;
+  box-shadow: 0 8px 32px rgba(0,229,160,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+.mt-open-btn:hover { transform: scale(1.08); box-shadow: 0 12px 40px rgba(0,229,160,0.45); }
+
+/* Panel */
+.mt-panel {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  width: 400px;
+  height: min(680px, calc(100vh - 56px));
+  background: var(--mt-surface);
+  border: 1px solid var(--mt-border);
+  border-radius: 20px;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 8001;
+  box-shadow: 0 0 0 1px rgba(0,229,160,0.05),
+              0 40px 80px rgba(0,0,0,0.65),
+              inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.mt-panel.mt-visible {
+  display: flex;
+  animation: mtPanelIn 0.4s cubic-bezier(0.16,1,0.3,1) both;
+}
+@keyframes mtPanelIn {
+  from { opacity: 0; transform: translateY(24px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Header */
+.mt-header {
+  padding: 14px 18px;
+  background: var(--mt-surface2);
+  border-bottom: 1px solid var(--mt-border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.mt-logo {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, var(--mt-accent), var(--mt-accent2));
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+.mt-hinfo { flex: 1; }
+.mt-hname {
+  font-size: 13.5px; font-weight: 700;
+  font-family: 'Syne', sans-serif;
+  color: var(--mt-text);
+  letter-spacing: 0.01em;
+}
+.mt-hstatus {
+  font-size: 10.5px;
+  font-family: var(--mt-font-mono);
+  color: var(--mt-accent);
+  display: flex; align-items: center; gap: 5px;
+  margin-top: 2px;
+}
+.mt-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--mt-accent);
+  animation: mtPulse 2s ease-in-out infinite;
+}
+@keyframes mtPulse {
+  0%,100% { opacity:1; transform:scale(1); }
+  50%      { opacity:0.4; transform:scale(0.75); }
+}
+.mt-close-btn {
+  width: 30px; height: 30px;
+  background: transparent;
+  border: 1px solid var(--mt-border);
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--mt-muted);
+  font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.mt-close-btn:hover { background: var(--mt-border); color: var(--mt-text); }
+
+/* Quick chips */
+.mt-chips {
+  padding: 10px 16px 0;
+  display: flex; flex-wrap: wrap; gap: 6px;
+  flex-shrink: 0;
+}
+.mt-chip {
+  padding: 4px 11px;
+  border-radius: 20px;
+  border: 1px solid var(--mt-border);
+  font-size: 10.5px;
+  font-family: var(--mt-font-mono);
+  color: var(--mt-muted);
+  cursor: pointer;
+  background: transparent;
+  transition: all 0.18s;
+  letter-spacing: 0.02em;
+}
+.mt-chip:hover { border-color: var(--mt-accent); color: var(--mt-accent); background: rgba(0,229,160,0.06); }
+
+/* Messages body */
+.mt-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  scroll-behavior: smooth;
+}
+.mt-body::-webkit-scrollbar { width: 4px; }
+.mt-body::-webkit-scrollbar-track { background: transparent; }
+.mt-body::-webkit-scrollbar-thumb { background: var(--mt-border); border-radius: 2px; }
+
+/* Message rows */
+.mt-msg {
+  display: flex;
+  gap: 9px;
+  animation: mtMsgIn 0.3s cubic-bezier(0.16,1,0.3,1) both;
+}
+.mt-msg.mt-user { flex-direction: row-reverse; }
+@keyframes mtMsgIn {
+  from { opacity:0; transform:translateY(8px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.mt-avatar {
+  width: 26px; height: 26px;
+  border-radius: 7px;
+  flex-shrink: 0; margin-top: 2px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+}
+.mt-msg.mt-bot .mt-avatar  { background: linear-gradient(135deg, var(--mt-accent), var(--mt-accent2)); }
+.mt-msg.mt-user .mt-avatar { background: var(--mt-surface2); border: 1px solid var(--mt-border); }
+
+.mt-bubble {
+  max-width: 84%;
+  padding: 10px 13px;
+  border-radius: 13px;
+  font-size: 12.5px;
+  line-height: 1.65;
+  font-family: var(--mt-font-mono);
+  font-weight: 300;
+  color: var(--mt-text);
+}
+.mt-msg.mt-bot .mt-bubble {
+  background: var(--mt-bot-bg);
+  border: 1px solid rgba(0,229,160,0.12);
+  border-top-left-radius: 4px;
+}
+.mt-msg.mt-user .mt-bubble {
+  background: var(--mt-user-bg);
+  border: 1px solid var(--mt-border);
+  border-top-right-radius: 4px;
+}
+
+/* Rich card */
+.mt-card {
+  background: rgba(0,229,160,0.04);
+  border: 1px solid rgba(0,229,160,0.15);
+  border-radius: 10px;
+  padding: 11px 13px;
+  margin-top: 9px;
+}
+.mt-card-label {
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  color: var(--mt-accent);
+  text-transform: uppercase;
+  margin-bottom: 7px;
+  font-weight: 500;
+}
+.mt-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.mt-row:last-child { border-bottom: none; }
+.mt-rkey { color: var(--mt-muted); font-size: 11px; }
+.mt-rval { color: var(--mt-text); font-weight: 500; font-size: 12px; }
+.mt-rval.mt-hi { color: var(--mt-accent); }
+
+/* WhatsApp button */
+.mt-wa-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 11px;
+  padding: 8px 14px;
+  background: #25D366;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 11.5px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+  font-family: 'Syne', sans-serif;
+}
+.mt-wa-btn:hover { background: #1ebc58; transform: translateY(-1px); }
+
+/* Suggestion grid */
+.mt-suggest {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+  margin-top: 10px;
+}
+.mt-sitem {
+  padding: 7px 10px;
+  border: 1px solid var(--mt-border);
+  border-radius: 8px;
+  font-size: 10.5px;
+  color: var(--mt-muted);
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.mt-sitem:hover { border-color: var(--mt-accent); color: var(--mt-accent); background: rgba(0,229,160,0.04); }
+.mt-sitem-icon { font-size: 13px; margin-bottom: 2px; }
+
+/* Typing indicator */
+.mt-typing {
+  display: none;
+  gap: 9px;
+  align-items: flex-end;
+  padding: 0 16px 8px;
+  flex-shrink: 0;
+}
+.mt-typing.mt-show { display: flex; }
+.mt-typing-dots {
+  background: var(--mt-bot-bg);
+  border: 1px solid rgba(0,229,160,0.12);
+  border-radius: 13px;
+  border-bottom-left-radius: 4px;
+  padding: 9px 13px;
+  display: flex; gap: 4px; align-items: center;
+}
+.mt-typing-dots span {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--mt-accent);
+  animation: mtDot 1.2s ease-in-out infinite;
+}
+.mt-typing-dots span:nth-child(2) { animation-delay: 0.15s; }
+.mt-typing-dots span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes mtDot {
+  0%,80%,100% { transform: translateY(0); opacity: 0.4; }
+  40%          { transform: translateY(-5px); opacity: 1; }
+}
+
+/* Footer input */
+.mt-footer {
+  padding: 12px 16px;
+  background: var(--mt-surface2);
+  border-top: 1px solid var(--mt-border);
+  display: flex; gap: 8px; align-items: flex-end;
+  flex-shrink: 0;
+}
+.mt-input-wrap { flex: 1; }
+.mt-input {
+  width: 100%;
+  background: var(--mt-surface);
+  border: 1px solid var(--mt-border);
+  border-radius: 11px;
+  padding: 10px 13px;
+  font-family: var(--mt-font-mono);
+  font-size: 12.5px;
+  color: var(--mt-text);
+  resize: none;
+  outline: none;
+  max-height: 90px;
+  min-height: 38px;
+  transition: border-color 0.2s;
+  line-height: 1.5;
+}
+.mt-input::placeholder { color: var(--mt-dim); }
+.mt-input:focus { border-color: rgba(0,229,160,0.4); }
+.mt-send {
+  width: 38px; height: 38px; flex-shrink: 0;
+  background: var(--mt-accent);
+  border: none; border-radius: 11px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: #000; font-size: 15px; font-weight: 700;
+  transition: all 0.2s;
+}
+.mt-send:hover { background: #00c98a; transform: scale(1.06); }
+.mt-send:active { transform: scale(0.97); }
+
+@media (max-width: 480px) {
+  .mt-panel {
+    bottom: 0; right: 0; left: 0;
+    width: 100%; height: 100vh;
+    border-radius: 0;
+  }
+  .mt-open-btn { bottom: 20px; right: 20px; }
 }
 </style>
 </head>
@@ -939,21 +1223,61 @@ footer{background:#080a0f;color:white;padding:80px 0 40px}
   </section>
   <footer><div class="container"><div class="footer-bottom" style="border-top:none;padding-top:40px;padding-bottom:20px"><p>© 2026 Mellow Tech Services. All rights reserved.</p></div></div></footer>
 </div>
-<div id="chatbot-panel">
-  <div id="chat-header">
-    <span>Mellow Tech Assistant</span>
-    <button onclick="toggleChat(false)">✕</button>
+<!-- ═══════════════════════════════════════════════════
+     MT-CHATBOT HTML  (all IDs and classes prefixed mt-)
+════════════════════════════════════════════════════ -->
+
+<!-- Open button (shown when panel is closed) -->
+<button class="mt-open-btn" id="mtOpenBtn" onclick="mtOpenPanel()" title="Chat with us" aria-label="Open chat">⚡</button>
+
+<!-- Chat panel -->
+<div class="mt-panel" id="mtPanel">
+
+  <!-- Header -->
+  <div class="mt-header">
+    <div class="mt-logo">⚡</div>
+    <div class="mt-hinfo">
+      <div class="mt-hname">MellowTech Assistant</div>
+      <div class="mt-hstatus"><span class="mt-dot"></span>Online · Smart Engine Active</div>
+    </div>
+    <button class="mt-close-btn" onclick="mtClosePanel()" aria-label="Close chat">✕</button>
   </div>
 
-  <div id="messages"></div>
+  <!-- Quick chips -->
+  <div class="mt-chips" id="mtChips">
+    <button class="mt-chip" onclick="mtSendChip('CV services')">📄 CV</button>
+    <button class="mt-chip" onclick="mtSendChip('Website development')">🌐 Website</button>
+    <button class="mt-chip" onclick="mtSendChip('Assignment help')">📝 Assignment</button>
+    <button class="mt-chip" onclick="mtSendChip('Laptop repair')">💻 Tech Support</button>
+    <button class="mt-chip" onclick="mtSendChip('Pricing')">💰 Pricing</button>
+    <button class="mt-chip" onclick="mtSendChip('How long does it take?')">⏱ Turnaround</button>
+  </div>
 
-  <div id="input-area">
-    <input type="text" id="user-input" placeholder="Ask anything..." />
-    <button onclick="handleInput()">Send</button>
+  <!-- Messages -->
+  <div class="mt-body" id="mtBody"></div>
+
+  <!-- Typing indicator -->
+  <div class="mt-typing" id="mtTyping">
+    <div class="mt-avatar" style="background:linear-gradient(135deg,var(--mt-accent),var(--mt-accent2));width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0">⚡</div>
+    <div class="mt-typing-dots"><span></span><span></span><span></span></div>
+  </div>
+
+  <!-- Input footer -->
+  <div class="mt-footer">
+    <div class="mt-input-wrap">
+      <textarea
+        class="mt-input"
+        id="mtInput"
+        placeholder="Ask about CVs, websites, assignments, tech support…"
+        rows="1"
+        onkeydown="mtHandleKey(event)"
+        oninput="mtResize(this)"
+      ></textarea>
+    </div>
+    <button class="mt-send" onclick="mtHandleSend()" aria-label="Send">↑</button>
   </div>
 </div>
 
-<button id="open-chat" onclick="toggleChat(true)">Chat with us</button>
 <script>
 const services = {
   windows:{title:"Windows Installation & Activation",breadcrumb:"Windows Installation",icon:"🪟",price:"Affordable pricing",intro:"We provide clean, professional Windows installation with full driver setup, system updates, and genuine activation.",problems:[{icon:"⚠️",text:"Your PC is running slow due to a corrupted Windows installation"},{icon:"🔴",text:"Windows keeps crashing or showing Blue Screen errors"},{icon:"🔑",text:"Your Windows license is expired or unactivated"},{icon:"💾",text:"You got a new PC and need a fresh OS installation"}],benefits:[{h:"Fast Performance",p:"A clean install removes bloatware and corruption for a noticeably faster system."},{h:"Genuine Activation",p:"Properly activated Windows means full security updates and no annoying popups."},{h:"All Drivers Installed",p:"Every device set up and working correctly."},{h:"Personal Data Protected",p:"We back up your files before any installation work begins."}],process:[{title:"Backup Your Data",body:"We secure your important files before beginning."},{title:"Format & Install",body:"Clean Windows installation with the latest version."},{title:"Driver Setup",body:"All hardware drivers installed and configured."},{title:"Activation & Updates",body:"Genuine Windows activation and all critical updates applied."},{title:"Handover & Testing",body:"Full system test before we hand your PC back."}],who:["Home PC and laptop users","Students setting up a new machine","Remote workers","Businesses upgrading computers"],scenarios:[{h:"Scenario 1",p:"James bought a second-hand laptop with no OS. We installed Windows 11, all drivers, and activated it - ready in 2 hours."},{h:"Scenario 2",p:"Sarah's PC kept crashing due to a corrupted Windows install. We did a clean reinstall and it now runs perfectly."}]},
@@ -1286,6 +1610,230 @@ Due Date: ${userData.dueDate}`;
 
   window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`);
 }
+</script>
+<!-- ═══════════════════════════════════════════════════
+     MT-CHATBOT JAVASCRIPT  (all vars/fns prefixed mt)
+════════════════════════════════════════════════════ -->
+<script>
+/* ── Constants ──────────────────────────────────────── */
+const MT_WA = '27720465993';
+
+/* ── Intent detection ───────────────────────────────── */
+const MT_INTENTS = {
+  cv:         { kw:['cv','resume','curriculum','vitae','cover letter'],       fn: mtHandleCV },
+  website:    { kw:['website','web','site','online store','ecommerce','landing page'], fn: mtHandleWebsite },
+  assignment: { kw:['assignment','task','essay','homework','research','thesis','dissertation','project'], fn: mtHandleAssignment },
+  laptop:     { kw:['laptop','pc','computer','slow','repair','fix','virus','screen','battery','not turning on','won\'t start','freeze','crash','blue screen'], fn: mtHandleLaptop },
+  price:      { kw:['price','pricing','cost','how much','rate','fee','charge','affordable'], fn: mtFaqPrice },
+  time:       { kw:['how long','turnaround','timeline','delivery','when','days','hours'], fn: mtFaqTime },
+  payment:    { kw:['payment','pay','deposit','eft','cash','bank','transfer','yoco'],       fn: mtFaqPayment },
+  greeting:   { kw:['hello','hi','hey','howzit','sup','good morning','good afternoon','good evening'], fn: mtGreeting }
+};
+
+function mtDetect(text){
+  const low=text.toLowerCase();
+  for(const[k,v] of Object.entries(MT_INTENTS))
+    if(v.kw.some(w=>low.includes(w))) return v.fn;
+  return mtUnknown;
+}
+
+/* ── Service handlers ───────────────────────────────── */
+function mtHandleCV(text){
+  const low=text.toLowerCase();
+  let type='Standard CV',price=100;
+  if(low.includes('ats'))           { type='ATS-Optimised CV'; price=200; }
+  else if(low.includes('professional')||low.includes('exec')) { type='Professional CV'; price=150; }
+  else if(low.includes('student')||low.includes('graduate'))  { type='Student / Graduate CV'; price=100; }
+  else if(low.includes('cover'))    { type='CV + Cover Letter'; price=180; }
+  const dep=Math.round(price*.25);
+  const wa=encodeURIComponent(`Hi MellowTech! I need a ${type}.\n\nService: CV Writing\nType: ${type}\nPrice: R${price}\nDeposit: R${dep}`);
+  return mtCard({icon:'📄',title:'CV Writing Service',intro:`Got it! Here's your quote for a <strong>${type}</strong>:`,rows:[
+    {k:'CV Type',v:type},{k:'Price',v:`R${price}`,hi:true},{k:'Deposit',v:`R${dep} (25%)`},{k:'Turnaround',v:'24–48 hours'}
+  ],note:'🔔 A 25% deposit is required before work begins.',wa,waLabel:'Order on WhatsApp'});
+}
+
+function mtHandleWebsite(text){
+  const low=text.toLowerCase();
+  let type='Basic Website',price=1500;
+  if(low.includes('ecommerce')||low.includes('online store')||low.includes('shop')||low.includes('sell')) { type='E-Commerce Store'; price=4000; }
+  else if(low.includes('business')||low.includes('company')||low.includes('corporate')) { type='Business Website'; price=2500; }
+  else if(low.includes('portfolio')||low.includes('personal')||low.includes('blog'))    { type='Portfolio / Personal Site'; price=1500; }
+  const dep=Math.round(price*.25);
+  const wa=encodeURIComponent(`Hi MellowTech! I need a ${type}.\n\nService: Web Development\nType: ${type}\nPrice: R${price}\nDeposit: R${dep}`);
+  return mtCard({icon:'🌐',title:'Website Development',intro:`Great choice! Here's your estimate for a <strong>${type}</strong>:`,rows:[
+    {k:'Website Type',v:type},{k:'Price',v:`R${price}`,hi:true},{k:'Deposit',v:`R${dep} (25%)`},{k:'Turnaround',v:'5–14 business days'}
+  ],note:'✅ Includes mobile-responsive design, hosting guidance &amp; 1 revision round.',wa,waLabel:'Start My Project'});
+}
+
+function mtHandleAssignment(text){
+  const low=text.toLowerCase();
+  let base=200,urgLabel='Standard',urgFee=0;
+  if(low.includes('today')||low.includes('asap')||low.includes('hours'))    { urgLabel='URGENT (same-day)'; urgFee=200; }
+  else if(low.includes('tomorrow')||low.includes('urgent')||low.includes('rush')) { urgLabel='Rush (next-day)'; urgFee=100; }
+  const dm=text.match(/\b(\d{1,2})\s*(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\b/gi);
+  const dueDate=dm?dm[0]:null;
+  let subj='General Assignment';
+  if(low.includes('research'))subj='Research Paper';
+  else if(low.includes('essay'))subj='Essay';
+  else if(low.includes('thesis')||low.includes('dissertation'))subj='Thesis / Dissertation';
+  else if(low.includes('report'))subj='Report';
+  const total=base+urgFee,dep=Math.round(total*.25);
+  const rows=[{k:'Type',v:subj},{k:'Urgency',v:urgLabel,hi:urgFee>0}];
+  if(dueDate)rows.push({k:'Due Date',v:dueDate});
+  if(urgFee>0)rows.push({k:'Urgency Fee',v:`+R${urgFee}`});
+  rows.push({k:'Total Price',v:`R${total}`,hi:true},{k:'Deposit',v:`R${dep} (25%)`});
+  const wa=encodeURIComponent(`Hi MellowTech! I need assignment help.\n\nType: ${subj}\nUrgency: ${urgLabel}${dueDate?'\nDue Date: '+dueDate:''}\nPrice: R${total}\nDeposit: R${dep}`);
+  return mtCard({icon:'📝',title:'Assignment Help',intro:`Here's your quote for <strong>${subj}</strong>:`,rows,note:'🔒 A 25% deposit is required before work starts. Confidentiality guaranteed.',wa,waLabel:'Submit Assignment Brief'});
+}
+
+function mtHandleLaptop(text){
+  const low=text.toLowerCase();
+  let issue='General Diagnosis',min=50,max=200;
+  if(low.includes('slow')||low.includes('lagg')||low.includes('freeze'))    { issue='Performance / Speed Issues'; min=150;max=300; }
+  else if(low.includes('virus')||low.includes('malware'))                  { issue='Virus / Malware Removal'; min=200;max=400; }
+  else if(low.includes('screen')||low.includes('display'))                 { issue='Screen Repair / Replacement'; min=300;max=600; }
+  else if(low.includes('not turning')||low.includes("won't start"))         { issue='Power / Boot Issue'; min=150;max=500; }
+  else if(low.includes('battery'))                                         { issue='Battery Replacement'; min=200;max=450; }
+  else if(low.includes('keyboard'))                                        { issue='Keyboard Repair'; min=150;max=350; }
+  else if(low.includes('wifi')||low.includes('network'))                   { issue='Network / Wi-Fi Issues'; min=100;max=250; }
+  else if(low.includes('blue screen')||low.includes('crash'))              { issue='Crash / Blue Screen Error'; min=150;max=400; }
+  const wa=encodeURIComponent(`Hi MellowTech! I need tech support.\n\nIssue: ${issue}\nDiagnosis Fee: R50\nRepair Estimate: R${min}–R${max}`);
+  return mtCard({icon:'💻',title:'Tech Support',intro:`Let's get that fixed! Here's what to expect for <strong>${issue}</strong>:`,rows:[
+    {k:'Issue',v:issue},{k:'Diagnosis Fee',v:'R50'},{k:'Repair Estimate',v:`R${min}–R${max}`,hi:true},{k:'Note',v:'Final quote after diagnosis'}
+  ],note:'🔧 Diagnosis fee applies toward the repair if you proceed.',wa,waLabel:'Book a Diagnosis'});
+}
+
+function mtFaqPrice(){
+  return `Here's a quick overview of our pricing:<div class="mt-card"><div class="mt-card-label">💰 Service Pricing</div>
+    <div class="mt-row"><span class="mt-rkey">📄 CV Standard</span><span class="mt-rval">R100</span></div>
+    <div class="mt-row"><span class="mt-rkey">📄 CV Professional</span><span class="mt-rval">R150</span></div>
+    <div class="mt-row"><span class="mt-rkey">📄 CV ATS-Optimised</span><span class="mt-rval">R200</span></div>
+    <div class="mt-row"><span class="mt-rkey">🌐 Basic Website</span><span class="mt-rval">R1,500</span></div>
+    <div class="mt-row"><span class="mt-rkey">🌐 Business Website</span><span class="mt-rval">R2,500</span></div>
+    <div class="mt-row"><span class="mt-rkey">🌐 E-Commerce</span><span class="mt-rval">R4,000</span></div>
+    <div class="mt-row"><span class="mt-rkey">📝 Assignment (base)</span><span class="mt-rval">R200+</span></div>
+    <div class="mt-row"><span class="mt-rkey">💻 Tech Diagnosis</span><span class="mt-rval">R50</span></div>
+    <div class="mt-row"><span class="mt-rkey">💻 Repairs</span><span class="mt-rval mt-hi">R150–R500</span></div>
+  </div><br>All prices require a <strong style="color:var(--mt-accent)">25% deposit</strong> upfront.`;
+}
+
+function mtFaqTime(){
+  return `Typical turnaround times:<div class="mt-card"><div class="mt-card-label">⏱ Turnaround</div>
+    <div class="mt-row"><span class="mt-rkey">📄 CV Writing</span><span class="mt-rval">24–48 hrs</span></div>
+    <div class="mt-row"><span class="mt-rkey">🌐 Basic Website</span><span class="mt-rval">5–7 days</span></div>
+    <div class="mt-row"><span class="mt-rkey">🌐 Business Website</span><span class="mt-rval">7–10 days</span></div>
+    <div class="mt-row"><span class="mt-rkey">🌐 E-Commerce</span><span class="mt-rval">10–14 days</span></div>
+    <div class="mt-row"><span class="mt-rkey">📝 Assignment</span><span class="mt-rval">By your deadline</span></div>
+    <div class="mt-row"><span class="mt-rkey">💻 Tech Repair</span><span class="mt-rval">Same-day – 3 days</span></div>
+  </div>`;
+}
+
+function mtFaqPayment(){
+  return `We make paying easy! 💳<div class="mt-card"><div class="mt-card-label">💰 Payment Methods</div>
+    <div class="mt-row"><span class="mt-rkey">🏦 EFT / Bank Transfer</span><span class="mt-rval mt-hi">✓</span></div>
+    <div class="mt-row"><span class="mt-rkey">📱 Capitec Pay</span><span class="mt-rval mt-hi">✓</span></div>
+    <div class="mt-row"><span class="mt-rkey">💵 Cash</span><span class="mt-rval mt-hi">✓</span></div>
+    <div class="mt-row"><span class="mt-rkey">📲 SnapScan / Zapper</span><span class="mt-rval mt-hi">✓</span></div>
+  </div><br>A <strong style="color:var(--mt-accent)">25% deposit</strong> is required before work begins.`;
+}
+
+function mtGreeting(){
+  return `Hey there! 👋 Welcome to <strong>MellowTech</strong>!<br><br>I'm your smart assistant — I can help you with quotes and info on all our services.<br><br>What can I help you with today?
+  <div class="mt-suggest">
+    <div class="mt-sitem" onclick="mtSendChip('I need a professional CV')"><div class="mt-sitem-icon">📄</div>CV Writing</div>
+    <div class="mt-sitem" onclick="mtSendChip('I need a business website')"><div class="mt-sitem-icon">🌐</div>Website Dev</div>
+    <div class="mt-sitem" onclick="mtSendChip('I have an urgent assignment')"><div class="mt-sitem-icon">📝</div>Assignments</div>
+    <div class="mt-sitem" onclick="mtSendChip('My laptop is slow')"><div class="mt-sitem-icon">💻</div>Tech Support</div>
+  </div>`;
+}
+
+function mtUnknown(){
+  return `I didn't quite catch that — no worries! 🙂<br><br>Here's what I can help you with:
+  <div class="mt-suggest">
+    <div class="mt-sitem" onclick="mtSendChip('CV services and pricing')"><div class="mt-sitem-icon">📄</div>CV Writing</div>
+    <div class="mt-sitem" onclick="mtSendChip('I need a website')"><div class="mt-sitem-icon">🌐</div>Web Development</div>
+    <div class="mt-sitem" onclick="mtSendChip('Help with my assignment')"><div class="mt-sitem-icon">📝</div>Assignments</div>
+    <div class="mt-sitem" onclick="mtSendChip('Laptop repair')"><div class="mt-sitem-icon">💻</div>Tech Support</div>
+  </div><br>Or <a href="https://wa.me/${MT_WA}" target="_blank" style="color:var(--mt-accent)">WhatsApp us</a> directly!`;
+}
+
+/* ── Card builder ───────────────────────────────────── */
+function mtCard({icon,title,intro,rows,note,wa,waLabel}){
+  const rowsHtml=rows.map(r=>`<div class="mt-row"><span class="mt-rkey">${r.k}</span><span class="mt-rval${r.hi?' mt-hi':''}">${r.v}</span></div>`).join('');
+  return `${intro}<div class="mt-card"><div class="mt-card-label">${icon} ${title}</div>${rowsHtml}</div>
+  <div style="font-size:11px;color:var(--mt-muted);margin-top:8px;line-height:1.6">${note}</div>
+  <a href="https://wa.me/${MT_WA}?text=${wa}" target="_blank" class="mt-wa-btn">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.117.549 4.107 1.51 5.84L.057 24l6.305-1.654A11.882 11.882 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
+    ${waLabel}
+  </a>`;
+}
+
+/* ── UI helpers ─────────────────────────────────────── */
+let mtBusy=false;
+
+function mtAppendMsg(role,html){
+  const body=document.getElementById('mtBody');
+  const wrap=document.createElement('div');
+  wrap.className=`mt-msg mt-${role}`;
+  const av=document.createElement('div');
+  av.className='mt-avatar';
+  av.textContent=role==='bot'?'⚡':'👤';
+  const bub=document.createElement('div');
+  bub.className='mt-bubble';
+  bub.innerHTML=html;
+  wrap.appendChild(av);wrap.appendChild(bub);
+  body.appendChild(wrap);
+  bub.querySelectorAll('.mt-sitem').forEach(el=>el.addEventListener('click',()=>mtSendChip(el.textContent.trim())));
+  body.scrollTop=body.scrollHeight;
+}
+
+function mtShowTyping(){ document.getElementById('mtTyping').classList.add('mt-show'); document.getElementById('mtBody').scrollTop=9999; }
+function mtHideTyping(){ document.getElementById('mtTyping').classList.remove('mt-show'); }
+
+function mtHandleKey(e){ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();mtHandleSend();} }
+function mtResize(el){ el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,90)+'px'; }
+function mtEsc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function mtHandleSend(){
+  if(mtBusy)return;
+  const inp=document.getElementById('mtInput');
+  const txt=inp.value.trim(); if(!txt)return;
+  inp.value=''; inp.style.height='auto';
+  mtAppendMsg('user',mtEsc(txt));
+  mtProcess(txt);
+}
+
+function mtSendChip(txt){
+  if(mtBusy)return;
+  mtAppendMsg('user',mtEsc(txt));
+  mtProcess(txt);
+}
+
+function mtProcess(txt){
+  mtBusy=true; mtShowTyping();
+  const fn=mtDetect(txt);
+  setTimeout(()=>{
+    mtHideTyping();
+    mtAppendMsg('bot',fn(txt));
+    mtBusy=false;
+  }, 550+Math.random()*350);
+}
+
+/* ── Panel open/close ───────────────────────────────── */
+function mtOpenPanel(){
+  document.getElementById('mtOpenBtn').style.display='none';
+  const p=document.getElementById('mtPanel');
+  p.classList.add('mt-visible');
+}
+function mtClosePanel(){
+  document.getElementById('mtPanel').classList.remove('mt-visible');
+  document.getElementById('mtOpenBtn').style.display='flex';
+}
+
+/* ── Init ───────────────────────────────────────────── */
+(function(){
+  setTimeout(()=>mtAppendMsg('bot',mtGreeting()),500);
+})();
 </script>
 </body>
 </html>
