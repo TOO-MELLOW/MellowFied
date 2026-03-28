@@ -50,125 +50,60 @@ h1,h2,h3,h4,h5{font-family:'Syne',sans-serif;line-height:1.1;letter-spacing:-0.0
 .btn-outline:hover{background:var(--ink);color:var(--lime);transform:translateY(-2px)}
 .btn-lime{background:var(--lime);color:var(--ink)}
 .btn-lime:hover{background:var(--lime-dark);transform:translateY(-2px);box-shadow:0 16px 40px rgba(200,244,90,0.4)}
-#chatbot {
+#chatbot-panel {
   position: fixed;
-  bottom: 90px;
   right: 20px;
-  width: 320px;
-  background: rgba(10,10,10,0.96);
-  backdrop-filter: blur(14px);
-  color: #eaeaea;
-  border-radius: 18px;
+  bottom: 20px;
+  width: 340px;
+  height: 480px;
+  background: #0f0f0f;
+  color: #fff;
+  border-radius: 16px;
   display: none;
-  font-family: 'Poppins', sans-serif;
-  box-shadow: 0 15px 50px rgba(0,0,0,0.7);
-  border: 1px solid rgba(37,211,102,0.15);
-  overflow: hidden;
+  flex-direction: column;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+  border: 1px solid #222;
 }
 
-/* Header */
 #chat-header {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  background: linear-gradient(135deg, #25D366, #1ebe5d);
+  justify-content: space-between;
   padding: 12px;
-}
-
-#chat-logo {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-}
-
-.status {
-  font-size: 11px;
-  color: #eafff3;
-}
-
-/* Messages */
-#messages {
-  height: 230px;
-  overflow-y: auto;
-  padding: 10px;
-}
-
-.bot, .user {
-  margin: 6px 0;
-  padding: 10px;
-  border-radius: 12px;
-  font-size: 13px;
-  max-width: 85%;
-}
-
-.bot {
-  background: #1a1a1a;
-}
-
-.user {
-  background: linear-gradient(135deg, #25D366, #1ebe5d);
-  margin-left: auto;
-}
-
-/* Quick buttons */
-#quick-options {
-  display: flex;
-  gap: 6px;
-  padding: 8px;
-}
-
-#quick-options button {
-  flex: 1;
-  background: #1a1a1a;
-  border: none;
-  padding: 6px;
-  border-radius: 8px;
-  color: #ccc;
-  cursor: pointer;
-}
-
-#quick-options button:hover {
   background: #25D366;
-  color: white;
+  border-radius: 16px 16px 0 0;
 }
 
-/* Input */
+#messages {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+}
+
 #input-area {
   display: flex;
-  padding: 8px;
+  padding: 10px;
 }
 
 #input-area input {
   flex: 1;
   padding: 8px;
-  border-radius: 8px;
-  border: none;
   background: #1a1a1a;
+  border: none;
   color: white;
 }
 
-#input-area button {
-  margin-left: 5px;
-  border: none;
-  border-radius: 8px;
-  padding: 8px;
-  cursor: pointer;
-}
-
-/* Toggle */
-#chat-toggle {
+#open-chat {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background: linear-gradient(135deg, #25D366, #1ebe5d);
-  padding: 16px;
-  border-radius: 50%;
-  border: none;
+  padding: 12px 18px;
+  border-radius: 30px;
+  background: #25D366;
   color: white;
-  font-size: 18px;
-  box-shadow: 0 0 20px rgba(37,211,102,0.6);
+  border: none;
   cursor: pointer;
 }
+
 /* NAV */
 nav {
   position: fixed; top: 0; left: 0; right: 0;
@@ -1004,34 +939,21 @@ footer{background:#080a0f;color:white;padding:80px 0 40px}
   </section>
   <footer><div class="container"><div class="footer-bottom" style="border-top:none;padding-top:40px;padding-bottom:20px"><p>© 2026 Mellow Tech Services. All rights reserved.</p></div></div></footer>
 </div>
-<div id="chatbot">
+<div id="chatbot-panel">
   <div id="chat-header">
-    <img src="logo.png" id="chat-logo">
-    <div>
-      <strong>Mellow Tech</strong><br>
-      <span class="status">● Online</span>
-    </div>
+    <span>Mellow Tech Assistant</span>
+    <button onclick="toggleChat(false)">✕</button>
   </div>
 
-  <div id="chat-body">
-    <div id="messages"></div>
+  <div id="messages"></div>
 
-    <div id="quick-options">
-      <button onclick="quickSelect('CV Services')">📄 CV</button>
-      <button onclick="quickSelect('Website Development')">🌐 Website</button>
-      <button onclick="quickSelect('Laptop Repair')">💻 Laptop</button>
-      <button onclick="quickSelect('Student Services')">📝 Assignment Guidelines</button>
-    </div>
-
-    <div id="input-area">
-      <input type="text" id="user-input" placeholder="Type your message..." />
-      <button onclick="sendMessage()">➤</button>
-      <button onclick="startRecording()">🎤</button>
-    </div>
+  <div id="input-area">
+    <input type="text" id="user-input" placeholder="Ask anything..." />
+    <button onclick="handleInput()">Send</button>
   </div>
 </div>
 
-<button id="chat-toggle" onclick="toggleChat()">💬</button>
+<button id="open-chat" onclick="toggleChat(true)">Chat with us</button>
 <script>
 const services = {
   windows:{title:"Windows Installation & Activation",breadcrumb:"Windows Installation",icon:"🪟",price:"Affordable pricing",intro:"We provide clean, professional Windows installation with full driver setup, system updates, and genuine activation.",problems:[{icon:"⚠️",text:"Your PC is running slow due to a corrupted Windows installation"},{icon:"🔴",text:"Windows keeps crashing or showing Blue Screen errors"},{icon:"🔑",text:"Your Windows license is expired or unactivated"},{icon:"💾",text:"You got a new PC and need a fresh OS installation"}],benefits:[{h:"Fast Performance",p:"A clean install removes bloatware and corruption for a noticeably faster system."},{h:"Genuine Activation",p:"Properly activated Windows means full security updates and no annoying popups."},{h:"All Drivers Installed",p:"Every device set up and working correctly."},{h:"Personal Data Protected",p:"We back up your files before any installation work begins."}],process:[{title:"Backup Your Data",body:"We secure your important files before beginning."},{title:"Format & Install",body:"Clean Windows installation with the latest version."},{title:"Driver Setup",body:"All hardware drivers installed and configured."},{title:"Activation & Updates",body:"Genuine Windows activation and all critical updates applied."},{title:"Handover & Testing",body:"Full system test before we hand your PC back."}],who:["Home PC and laptop users","Students setting up a new machine","Remote workers","Businesses upgrading computers"],scenarios:[{h:"Scenario 1",p:"James bought a second-hand laptop with no OS. We installed Windows 11, all drivers, and activated it - ready in 2 hours."},{h:"Scenario 2",p:"Sarah's PC kept crashing due to a corrupted Windows install. We did a clean reinstall and it now runs perfectly."}]},
@@ -1272,83 +1194,97 @@ if (!window.__contactFormBound) {
 }
 </script>
   <script>
-let step = 0;
-let userData = { name: "", service: "", problem: "" };
+let userData = {
+  service: "",
+  price: 0,
+  deposit: 0,
+  dueDate: ""
+};
 
-function toggleChat() {
-  let chat = document.getElementById("chatbot");
-  chat.style.display = chat.style.display === "block" ? "none" : "block";
+function toggleChat(show) {
+  document.getElementById("chatbot-panel").style.display = show ? "flex" : "none";
 }
 
-setTimeout(() => {
-  toggleChat();
-  botMessage("Hi 👋 Welcome to Mellow Tech");
-  setTimeout(() => botMessage("What’s your name?"), 1000);
-}, 5000);
-
-function botMessage(text) {
-  let messages = document.getElementById("messages");
-
-  let typing = document.createElement("div");
-  typing.className = "typing";
-  typing.innerText = "Typing...";
-  messages.appendChild(typing);
-
-  setTimeout(() => {
-    typing.remove();
-    let msg = document.createElement("div");
-    msg.className = "bot";
-    msg.innerText = text;
-    messages.appendChild(msg);
-    messages.scrollTop = messages.scrollHeight;
-  }, 700);
-}
-
-function userMessage(text) {
+function addMessage(text, type="bot") {
   let msg = document.createElement("div");
-  msg.className = "user";
+  msg.className = type;
   msg.innerText = text;
   document.getElementById("messages").appendChild(msg);
 }
 
-function quickSelect(service) {
-  userData.service = service;
-  userMessage(service);
-  botMessage("Describe your problem briefly");
-  step = 2;
-}
-
-function sendMessage() {
+function handleInput() {
   let input = document.getElementById("user-input");
-  let text = input.value;
-  if (!text) return;
-
-  userMessage(text);
+  let text = input.value.toLowerCase();
   input.value = "";
 
-  if (step === 0) {
-    userData.name = text;
-    botMessage("What service do you need?");
-    step++;
-  } 
-  else if (step === 1) {
-    userData.service = text;
-    botMessage("Describe your problem");
-    step++;
-  } 
-  else {
-    userData.problem = text;
+  addMessage(text, "user");
 
-    botMessage("Connecting you to WhatsApp...");
+  processQuery(text);
+}
 
-    saveLead();
+// 🔥 CORE LOGIC
+function processQuery(text) {
 
-    setTimeout(() => {
-      let phone = "27720465993";
-      let msg = `Hi, I'm ${userData.name}. I need ${userData.service}. Problem: ${userData.problem}`;
-      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`);
-    }, 1200);
+  // Detect services
+  if (text.includes("cv")) {
+    userData.service = "CV Service";
+    userData.price = 100;
   }
+
+  else if (text.includes("website")) {
+    userData.service = "Website Development";
+    userData.price = 1500;
+  }
+
+  else if (text.includes("assignment")) {
+    userData.service = "Assignment Help";
+    userData.price = 200;
+
+    // Extract due date
+    let dateMatch = text.match(/\d{1,2}\s?(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)/);
+    if (dateMatch) {
+      userData.dueDate = dateMatch[0];
+    }
+
+    addMessage("📌 Assignment detected. A 25% deposit is required before work starts.");
+  }
+
+  // Price calculation
+  if (userData.price > 0) {
+    userData.deposit = userData.price * 0.25;
+
+    addMessage(
+      `💰 Service: ${userData.service}
+Price: R${userData.price}
+Deposit (25%): R${userData.deposit}`
+    );
+
+    addMessage("Click below to continue to WhatsApp 👇");
+
+    sendToWhatsApp();
+  }
+
+  // FAQ responses
+  if (text.includes("how long")) {
+    addMessage("⏱ Turnaround time is usually 1–3 days depending on workload.");
+  }
+
+  if (text.includes("price")) {
+    addMessage("💰 Prices depend on the service. Tell me what you need 😊");
+  }
+}
+
+// WhatsApp redirect
+function sendToWhatsApp() {
+  let phone = "27720465993";
+
+  let msg = `Hello Mellow Tech,
+Service: ${userData.service}
+Price: R${userData.price}
+Deposit: R${userData.deposit}
+Due Date: ${userData.dueDate}`;
+
+  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`);
 }
 </script>
 </body>
