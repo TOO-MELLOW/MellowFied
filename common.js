@@ -3,18 +3,19 @@
    common.js — loaded on every page
 ════════════════════════════════════════════════════ */
 // Loader - show only once per session
+// Loader - show only once per session (simplified)
 (function() {
-  // Wait for DOM to be ready before checking/manipulating loader
   function initLoader() {
     const loader = document.getElementById('loader');
+    if (!loader) return;
     
     // Check if loader has already been shown this session
     if (sessionStorage.getItem('loaderShown')) {
-      if (loader) {
-        loader.style.display = 'none';
-        loader.style.opacity = '0';
-        loader.style.visibility = 'hidden';
-      }
+      // Hide immediately - no animation
+      loader.style.display = 'none';
+      loader.style.opacity = '0';
+      loader.style.visibility = 'hidden';
+      document.body.classList.remove('mt-hidden'); // Ensure body is visible
       return;
     }
     
@@ -25,7 +26,12 @@
     window.addEventListener('load', function() {
       if (loader) {
         loader.classList.add('hide');
-        setTimeout(() => { if (loader) loader.style.display = 'none'; }, 600);
+        setTimeout(() => { 
+          if (loader) {
+            loader.style.display = 'none';
+            document.body.classList.remove('mt-hidden');
+          }
+        }, 600);
       }
     });
     
@@ -33,7 +39,12 @@
     setTimeout(function() {
       if (loader && !loader.classList.contains('hide')) {
         loader.classList.add('hide');
-        setTimeout(() => { if (loader) loader.style.display = 'none'; }, 600);
+        setTimeout(() => { 
+          if (loader) {
+            loader.style.display = 'none';
+            document.body.classList.remove('mt-hidden');
+          }
+        }, 600);
       }
     }, 5000);
   }
