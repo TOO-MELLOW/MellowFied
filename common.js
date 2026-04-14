@@ -4,37 +4,46 @@
 ════════════════════════════════════════════════════ */
 // Loader - show only once per session
 (function() {
-  // Check if loader has already been shown this session
-  if (sessionStorage.getItem('loaderShown')) {
+  // Wait for DOM to be ready before checking/manipulating loader
+  function initLoader() {
     const loader = document.getElementById('loader');
-    if (loader) {
-      loader.style.display = 'none';
-      loader.style.opacity = '0';
-      loader.style.visibility = 'hidden';
+    
+    // Check if loader has already been shown this session
+    if (sessionStorage.getItem('loaderShown')) {
+      if (loader) {
+        loader.style.display = 'none';
+        loader.style.opacity = '0';
+        loader.style.visibility = 'hidden';
+      }
+      return;
     }
-    return;
+    
+    // First visit - mark as shown
+    sessionStorage.setItem('loaderShown', 'true');
+    
+    // Hide loader after page loads
+    window.addEventListener('load', function() {
+      if (loader) {
+        loader.classList.add('hide');
+        setTimeout(() => { if (loader) loader.style.display = 'none'; }, 600);
+      }
+    });
+    
+    // Fallback: hide after 5 seconds max
+    setTimeout(function() {
+      if (loader && !loader.classList.contains('hide')) {
+        loader.classList.add('hide');
+        setTimeout(() => { if (loader) loader.style.display = 'none'; }, 600);
+      }
+    }, 5000);
   }
   
-  // First visit - mark as shown
-  sessionStorage.setItem('loaderShown', 'true');
-  
-  // Hide loader after page loads
-  window.addEventListener('load', function() {
-    const loader = document.getElementById('loader');
-    if (loader) {
-      loader.classList.add('hide');
-      setTimeout(() => { if (loader) loader.style.display = 'none'; }, 600);
-    }
-  });
-  
-  // Fallback: hide after 5 seconds max
-  setTimeout(function() {
-    const loader = document.getElementById('loader');
-    if (loader && !loader.classList.contains('hide')) {
-      loader.classList.add('hide');
-      setTimeout(() => { if (loader) loader.style.display = 'none'; }, 600);
-    }
-  }, 5000);
+  // Run when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLoader);
+  } else {
+    initLoader();
+  }
 })();
 /* ── Nav scroll / hide ────────────────────────────── */
 (function(){
