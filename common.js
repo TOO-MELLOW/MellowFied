@@ -2,48 +2,40 @@
    MELLOW TECH SERVICES — SHARED JAVASCRIPT
    common.js — loaded on every page
 ════════════════════════════════════════════════════ */
+// Loader - show only once per session
 (function() {
-  // Check if loader has already been shown in this session
+  // Check if loader has already been shown this session
   if (sessionStorage.getItem('loaderShown')) {
-    // Hide loader immediately without animation
     const loader = document.getElementById('loader');
     if (loader) {
       loader.style.display = 'none';
-      loader.style.visibility = 'hidden';
       loader.style.opacity = '0';
+      loader.style.visibility = 'hidden';
     }
-    return; // Exit early - no animation
+    return;
   }
   
-  // First visit this session - mark as shown
+  // First visit - mark as shown
   sessionStorage.setItem('loaderShown', 'true');
   
-  // Wait for everything to load, then hide loader with animation
+  // Hide loader after page loads
   window.addEventListener('load', function() {
     const loader = document.getElementById('loader');
-    if (!loader) return;
-    
-    // Add the hide class to trigger CSS animation
-    loader.classList.add('hide');
-    
-    // Optional: remove from DOM after animation completes
-    setTimeout(function() {
-      loader.style.display = 'none';
-    }, 600); // Match your CSS animation duration
+    if (loader) {
+      loader.classList.add('hide');
+      setTimeout(() => { if (loader) loader.style.display = 'none'; }, 600);
+    }
   });
   
-  // Fallback: if load event takes too long, hide after 5 seconds max
+  // Fallback: hide after 5 seconds max
   setTimeout(function() {
     const loader = document.getElementById('loader');
     if (loader && !loader.classList.contains('hide')) {
       loader.classList.add('hide');
-      setTimeout(function() {
-        loader.style.display = 'none';
-      }, 600);
+      setTimeout(() => { if (loader) loader.style.display = 'none'; }, 600);
     }
   }, 5000);
 })();
-
 /* ── Nav scroll / hide ────────────────────────────── */
 (function(){
   var lastScroll = 0;
