@@ -2,6 +2,48 @@
    MELLOW TECH SERVICES — SHARED JAVASCRIPT
    common.js — loaded on every page
 ════════════════════════════════════════════════════ */
+<script>
+(function() {
+  // Check if loader has already been shown in this session
+  if (sessionStorage.getItem('loaderShown')) {
+    // Hide loader immediately without animation
+    const loader = document.getElementById('loader');
+    if (loader) {
+      loader.style.display = 'none';
+      loader.style.visibility = 'hidden';
+      loader.style.opacity = '0';
+    }
+    return; // Exit early - no animation
+  }
+  
+  // First visit this session - mark as shown
+  sessionStorage.setItem('loaderShown', 'true');
+  
+  // Wait for everything to load, then hide loader with animation
+  window.addEventListener('load', function() {
+    const loader = document.getElementById('loader');
+    if (!loader) return;
+    
+    // Add the hide class to trigger CSS animation
+    loader.classList.add('hide');
+    
+    // Optional: remove from DOM after animation completes
+    setTimeout(function() {
+      loader.style.display = 'none';
+    }, 600); // Match your CSS animation duration
+  });
+  
+  // Fallback: if load event takes too long, hide after 5 seconds max
+  setTimeout(function() {
+    const loader = document.getElementById('loader');
+    if (loader && !loader.classList.contains('hide')) {
+      loader.classList.add('hide');
+      setTimeout(function() {
+        loader.style.display = 'none';
+      }, 600);
+    }
+  }, 5000);
+})();
 
 /* ── Nav scroll / hide ────────────────────────────── */
 (function(){
