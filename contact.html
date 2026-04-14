@@ -1,346 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Contact Us | Mellow Tech Services — Polokwane, Limpopo</title>
-  <meta name="description" content="Contact Mellow Tech Services in Polokwane. Call, WhatsApp or email us for professional IT support, web development, graphic design and more across Limpopo." />
-  <link rel="canonical" href="https://mellowtechs.vercel.app/contact.html" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us — Mellow Tech Services</title>
+<meta name="description" content="Get in touch with Mellow Tech Services for fast, affordable tech support in Polokwane and online.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
 </head>
 <body>
 
-<nav class="nav" id="nav">
-  <div class="nav-inner">
-     <a href="index.html" class="logo">
-    <img src="mellowtechs.png" alt="Mellow Tech Services Logo">
-</a>
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="services.html">Services</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="contact.html" class="active">Contact</a></li>
-    </ul>
-    <a href="contact.html" class="nav-cta">Get a Quote</a>
-    <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+<!-- LOADER -->
+<div id="mtLoader" role="status" aria-label="Loading Mellow Tech Services">
+  <canvas id="mtCanvas" aria-hidden="true"></canvas>
+  <div class="mtBracket tl"></div><div class="mtBracket tr"></div>
+  <div class="mtBracket bl"></div><div class="mtBracket br"></div>
+  <div id="mtCenter">
+    <div id="mtLogoBox"><div id="mtGlow"></div><img id="mtLogoBase" src="images/logo.png" alt="" draggable="false"><div id="mtFillClip"><img id="mtLogoFill" src="images/logo.png" alt="" draggable="false"></div></div>
+    <div id="mtBrand">Mellow Tech Services</div>
+    <div id="mtTag">Digitally Mellow &bull; Technically Sharp</div>
+    <div id="mtBarWrap"><div id="mtBarPct">0%</div><div id="mtBarTrack"><div id="mtBarFill"></div></div></div>
   </div>
-  <div class="mobile-menu" id="mobileMenu">
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="services.html">Services</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="contact.html">Contact</a></li>
-      <li><a href="contact.html" class="mobile-cta">Get a Quote</a></li>
-    </ul>
+</div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a class="nav-logo" href="index.html"><img src="images/logo.png" style="height:50px;width:auto;" alt="logo"></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a><a href="services.html">Services</a>
+      <a href="about.html">About</a><a href="contact.html" class="active">Contact</a>
+    </div>
+    <div class="nav-cta"><a class="btn btn-primary" href="contact.html">Get Support ↗</a></div>
+    <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
   </div>
 </nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a><a href="services.html">Services</a>
+  <a href="about.html">About</a><a href="contact.html">Contact</a>
+  <div class="mobile-cta"><a class="btn btn-primary" href="contact.html">Get Tech Support ↗</a></div>
+</div>
 
-<!-- PAGE HERO -->
-<section class="page-hero">
-  <div class="hero-bg">
-    <div class="hero-orb hero-orb-1"></div>
-    <div class="hero-orb hero-orb-2"></div>
-    <div class="hero-grid"></div>
-  </div>
-  <div class="container page-hero-inner">
-    <span class="section-tag reveal">Let's Talk</span>
-    <h1 class="reveal delay-1">Get In <span class="gradient-text">Touch</span></h1>
-    <p class="reveal delay-2">Ready to start your project? We'd love to hear from you — we respond within hours.</p>
+<!-- CONTACT HERO -->
+<section class="contact-hero page-hero">
+  <div class="container">
+    <div class="section-tag" style="justify-content:center;margin-bottom:16px"><div class="tag-line"></div><span class="label" style="color:rgba(255,255,255,0.4)">Reach Out</span></div>
+    <h1 class="headline" style="color:white">Let's solve your tech problems</h1>
+    <p>Fill in the form below and we'll get back to you as quickly as possible.</p>
   </div>
 </section>
 
-<!-- CONTACT SECTION -->
-<section class="section contact-section">
+<!-- CONTACT BODY -->
+<section class="contact-body">
   <div class="container">
     <div class="contact-grid">
-
-      <!-- INFO -->
-      <div class="contact-info reveal">
-        <h2>Let's discuss your <span class="gradient-text">project</span></h2>
-        <p>Whether you need a quick PC fix, a new website, or a complete business digital setup — we've got the expertise and the passion to make it happen.</p>
-
-        <div class="contact-methods">
-          <a href="tel:+27720465993" class="contact-method">
-            <div class="cm-icon">📱</div>
-            <div>
-              <strong>Call Us</strong>
-              <span>+27 (720) 465-993</span>
-              <small>Available Mon–Sat, 8am–7pm</small>
-            </div>
-          </a>
-          <a href="mailto:info@mellowtech.co.za" class="contact-method">
-            <div class="cm-icon">✉️</div>
-            <div>
-              <strong>Email Us</strong>
-              <span>info@mellowtech.co.za</span>
-              <small>Response within 24 hours</small>
-            </div>
-          </a>
-          <a href="https://wa.me/27720465993" target="_blank" class="contact-method wa-method">
-            <div class="cm-icon">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            </div>
-            <div>
-              <strong>WhatsApp</strong>
-              <span>+27 (720) 465-993</span>
-              <small>Fastest response — usually within minutes</small>
-            </div>
-          </a>
-          <div class="contact-method static">
-            <div class="cm-icon">📍</div>
-            <div>
-              <strong>Service Area</strong>
-              <span>Polokwane &amp; Limpopo Province</span>
-              <small>In-person &amp; remote services available</small>
-            </div>
-          </div>
-        </div>
-
-        <div class="hours-block">
-          <h4>Business Hours</h4>
-          <div class="hours-grid">
-            <span>Monday – Friday</span><span>8:00 AM – 7:00 PM</span>
-            <span>Saturday</span><span>9:00 AM – 5:00 PM</span>
-            <span>Sunday</span><span>Emergency only</span>
-          </div>
+      <div class="reveal">
+        <h2>Get in touch</h2>
+        <p>Have a tech problem? Need a quote? Just want to ask a question? We're here to help.</p>
+        <div class="contact-method"><div class="cm-icon">📧</div><div class="cm-text"><h4>Email</h4><p>mellowtech@email.com</p></div></div>
+        <div class="contact-method"><div class="cm-icon">📱</div><div class="cm-text"><h4>WhatsApp / Phone</h4><p>+27 720 465 993</p></div></div>
+        <div class="contact-method"><div class="cm-icon">🕐</div><div class="cm-text"><h4>Hours</h4><p>Monday – Saturday: 8am – 7pm</p></div></div>
+        <div style="margin-top:40px;background:var(--ink);border-radius:16px;padding:28px;color:white">
+          <h4 style="color:var(--lime);font-family:'Syne',sans-serif;font-size:1rem;margin-bottom:12px">⚡ Quick Turnaround</h4>
+          <p style="font-size:0.9rem;color:rgba(255,255,255,0.6);line-height:1.7">Most services are completed within 24 hours. Urgent requests handled same-day where possible.</p>
         </div>
       </div>
-
-      <!-- FORM -->
-      <div class="contact-form-wrap reveal delay-1">
-        <div class="form-card">
+      <div class="reveal">
+        <div class="contact-form">
           <h3>Send us a message</h3>
-          <p>Fill in the form and we'll get back to you with a personalised quote.</p>
-
-          <!--
-            IMPORTANT — EmailJS template variable mapping:
-            Template variables used in BOTH templates:
-              {{name}}     → input name="name"
-              {{email}}    → input name="email"
-              {{phone}}    → input name="phone"
-              {{service}}  → select name="service"
-              {{message}}  → textarea name="message"
-              {{reply_to}} → hardcoded as "info@mellowtech.co.za"
-
-            In your EmailJS auto-reply template (template_49mvvnh):
-              Set the "Reply To" field to: {{reply_to}}
-          -->
-          <form class="contact-form" id="contactForm" novalidate>
+          <form id="contactForm" novalidate>
             <div class="form-row">
-              <div class="form-group">
-                <label for="name">Full Name *</label>
-                <input type="text" id="name" name="name" placeholder="Your full name" required />
-              </div>
-              <div class="form-group">
-                <label for="phone">Phone / WhatsApp *</label>
-                <input type="tel" id="phone" name="phone" placeholder="+27 xxx xxx xxx" required />
-              </div>
+              <div class="form-group"><label for="name">Full Name *</label><input type="text" id="name" name="name" placeholder="Your full name" required></div>
+              <div class="form-group"><label for="phone">Phone / WhatsApp *</label><input type="tel" id="phone" name="phone" placeholder="+27 xxx xxx xxx" required></div>
             </div>
-            <div class="form-group">
-              <label for="email">Email Address *</label>
-              <input type="email" id="email" name="email" placeholder="your@email.com" required />
-            </div>
+            <div class="form-group"><label for="email">Email Address *</label><input type="email" id="email" name="email" placeholder="your@email.com" required></div>
             <div class="form-group">
               <label for="service">Service Needed *</label>
               <select id="service" name="service" required>
                 <option value="" disabled selected>Select a Service</option>
-                <option value="Windows Installation">Windows Installation</option>
-                <option value="Microsoft Office">Microsoft Office</option>
-                <option value="Graphic Design">Graphic Design</option>
-                <option value="CV Design & Revamp">CV Design &amp; Revamp</option>
-                <option value="Website & Domain Setup">Website &amp; Domain Setup</option>
-                <option value="PC Troubleshooting">PC Troubleshooting</option>
-                <option value="Password Removal">Password Removal</option>
-                <option value="FRP Bypass">FRP Bypass</option>
-                <option value="Software Installation">Software Installation</option>
-                <option value="Assignment Assistance">Assignment Assistance</option>
-                <option value="Business Digital Setup">Business Digital Setup</option>
-                <option value="Nano Screen Coating">Nano Screen Coating</option>
-                <option value="Other / Not Sure">Other / Not Sure</option>
+                <option>Windows Installation</option><option>Microsoft Office</option><option>Graphic Design</option>
+                <option>CV Design &amp; Revamp</option><option>Website &amp; Domain Setup</option><option>PC Troubleshooting</option>
+                <option>Password Removal</option><option>FRP Bypass</option><option>Software Installation</option>
+                <option>Assignment Assistance</option><option>Business Digital Setup</option><option>Other / Not Sure</option>
               </select>
             </div>
-            <div class="form-group">
-              <label for="message">Message / Project Details *</label>
-              <textarea id="message" name="message" rows="5" placeholder="Tell us about your project..." required></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary btn-full" id="submitBtn">
+            <div class="form-group"><label for="message">Message / Project Details *</label><textarea id="message" name="message" rows="5" placeholder="Tell us about your project..." required></textarea></div>
+            <button type="submit" class="form-submit" id="submitBtn">
               <span class="btn-text">Send Message</span>
-              <span class="btn-loading" style="display:none">Sending...</span>
+              <span class="btn-loading" style="display:none">Sending…</span>
             </button>
           </form>
-
-          <!-- Success popup — shown after both emails send -->
-          <div class="form-success" id="formSuccess" style="display:none">
+          <div class="form-success" id="formSuccess">
             <div class="success-icon">✅</div>
             <h4>Message Sent!</h4>
             <p>Thank you! We'll get back to you within a few hours. For urgent issues, WhatsApp us directly.</p>
-            <a href="https://wa.me/27720465993" target="_blank" class="btn btn-wa" style="margin-top:1rem">
-              Chat on WhatsApp
-            </a>
+            <a href="https://wa.me/27720465993" target="_blank" class="btn btn-lime" style="margin-top:1rem">Chat on WhatsApp</a>
           </div>
-
         </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- FAQ -->
-<section class="section faq-section">
-  <div class="container">
-    <div class="section-head reveal">
-      <span class="section-tag">Common Questions</span>
-      <h2>Frequently Asked <span class="gradient-text">Questions</span></h2>
-    </div>
-    <div class="faq-grid">
-      <div class="faq-item reveal">
-        <button class="faq-q">How long does a Windows installation take? <span>+</span></button>
-        <div class="faq-a"><p>Most Windows installations are completed within 1–2 hours. This includes the OS install, driver setup, and activation. We can often do same-day service for urgent cases.</p></div>
-      </div>
-      <div class="faq-item reveal delay-1">
-        <button class="faq-q">Do you offer remote support? <span>+</span></button>
-        <div class="faq-a"><p>Yes! Many of our services can be performed remotely via secure connection. This includes software installs, driver updates, troubleshooting, and more. We'll guide you through the connection process.</p></div>
-      </div>
-      <div class="faq-item reveal delay-2">
-        <button class="faq-q">How much does a website cost? <span>+</span></button>
-        <div class="faq-a"><p>Website pricing depends on your requirements. We offer affordable packages for small businesses and individuals. Contact us for a free, no-obligation quote tailored to your needs and budget.</p></div>
-      </div>
-      <div class="faq-item reveal">
-        <button class="faq-q">How fast can you design my CV? <span>+</span></button>
-        <div class="faq-a"><p>Standard CV designs are delivered within 24 hours. Rush turnarounds (same day) are available for an additional fee. We'll need your current CV or career information to get started.</p></div>
-      </div>
-      <div class="faq-item reveal delay-1">
-        <button class="faq-q">Do you serve areas outside Polokwane? <span>+</span></button>
-        <div class="faq-a"><p>Yes! We serve all of Limpopo Province including Tzaneen, Mokopane, Bela-Bela, and more. Remote services are available nationwide. For in-person visits outside Polokwane, travel fees may apply.</p></div>
-      </div>
-      <div class="faq-item reveal delay-2">
-        <button class="faq-q">What payment methods do you accept? <span>+</span></button>
-        <div class="faq-a"><p>We accept EFT, cash, and most mobile payment solutions. Payment terms are discussed before starting any project — no hidden charges ever.</p></div>
       </div>
     </div>
   </div>
 </section>
 
-<footer class="footer">
+<!-- FOOTER -->
+<footer>
   <div class="container">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <a href="index.html" class="logo">
-          <span class="logo-text">Mellow<strong>Tech</strong></span>
-        </a>
-        <p>Your trusted tech partner in Polokwane &amp; Limpopo.</p>
-        <div class="footer-contact-items">
-          <a href="tel:+27720465993">📱 +27 (720) 465-993</a>
-          <a href="mailto:info@mellowtech.co.za">✉️ info@mellowtech.co.za</a>
-        </div>
-      </div>
-      <div class="footer-col">
-        <h5>Services</h5>
-        <ul>
-          <li><a href="services.html#windows">Windows Installation</a></li>
-          <li><a href="services.html#design">Graphic Design</a></li>
-          <li><a href="services.html#web">Web Development</a></li>
-          <li><a href="services.html#repair">PC Repair</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h5>Company</h5>
-        <ul>
-          <li><a href="about.html">About Us</a></li>
-          <li><a href="services.html">All Services</a></li>
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h5>Service Areas</h5>
-        <ul>
-          <li><a href="#">Polokwane</a></li>
-          <li><a href="#">Limpopo Province</a></li>
-          <li><a href="#">Tzaneen</a></li>
-          <li><a href="#">Mokopane</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>© 2025 Mellow Tech Services. All rights reserved.</p>
+    <div class="footer-bottom" style="border-top:1px solid rgba(255,255,255,0.08);padding-top:32px">
+      <p>© 2026 Mellow Tech Services. All rights reserved.</p>
+      <p><a href="services.html" style="color:var(--lime)">View Services →</a></p>
     </div>
   </div>
 </footer>
 
-<!-- Floating WhatsApp button -->
-<a href="https://wa.me/27720465993?text=Hi%20Mellow%20Tech%2C%20I%27d%20like%20to%20get%20a%20quote" target="_blank" class="wa-float" aria-label="Chat on WhatsApp">
-  <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-  <span class="wa-tooltip">Chat on WhatsApp</span>
-</a>
+<!-- CHATBOT -->
+<button class="mt-open-btn" id="mtOpenBtn" onclick="mtOpenPanel()" title="Chat with us" aria-label="Open chat">⚡</button>
+<div class="mt-panel" id="mtPanel">
+  <div class="mt-header"><div class="mt-logo">⚡</div><div class="mt-hinfo"><div class="mt-hname">MellowTech Assistant</div><div class="mt-hstatus"><span class="mt-dot"></span>Online · Smart Engine Active</div></div><button class="mt-close-btn" onclick="mtClosePanel()" aria-label="Close chat">✕</button></div>
+  <div class="mt-chips" id="mtChips"><button class="mt-chip" onclick="mtSendChip('CV services')">📄 CV</button><button class="mt-chip" onclick="mtSendChip('Website development')">🌐 Website</button><button class="mt-chip" onclick="mtSendChip('Assignment help')">📝 Assignment</button><button class="mt-chip" onclick="mtSendChip('Laptop repair')">💻 Tech Support</button><button class="mt-chip" onclick="mtSendChip('Pricing')">💰 Pricing</button><button class="mt-chip" onclick="mtSendChip('How long does it take?')">⏱ Turnaround</button></div>
+  <div class="mt-body" id="mtBody"></div>
+  <div class="mt-typing" id="mtTyping"><div class="mt-avatar" style="background:linear-gradient(135deg,var(--mt-accent),var(--mt-accent2));width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0">⚡</div><div class="mt-typing-dots"><span></span><span></span><span></span></div></div>
+  <div class="mt-footer"><div class="mt-input-wrap"><textarea class="mt-input" id="mtInput" placeholder="Ask about CVs, websites, assignments, tech support…" rows="1" onkeydown="mtHandleKey(event)" oninput="mtResize(this)"></textarea></div><button class="mt-send" onclick="mtHandleSend()" aria-label="Send">↑</button></div>
+</div>
 
-<!-- ✅ EmailJS v4 SDK (official, latest) -->
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script>
-  // ─── EmailJS Config ────────────────────────────────────────────────────────
-  const EMAILJS_PUBLIC_KEY  = "xS49JkhsNjH8-uBMZ";   // Your Public Key
-  const EMAILJS_SERVICE_ID  = "service_ee5shgv";       // Your Service ID
-  const TEMPLATE_NOTIFY     = "template_2gco1gg";      // Notification → your Gmail
-  const TEMPLATE_AUTOREPLY  = "template_49mvvnh";      // Auto-reply → the user
-  // ──────────────────────────────────────────────────────────────────────────
-
-  emailjs.init(EMAILJS_PUBLIC_KEY);
-
-  const form       = document.getElementById("contactForm");
-  const successBox = document.getElementById("formSuccess");
-  const submitBtn  = document.getElementById("submitBtn");
-  const btnText    = submitBtn.querySelector(".btn-text");
-  const btnLoading = submitBtn.querySelector(".btn-loading");
-
-  form.addEventListener("submit", async function (e) {
-    e.preventDefault();
-
-    // Basic client-side guard — email is required for auto-reply
-    if (!form.email.value.trim()) {
-      alert("Please enter your email address so we can reply to you.");
-      return;
-    }
-
-    // Show loading state
-    btnText.style.display    = "none";
-    btnLoading.style.display = "inline";
-    submitBtn.disabled       = true;
-
-    // Shared template variables — names match {{variable}} in both templates
-    const templateParams = {
-      name     : form.name.value.trim(),
-      email    : form.email.value.trim(),
-      phone    : form.phone.value.trim(),
-      service  : form.service.value,
-      message  : form.message.value.trim(),
-      reply_to : "info@mellowtech.co.za"   // Set as Reply-To in your auto-reply template
-    };
-
-    try {
-      // 1️⃣  Notification email → your Gmail inbox
-      await emailjs.send(EMAILJS_SERVICE_ID, TEMPLATE_NOTIFY, templateParams);
-
-      // 2️⃣  Auto-reply → user's email (From: Gmail, Reply-To: info@mellowtech.co.za)
-      await emailjs.send(EMAILJS_SERVICE_ID, TEMPLATE_AUTOREPLY, templateParams);
-
-      // Both sent — show success popup, hide form
-      form.style.display       = "none";
-      successBox.style.display = "block";
-
-    } catch (err) {
-      console.error("EmailJS error:", err);
-      alert("Something went wrong sending your message. Please try again or WhatsApp us directly.");
-
-      // Restore button so user can retry
-      btnText.style.display    = "inline";
-      btnLoading.style.display = "none";
-      submitBtn.disabled       = false;
-    }
-  });
-</script>
-
+<script src="common.js"></script>
 </body>
 </html>

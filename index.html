@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mellow Tech Services — Smart Tech Solutions</title>
+<meta name="description" content="Mellow Tech Services offers Windows installation, PC troubleshooting, graphic design, web development, CV design, and business digital setup.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<style>
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;padding-top:var(--nav-h);background:#0a0b10;overflow:hidden}
+.hero-bg-img{position:absolute;right:0;top:0;bottom:0;width:55%;background-image:url('images/herobg.png');background-size:164%;background-position:top center;background-repeat:no-repeat;z-index:0}
+.hero-bg-img::before{content:'';position:absolute;inset:0;background:linear-gradient(to right,#0a0b10 0%,rgba(10,11,16,0.5) 25%,rgba(10,11,16,0.03) 60%,transparent 100%)}
+.hero-bg-img::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,#0a0b10 0%,transparent 30%)}
+.hero-grid-overlay{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(200,244,90,0.05) 1px,transparent 1px);background-size:44px 44px;z-index:1;pointer-events:none}
+.hero-inner{width:100%;max-width:1260px;margin:0 auto;padding:80px 24px;position:relative;z-index:2}
+.hero-text{max-width:560px}
+.hero-eyebrow{margin-bottom:24px;display:flex;align-items:center;gap:12px}
+.hero-eyebrow .pill{background:rgba(200,244,90,0.15);color:var(--lime);border:1px solid rgba(200,244,90,0.3)}
+.hero-title{color:white;margin-bottom:24px}
+.hero-title em{color:var(--lime);font-style:normal;display:block}
+.hero-sub{color:rgba(255,255,255,0.65);font-size:1.1rem;font-weight:300;margin-bottom:40px;line-height:1.7}
+.hero-btns{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:56px;margin-top:106px}
+.hero-stats{display:flex;gap:48px;border-top:1px solid rgba(255,255,255,0.1);padding-top:32px}
+.hero-stat-num{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:var(--lime)}
+.hero-stat-label{font-size:0.85rem;color:rgba(255,255,255,0.5);margin-top:2px}
+@media(max-width:1024px){.hero-bg-img{width:100%;opacity:0.35}}
+@media(max-width:768px){.hero-bg-img{width:100%;opacity:0.25}.hero-stats{gap:24px}}
+@media(max-width:480px){.hero-btns{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="mtLoader" role="status" aria-label="Loading Mellow Tech Services">
+  <canvas id="mtCanvas" aria-hidden="true"></canvas>
+  <div class="mtBracket tl" aria-hidden="true"></div>
+  <div class="mtBracket tr" aria-hidden="true"></div>
+  <div class="mtBracket bl" aria-hidden="true"></div>
+  <div class="mtBracket br" aria-hidden="true"></div>
+  <div id="mtCenter">
+    <div id="mtLogoBox">
+      <div id="mtGlow"></div>
+      <img id="mtLogoBase" src="images/logo.png" alt="Mellow Tech Services Logo" draggable="false">
+      <div id="mtFillClip"><img id="mtLogoFill" src="images/logo.png" alt="" draggable="false"></div>
+    </div>
+    <div id="mtBrand">Mellow Tech Services</div>
+    <div id="mtTag">Digitally Mellow &bull; Technically Sharp</div>
+    <div id="mtBarWrap">
+      <div id="mtBarPct">0%</div>
+      <div id="mtBarTrack"><div id="mtBarFill"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a class="nav-logo" href="index.html">
+      <img src="images/logo.png" style="height:50px;width:auto;" alt="logo">
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="active">Home</a>
+      <a href="services.html">Services</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="nav-cta">
+      <a class="btn btn-primary" href="contact.html">Get Support ↗</a>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="services.html">Services</a>
+  <a href="about.html">About</a>
+  <a href="contact.html">Contact</a>
+  <div class="mobile-cta">
+    <a class="btn btn-primary" href="contact.html">Get Tech Support ↗</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-img"></div>
+  <div class="hero-grid-overlay"></div>
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-eyebrow"></div>
+      <h1 class="display hero-title">
+        Simple Tech Solutions for
+        <em>Work, School &amp; Business</em>
+      </h1>
+      <p class="hero-sub">Tech Support for Polokwane and Remote Areas (Online Services Available).</p>
+      <div class="hero-btns">
+        <a class="btn btn-lime" href="contact.html">Get Tech Support →</a>
+        <a class="btn btn-outline" style="color:white;border-color:rgba(255,255,255,0.3)" href="services.html">View Services</a>
+      </div>
+      <div class="hero-stats">
+        <div><div class="hero-stat-num">100+</div><div class="hero-stat-label">Happy Clients</div></div>
+        <div><div class="hero-stat-num">9</div><div class="hero-stat-label">Core Services</div></div>
+        <div><div class="hero-stat-num">4.9★</div><div class="hero-stat-label">Average Rating</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <span class="marquee-item">Windows Installation <span class="marquee-sep"></span></span>
+    <span class="marquee-item">Microsoft Office Setup <span class="marquee-sep"></span></span>
+    <span class="marquee-item">PC Troubleshooting <span class="marquee-sep"></span></span>
+    <span class="marquee-item">Virus Removal <span class="marquee-sep"></span></span>
+    <span class="marquee-item">Software Installation <span class="marquee-sep"></span></span>
+    <span class="marquee-item">Graphic Design <span class="marquee-sep"></span></span>
+    <span class="marquee-item">Web Development <span class="marquee-sep"></span></span>
+    <span class="marquee-item">Assignment Help <span class="marquee-sep"></span></span>
+    <span class="marquee-item">CV Design &amp; Revamp <span class="marquee-sep"></span></span>
+    <span class="marquee-item">Business Digital Setup <span class="marquee-sep"></span></span>
+    <span class="marquee-item">Windows Installation <span class="marquee-sep"></span></span>
+    <span class="marquee-item">Microsoft Office Setup <span class="marquee-sep"></span></span>
+    <span class="marquee-item">PC Troubleshooting <span class="marquee-sep"></span></span>
+    <span class="marquee-item">Virus Removal <span class="marquee-sep"></span></span>
+    <span class="marquee-item">Software Installation <span class="marquee-sep"></span></span>
+    <span class="marquee-item">Graphic Design <span class="marquee-sep"></span></span>
+    <span class="marquee-item">Web Development <span class="marquee-sep"></span></span>
+    <span class="marquee-item">Assignment Help <span class="marquee-sep"></span></span>
+    <span class="marquee-item">CV Design &amp; Revamp <span class="marquee-sep"></span></span>
+    <span class="marquee-item">Business Digital Setup <span class="marquee-sep"></span></span>
+  </div>
+</div>
+
+<!-- SOLUTIONS -->
+<section class="solutions">
+  <div class="container">
+    <div class="solutions-header reveal">
+      <div>
+        <div class="section-tag"><div class="tag-line"></div><span class="label">What We Do</span></div>
+        <h2 class="headline">Technology solutions that actually work</h2>
+      </div>
+      <div class="solutions-right">
+        <p>Whether you're a student struggling with an assignment, a professional who needs a polished CV, or a business ready to go digital, we've got you covered with fast, reliable, and affordable tech support.</p>
+      </div>
+    </div>
+    <div class="solutions-grid reveal">
+      <div class="sol-block"><div class="sol-num">01</div><div class="sol-icon">🖥️</div><h3>PC Support &amp; Repair</h3><p>Windows installation, virus removal, driver updates, and troubleshooting — we keep your machine running at peak performance.</p></div>
+      <div class="sol-block"><div class="sol-num">02</div><div class="sol-icon">🎨</div><h3>Creative Services</h3><p>Professional graphic design, CV revamps, and web development that make you look great and stand out from the crowd.</p></div>
+      <div class="sol-block"><div class="sol-num">03</div><div class="sol-icon">🚀</div><h3>Business Digitization</h3><p>Get your business fully set up online — from digital presence and email to software tools and professional branding.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES HIGHLIGHT -->
+<section class="services-highlight">
+  <div class="container">
+    <div class="sh-header reveal">
+      <div class="section-tag" style="justify-content:center"><div class="tag-line"></div><span class="label" style="color:rgba(255,255,255,0.5)">Our Services</span></div>
+      <h2 class="headline">Everything you need,<br>all in one place</h2>
+      <p>From fixing your PC to designing your dream website — our team handles it all with care and expertise.</p>
+    </div>
+    <div class="sh-grid reveal">
+      <a class="sh-card" href="service-windows.html"><div class="sh-card-icon">💻</div><h3>Windows Installation</h3><p>Clean OS installation with full driver setup and activation. Get a fresh, fast system in no time.</p><div class="sh-card-arrow">Learn more →</div></a>
+      <a class="sh-card" href="service-office.html"><div class="sh-card-icon">📊</div><h3>Microsoft Office</h3><p>Full Office suite installation and activation — Word, Excel, PowerPoint, and more, ready to use.</p><div class="sh-card-arrow">Learn more →</div></a>
+      <a class="sh-card" href="service-troubleshoot.html"><div class="sh-card-icon">🔧</div><h3>PC Troubleshooting</h3><p>Diagnose and fix slow PCs, crashes, viruses, and errors — comprehensive repair service.</p><div class="sh-card-arrow">Learn more →</div></a>
+      <a class="sh-card" href="service-software.html"><div class="sh-card-icon">⚙️</div><h3>Software &amp; Drivers</h3><p>Installation of any software, apps, and device drivers to keep your system fully functional.</p><div class="sh-card-arrow">Learn more →</div></a>
+      <a class="sh-card" href="service-design.html"><div class="sh-card-icon">🎨</div><h3>Graphic Design</h3><p>Logos, flyers, social media graphics, and more — creative designs that capture your brand.</p><div class="sh-card-arrow">Learn more →</div></a>
+      <a class="sh-card" href="service-web.html"><div class="sh-card-icon">🌐</div><h3>Web Development</h3><p>Modern, responsive websites built for businesses, portfolios, and personal brands.</p><div class="sh-card-arrow">Learn more →</div></a>
+    </div>
+    <div class="sh-view-all reveal">
+      <a class="btn btn-outline" style="color:white;border-color:rgba(255,255,255,0.25)" href="services.html">View All 9 Services →</a>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section class="why">
+  <div class="container">
+    <div class="why-grid">
+      <div class="why-left reveal">
+        <div class="section-tag"><div class="tag-line"></div><span class="label">Why Mellow Tech</span></div>
+        <h2 class="headline">Tech support that's actually stress-free</h2>
+        <p>We believe technology should be simple, not scary. Our friendly team speaks plain English, works fast, and makes sure you understand exactly what's happening every step of the way.</p>
+        <div class="why-pills">
+          <span class="pill pill-lime">✓ Fast Turnaround</span>
+          <span class="pill pill-teal">✓ Affordable Pricing</span>
+          <span class="pill">✓ Expert Team</span>
+          <span class="pill">✓ Ongoing Support</span>
+        </div>
+      </div>
+      <div class="why-features reveal">
+        <div class="why-feat"><div class="why-feat-icon">⚡</div><div class="why-feat-text"><h4>Fast Turnaround Times</h4><p>Most jobs completed same-day or within 24 hours. We respect your time and work efficiently.</p></div></div>
+        <div class="why-feat"><div class="why-feat-icon">💬</div><div class="why-feat-text"><h4>Clear Communication</h4><p>No tech jargon. We explain everything in plain language so you know exactly what's going on.</p></div></div>
+        <div class="why-feat"><div class="why-feat-icon">💰</div><div class="why-feat-text"><h4>Affordable &amp; Transparent</h4><p>Fair, upfront pricing with no hidden fees. You'll always know the cost before we start.</p></div></div>
+        <div class="why-feat"><div class="why-feat-icon">🛡️</div><div class="why-feat-text"><h4>Satisfaction Guaranteed</h4><p>We don't stop until you're happy. If there's an issue after the job, we'll sort it out for free.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AUDIENCE -->
+<section class="audience">
+  <div class="container">
+    <div class="audience-header reveal">
+      <div class="section-tag" style="justify-content:center"><div class="tag-line"></div><span class="label">Who We Help</span></div>
+      <h2 class="headline">Built for students, professionals &amp; businesses</h2>
+    </div>
+    <div class="audience-tabs reveal">
+      <button class="audience-tab active" onclick="switchTab('students',event)">Students</button>
+      <button class="audience-tab" onclick="switchTab('professionals',event)">Professionals</button>
+      <button class="audience-tab" onclick="switchTab('businesses',event)">Businesses</button>
+    </div>
+    <div class="audience-content active" id="tab-students">
+      <div class="audience-text"><h3>Making student life easier</h3><p>Deadlines are stressful enough without tech problems slowing you down. We help students stay productive with fast, affordable tech support that fits a student budget.</p><div class="audience-list"><div class="audience-li"><div class="aud-check">✓</div><span>Assignment assistance and formatting help</span></div><div class="audience-li"><div class="aud-check">✓</div><span>Windows &amp; Office installation for laptops</span></div><div class="audience-li"><div class="aud-check">✓</div><span>Virus removal and speed optimization</span></div><div class="audience-li"><div class="aud-check">✓</div><span>CV design for internships and job applications</span></div></div><div style="margin-top:32px"><a class="btn btn-primary" href="contact.html">Get Student Support →</a></div></div>
+      <div class="audience-visual"><div class="aud-vis-title">Student Services</div><div class="aud-item"><div class="aud-item-label">Most Popular</div><div class="aud-item-val">Assignment Assistance</div></div><div class="aud-item"><div class="aud-item-label">Also Recommended</div><div class="aud-item-val">CV Design &amp; Revamp</div></div><div class="aud-item"><div class="aud-item-label">Quick Fix</div><div class="aud-item-val">PC Troubleshooting</div></div></div>
+    </div>
+    <div class="audience-content" id="tab-professionals">
+      <div class="audience-text"><h3>Helping professionals perform at their best</h3><p>Your time is valuable. We handle all your tech headaches so you can focus on what you do best.</p><div class="audience-list"><div class="audience-li"><div class="aud-check">✓</div><span>Professional CV design and revamps</span></div><div class="audience-li"><div class="aud-check">✓</div><span>Software installation and setup</span></div><div class="audience-li"><div class="aud-check">✓</div><span>PC tune-ups and performance boosts</span></div><div class="audience-li"><div class="aud-check">✓</div><span>Graphic design for personal branding</span></div></div><div style="margin-top:32px"><a class="btn btn-primary" href="contact.html">Get Professional Support →</a></div></div>
+      <div class="audience-visual"><div class="aud-vis-title">Professional Services</div><div class="aud-item"><div class="aud-item-label">Top Rated</div><div class="aud-item-val">CV Design &amp; Revamp</div></div><div class="aud-item"><div class="aud-item-label">Popular Choice</div><div class="aud-item-val">Graphic Design</div></div><div class="aud-item"><div class="aud-item-label">Essential Setup</div><div class="aud-item-val">Software Installation</div></div></div>
+    </div>
+    <div class="audience-content" id="tab-businesses">
+      <div class="audience-text"><h3>Getting businesses up and running digitally</h3><p>Take your business online with confidence. We provide everything small and medium businesses need.</p><div class="audience-list"><div class="audience-li"><div class="aud-check">✓</div><span>Complete business digital setup</span></div><div class="audience-li"><div class="aud-check">✓</div><span>Professional website development</span></div><div class="audience-li"><div class="aud-check">✓</div><span>Logo and brand graphic design</span></div><div class="audience-li"><div class="aud-check">✓</div><span>Microsoft Office and productivity tools</span></div></div><div style="margin-top:32px"><a class="btn btn-primary" href="contact.html">Get Business Support →</a></div></div>
+      <div class="audience-visual"><div class="aud-vis-title">Business Services</div><div class="aud-item"><div class="aud-item-label">Essential</div><div class="aud-item-val">Business Digital Setup</div></div><div class="aud-item"><div class="aud-item-label">Growth Driver</div><div class="aud-item-val">Web Development</div></div><div class="aud-item"><div class="aud-item-label">Brand Identity</div><div class="aud-item-val">Graphic Design</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="container">
+    <div class="test-header reveal">
+      <div class="section-tag" style="justify-content:center"><div class="tag-line"></div><span class="label" style="color:rgba(255,255,255,0.4)">Reviews</span></div>
+      <h2 class="headline">What our clients say</h2>
+      <p>Real feedback from real people we've helped.</p>
+    </div>
+    <div class="test-grid reveal">
+      <div class="test-card"><div class="test-stars">★★★★★</div><p class="test-quote">"My laptop was so slow it was practically useless. Mellow Tech fixed everything in a few hours — it now runs like it's brand new. Honestly amazing service."</p><div class="test-author"><div class="test-avatar">TM</div><div><div class="test-name">Thabo M.</div><div class="test-role">University Student</div></div></div></div>
+      <div class="test-card"><div class="test-stars">★★★★★</div><p class="test-quote">"They redesigned my CV and I got called for three interviews within a week. Professional, fast, and the design looked absolutely incredible."</p><div class="test-author"><div class="test-avatar">PN</div><div><div class="test-name">Precious N.</div><div class="test-role">Job Seeker</div></div></div></div>
+      <div class="test-card"><div class="test-stars">★★★★★</div><p class="test-quote">"Got my whole business set up digitally — website, email, social media, everything. The team was super patient and explained every step clearly."</p><div class="test-author"><div class="test-avatar">KD</div><div><div class="test-name">Kagiso D.</div><div class="test-role">Small Business Owner</div></div></div></div>
+      <div class="test-card"><div class="test-stars">★★★★★</div><p class="test-quote">"Installed Windows and all my software in under two hours. Everything worked perfectly. Very affordable and professional — highly recommended!"</p><div class="test-author"><div class="test-avatar">LB</div><div><div class="test-name">Lerato B.</div><div class="test-role">Remote Worker</div></div></div></div>
+      <div class="test-card"><div class="test-stars">★★★★★</div><p class="test-quote">"The assignment assistance saved my semester! They helped me structure and format my research paper properly. I submitted on time and got a great mark."</p><div class="test-author"><div class="test-avatar">SM</div><div><div class="test-name">Sipho M.</div><div class="test-role">College Student</div></div></div></div>
+      <div class="test-card"><div class="test-stars">★★★★★</div><p class="test-quote">"They built my business website in just a few days and it looks fantastic. My clients are constantly complimenting it. Worth every penny."</p><div class="test-author"><div class="test-avatar">NZ</div><div><div class="test-name">Nompilo Z.</div><div class="test-role">Entrepreneur</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-inner reveal">
+      <div class="section-tag" style="justify-content:center;margin-bottom:16px"><div class="tag-line" style="background:rgba(13,15,20,0.3)"></div><span class="label">Get Started Today</span></div>
+      <h2 class="headline">Ready to sort out your tech?</h2>
+      <p>Tell us what you need and we'll take it from there. Fast, friendly, and affordable tech solutions — one message away.</p>
+      <div class="cta-btns">
+        <a class="btn btn-primary" href="contact.html">Contact Us Now →</a>
+        <a class="btn btn-outline" href="services.html">Browse Services</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo" style="margin-bottom:16px"><span>Mellow Tech Services</span></div>
+        <p>Simple, affordable technology solutions for students, professionals, and businesses. We make tech easy for everyone.</p>
+        <div class="footer-contact" style="margin-top:20px">📧 <span>mellowtech@email.com</span><br><span style="display:block;margin-top:6px">📱 <span>+27 720 465 993</span></span></div>
+      </div>
+      <div class="footer-col"><h4>Services</h4><ul>
+        <li><a href="service-windows.html">Windows Installation</a></li>
+        <li><a href="service-office.html">Microsoft Office</a></li>
+        <li><a href="service-troubleshoot.html">PC Troubleshooting</a></li>
+        <li><a href="service-software.html">Software &amp; Drivers</a></li>
+        <li><a href="service-design.html">Graphic Design</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>More Services</h4><ul>
+        <li><a href="service-web.html">Web Development</a></li>
+        <li><a href="service-assignment.html">Assignment Help</a></li>
+        <li><a href="service-cv.html">CV Design</a></li>
+        <li><a href="service-business.html">Business Digital Setup</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Company</h4><ul>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="services.html">All Services</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Mellow Tech Services. All rights reserved.</p>
+      <div class="footer-social">
+        <a href="https://www.facebook.com/TUMELLOWTECH" target="_blank" title="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+        <a href="https://www.tiktok.com/@mellowtechservices" target="_blank" title="TikTok"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.74a4.85 4.85 0 01-1.01-.05z"/></svg></a>
+        <a href="https://wa.me/27720465993" target="_blank" title="WhatsApp"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.117.549 4.107 1.51 5.84L.057 24l6.305-1.654A11.882 11.882 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- CHATBOT -->
+<button class="mt-open-btn" id="mtOpenBtn" onclick="mtOpenPanel()" title="Chat with us" aria-label="Open chat">⚡</button>
+<div class="mt-panel" id="mtPanel">
+  <div class="mt-header">
+    <div class="mt-logo">⚡</div>
+    <div class="mt-hinfo">
+      <div class="mt-hname">MellowTech Assistant</div>
+      <div class="mt-hstatus"><span class="mt-dot"></span>Online · Smart Engine Active</div>
+    </div>
+    <button class="mt-close-btn" onclick="mtClosePanel()" aria-label="Close chat">✕</button>
+  </div>
+  <div class="mt-chips" id="mtChips">
+    <button class="mt-chip" onclick="mtSendChip('CV services')">📄 CV</button>
+    <button class="mt-chip" onclick="mtSendChip('Website development')">🌐 Website</button>
+    <button class="mt-chip" onclick="mtSendChip('Assignment help')">📝 Assignment</button>
+    <button class="mt-chip" onclick="mtSendChip('Laptop repair')">💻 Tech Support</button>
+    <button class="mt-chip" onclick="mtSendChip('Pricing')">💰 Pricing</button>
+    <button class="mt-chip" onclick="mtSendChip('How long does it take?')">⏱ Turnaround</button>
+  </div>
+  <div class="mt-body" id="mtBody"></div>
+  <div class="mt-typing" id="mtTyping">
+    <div class="mt-avatar" style="background:linear-gradient(135deg,var(--mt-accent),var(--mt-accent2));width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0">⚡</div>
+    <div class="mt-typing-dots"><span></span><span></span><span></span></div>
+  </div>
+  <div class="mt-footer">
+    <div class="mt-input-wrap">
+      <textarea class="mt-input" id="mtInput" placeholder="Ask about CVs, websites, assignments, tech support…" rows="1" onkeydown="mtHandleKey(event)" oninput="mtResize(this)"></textarea>
+    </div>
+    <button class="mt-send" onclick="mtHandleSend()" aria-label="Send">↑</button>
+  </div>
+</div>
+
+<script src="common.js"></script>
+</body>
+</html>
