@@ -2,7 +2,6 @@
    MELLOW TECH SERVICES — SHARED JAVASCRIPT
    common.js — loaded on every page
 ════════════════════════════════════════════════════ */
-<script>
 (function() {
   // Check if loader has already been shown in this session
   if (sessionStorage.getItem('loaderShown')) {
