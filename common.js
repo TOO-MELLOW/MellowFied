@@ -642,21 +642,61 @@ window.switchTab = function(id, e){
 
     if (!isLoaded) animationFrame = requestAnimationFrame(frame);
   }
+(function() {
+  // Session check (optional)
+  if (sessionStorage.getItem('loaderShown') === 'true') {
+    document.getElementById('page-loader')?.remove();
+    return;
+  }
+  sessionStorage.setItem('loaderShown', 'true');
 
-  window.addEventListener('load', function() {
-    isLoaded = true;
+  const MIN_DISPLAY_TIME = 3000; // Minimum 3 seconds
+  let startTime = null;
+  let isLoaded = false;
+  let animationFrame = null;
+
+  function frame(now) {
+    if (!startTime) startTime = now;
+    const elapsed = now - startTime;
+    const FAKE_DURATION = 30000;
+    const rawProgress = Math.min(elapsed / FAKE_DURATION, 0.99);
+
+    bar.style.width = (rawProgress * 100) + '%';
+    pctEl.textContent = Math.floor(rawProgress * 100) + '%';
+
+    if (!isLoaded || elapsed < MIN_DISPLAY_TIME) {
+      animationFrame = requestAnimationFrame(frame);
+    }
+  }
+
+  function finishLoader() {
     if (animationFrame) cancelAnimationFrame(animationFrame);
+    
+    // Quickly animate to 100%
     bar.style.width = '100%';
     pctEl.textContent = '100%';
     lineEls.forEach(ln => ln.el.setAttribute('stroke-dashoffset', 0));
     nodeEls.forEach(n => n.g.setAttribute('opacity', 1));
+    
     setTimeout(() => {
-      loader.classList.add('done');
-      mainContent.classList.add('visible');
-    }, 300);
+      document.getElementById('page-loader').classList.add('done');
+    }, 400);
+  }
+
+  window.addEventListener('load', function() {
+    isLoaded = true;
+    const elapsed = startTime ? performance.now() - startTime : 0;
+    const remainingTime = Math.max(0, MIN_DISPLAY_TIME - elapsed);
+    
+    if (remainingTime === 0) {
+      finishLoader();
+    } else {
+      setTimeout(finishLoader, remainingTime);
+    }
   });
 
-  animationFrame = requestAnimationFrame(frame);
+  animationFrame = requestAnimationFrame(frame); 
+  
 })();
 /* ═══════════════════════════════════════════════════
    EMAILJS CONTACT FORM
