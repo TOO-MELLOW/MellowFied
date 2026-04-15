@@ -25,12 +25,211 @@
 .hero-stats{display:flex;gap:48px;border-top:1px solid rgba(255,255,255,0.1);padding-top:32px}
 .hero-stat-num{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:var(--lime)}
 .hero-stat-label{font-size:0.85rem;color:rgba(255,255,255,0.5);margin-top:2px}
+  :root {
+  --blue: #4BCFFA;
+  --blue-dim: rgba(75,207,250,0.18);
+  --blue-glow: rgba(75,207,250,0.55);
+  --gold: #C8992E;
+  --gold-light: #E8B84B;
+  --gold-dim: rgba(200,153,46,0.22);
+  --navy: #080C10;
+  --navy-mid: #0E1B2E;
+  --navy-card: #111E32;
+  --text: #cde8f8;
+  --text-dim: rgba(205,232,248,0.45);
+}
+
+/* LOADER OVERLAY */
+#page-loader {
+  position: fixed; inset: 0; z-index: 9999;
+  background: radial-gradient(ellipse 80% 60% at 50% 40%, #0E1B2E 0%, #080C10 100%);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+#page-loader.done { opacity: 0; visibility: hidden; pointer-events: none; }
+
+/* subtle grid overlay */
+#page-loader::before {
+  content: ''; position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(75,207,250,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(75,207,250,0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+}
+
+.corner { position: absolute; width: 80px; height: 80px; opacity: 0.35; }
+.corner svg { width: 100%; height: 100%; }
+.corner.tl { top: 24px; left: 24px; }
+.corner.tr { top: 24px; right: 24px; transform: scaleX(-1); }
+.corner.bl { bottom: 24px; left: 24px; transform: scaleY(-1); }
+.corner.br { bottom: 24px; right: 24px; transform: scale(-1); }
+
+#canvas-wrap {
+  position: relative;
+  width: 520px; height: 520px;
+  flex-shrink: 0;
+}
+#loader-scene { width: 100%; height: 100%; }
+
+#status-zone {
+  position: absolute;
+  bottom: 48px; left: 0; right: 0;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+}
+#status-text {
+  font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--text-dim); font-weight: 500;
+  font-family: 'DM Sans', sans-serif;
+}
+#status-text span { color: var(--blue); }
+
+#progress-bar-wrap {
+  width: min(380px, 80vw);
+  height: 3px;
+  background: rgba(75,207,250,0.1);
+  border-radius: 99px; overflow: hidden;
+}
+#progress-bar {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--blue) 0%, var(--gold-light) 100%);
+  border-radius: 99px;
+  transition: width 0.15s linear;
+  box-shadow: 0 0 10px var(--blue-glow);
+  position: relative;
+}
+#progress-bar::after {
+  content: '';
+  position: absolute; right: 0; top: -2px;
+  width: 8px; height: 7px; border-radius: 50%;
+  background: var(--gold-light);
+  box-shadow: 0 0 8px 2px var(--gold-light);
+}
+#pct {
+  font-size: 12px; color: var(--gold-light);
+  font-family: 'Space Grotesk', sans-serif;
+  letter-spacing: 0.08em; font-weight: 500;
+}
+
+@keyframes dots {
+  0%,20%   { content: '.' }
+  40%,60%  { content: '..' }
+  80%,100% { content: '...' }
+}
+.dots::after {
+  content: '.';
+  animation: dots 1.4s steps(1) infinite;
+}
+
+/* Hide main content until loader finishes */
+#main-content {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+#main-content.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+@media (max-width: 560px) {
+  #canvas-wrap { width: 340px; height: 340px; }
+}
 @media(max-width:1024px){.hero-bg-img{width:100%;opacity:0.35}}
 @media(max-width:768px){.hero-bg-img{width:100%;opacity:0.25}.hero-stats{gap:24px}}
 @media(max-width:480px){.hero-btns{flex-direction:column}}
 </style>
 </head>
 <body>
+  <!-- LOADER  -->
+<div id="page-loader">
+
+  <!-- Corner decorations -->
+  <div class="corner tl"><svg viewBox="0 0 80 80" fill="none"><path d="M4 76 L4 4 L76 4" stroke="#4BCFFA" stroke-width="1.5" stroke-linecap="round"/><circle cx="4" cy="4" r="3" fill="#C8992E"/></svg></div>
+  <div class="corner tr"><svg viewBox="0 0 80 80" fill="none"><path d="M4 76 L4 4 L76 4" stroke="#4BCFFA" stroke-width="1.5" stroke-linecap="round"/><circle cx="4" cy="4" r="3" fill="#C8992E"/></svg></div>
+  <div class="corner bl"><svg viewBox="0 0 80 80" fill="none"><path d="M4 76 L4 4 L76 4" stroke="#4BCFFA" stroke-width="1.5" stroke-linecap="round"/><circle cx="4" cy="4" r="3" fill="#C8992E"/></svg></div>
+  <div class="corner br"><svg viewBox="0 0 80 80" fill="none"><path d="M4 76 L4 4 L76 4" stroke="#4BCFFA" stroke-width="1.5" stroke-linecap="round"/><circle cx="4" cy="4" r="3" fill="#C8992E"/></svg></div>
+
+  <!-- Canvas / SVG Animation -->
+  <div id="canvas-wrap">
+    <svg id="loader-scene" viewBox="0 0 520 520" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="glow-blue" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur"/>
+          <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.3   0 0 0 0 0.8   0 0 0 0 1   0 0 0 0.9 0"/>
+          <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="glow-gold" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur"/>
+          <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.8   0 0 0 0 0.55   0 0 0 0 0.1   0 0 0 0.9 0"/>
+          <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="glow-node" x="-80%" y="-80%" width="260%" height="260%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="soft-glow" x="-100%" y="-100%" width="300%" height="300%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="18"/>
+        </filter>
+        <radialGradient id="bg-radial" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#1a3050" stop-opacity=".6"/>
+          <stop offset="100%" stop-color="#080C10" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="line-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#4BCFFA" stop-opacity=".9"/>
+          <stop offset="100%" stop-color="#C8992E" stop-opacity=".7"/>
+        </linearGradient>
+      </defs>
+
+      <circle cx="260" cy="260" r="240" fill="url(#bg-radial)"/>
+
+      <g id="rings">
+        <circle class="ring" cx="260" cy="260" r="70"  fill="none" stroke="#4BCFFA" stroke-width="1" opacity="0"/>
+        <circle class="ring" cx="260" cy="260" r="100" fill="none" stroke="#4BCFFA" stroke-width=".7" opacity="0"/>
+        <circle class="ring" cx="260" cy="260" r="140" fill="none" stroke="#4BCFFA" stroke-width=".5" opacity="0"/>
+      </g>
+
+      <circle cx="260" cy="260" r="170" fill="none" stroke="rgba(75,207,250,0.08)" stroke-width="1" stroke-dasharray="4 6"/>
+
+      <g id="connections"></g>
+      <g id="particles"></g>
+      <g id="nodes"></g>
+      
+      <g id="logo-group">
+        <circle cx="260" cy="260" r="62" fill="#4BCFFA" opacity=".08" filter="url(#soft-glow)"/>
+        <circle cx="260" cy="260" r="56" fill="#0E1B2E" stroke="rgba(75,207,250,0.3)" stroke-width="1.5"/>
+        <circle cx="260" cy="260" r="56" fill="none" stroke="#4BCFFA" stroke-width=".5" opacity=".5" filter="url(#glow-blue)"/>
+        
+        <g transform="translate(225, 248) scale(0.6)" opacity="0.4">
+          <circle cx="0" cy="0" r="8" fill="none" stroke="#C8992E" stroke-width="2"/>
+          <circle cx="0" cy="0" r="4" fill="none" stroke="#C8992E" stroke-width="1.5"/>
+          <line x1="0" y1="-12" x2="0" y2="-8" stroke="#C8992E" stroke-width="2"/>
+          <line x1="0" y1="8" x2="0" y2="12" stroke="#C8992E" stroke-width="2"/>
+          <line x1="-12" y1="0" x2="-8" y2="0" stroke="#C8992E" stroke-width="2"/>
+          <line x1="8" y1="0" x2="12" y2="0" stroke="#C8992E" stroke-width="2"/>
+        </g>
+        
+        <rect x="240" y="242" width="40" height="28" rx="3" fill="#0E1B2E" stroke="#4BCFFA" stroke-width="1.5" filter="url(#glow-blue)"/>
+        <rect x="243" y="245" width="34" height="22" rx="2" fill="#080C10" opacity="0.4"/>
+        <path d="M250 256 L255 261 L270 248" stroke="#E8B84B" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow-gold)"/>
+        <line x1="268" y1="254" x2="268" y2="260" stroke="#4BCFFA" stroke-width="1.5" opacity="0.6"/>
+        <path d="M258 270 L260 276 L262 270" stroke="#4BCFFA" stroke-width="1.5" fill="none" opacity="0.6"/>
+        <line x1="252" y1="276" x2="268" y2="276" stroke="#4BCFFA" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+      </g>
+    </svg>
+  </div>
+
+  <div id="status-zone">
+    <div id="status-text">Loading <span>Mellow Tech Services</span><span class="dots"></span></div>
+    <div id="progress-bar-wrap">
+      <div id="progress-bar"></div>
+    </div>
+    <div id="pct">0%</div>
+  </div>
+</div>
+<!-- END LOADER -->
+
 <!-- NAV -->
 <nav id="navbar">
   <div class="nav-inner">
