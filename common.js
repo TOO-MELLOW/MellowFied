@@ -315,14 +315,14 @@ window.switchTab = function(id, e){
 
   document.body.classList.add('mt-hidden');
 
-  var dur = 4000;
-  try {
+  var dur = 7000;
+/*  try {
     var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
     if(conn && conn.effectiveType){
       if(conn.effectiveType==='2g'||conn.effectiveType==='slow-2g') dur=3000;
       else if(conn.effectiveType==='3g') dur=3500;
     }
-  } catch(e){}
+  } catch(e){} */
 
   var ctx = canvas.getContext('2d');
   var W, H;
