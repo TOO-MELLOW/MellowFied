@@ -410,7 +410,7 @@ window.switchTab = function(id, e){
 (function() {
   const CX = 260, CY = 260, R = 170;
   const NS = 'http://www.w3.org/2000/svg';
-  const MIN_DISPLAY_TIME = 3000;
+  const MIN_DISPLAY_TIME = 7000;
 
   const services = [
     { label: 'CV Writing',          icon: '📄', angle: -90 },
@@ -557,8 +557,8 @@ window.switchTab = function(id, e){
   function frame(now) {
     if (!startTime) startTime = now;
     const elapsed = now - startTime;
-    const FAKE_DURATION = 30000;
-    const rawProgress = Math.min(elapsed / FAKE_DURATION, 0.99);
+    const FAKE_DURATION = 60000;
+    const rawProgress = Math.min(elapsed / FAKE_DURATION, 1.10);
 
     bar.style.width = (rawProgress * 100) + '%';
     pctEl.textContent = Math.floor(rawProgress * 100) + '%';
