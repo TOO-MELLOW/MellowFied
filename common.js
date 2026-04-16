@@ -315,7 +315,7 @@ window.switchTab = function(id, e){
 
   document.body.classList.add('mt-hidden');
 
-  var dur = 7000;
+  var dur = 10000;
 /*  try {
     var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
     if(conn && conn.effectiveType){
@@ -410,7 +410,7 @@ window.switchTab = function(id, e){
 (function() {
   const CX = 260, CY = 260, R = 170;
   const NS = 'http://www.w3.org/2000/svg';
-  const MIN_DISPLAY_TIME = 7000;
+  const MIN_DISPLAY_TIME = 10000;
 
   const services = [
     { label: 'CV Writing',          icon: '📄', angle: -90 },
@@ -493,7 +493,7 @@ window.switchTab = function(id, e){
   });
 
   // Particles
-  const MAX_PARTICLES = 70;
+  const MAX_PARTICLES = 90;
   const particles = [];
   function spawnParticle(svcIdx) {
     const svc = services[svcIdx];
@@ -533,7 +533,7 @@ window.switchTab = function(id, e){
     const elapsed = now - lastRingTime;
     rings.forEach((ring, i) => {
       const delay = i * 400;
-      const t = Math.max(0, (elapsed - delay) / 1800);
+      const t = Math.max(0, (elapsed - delay) / 1500);
       const op = t < 0.3 ? t/0.3 * 0.35 : (1-t) * 0.35;
       ring.setAttribute('opacity', op > 0 ? op : 0);
     });
@@ -557,8 +557,8 @@ window.switchTab = function(id, e){
   function frame(now) {
     if (!startTime) startTime = now;
     const elapsed = now - startTime;
-    const FAKE_DURATION = 60000;
-    const rawProgress = Math.min(elapsed / FAKE_DURATION, 1.10);
+    const FAKE_DURATION = 10000;
+    const rawProgress = Math.min(elapsed / FAKE_DURATION, 0.90);
 
     bar.style.width = (rawProgress * 100) + '%';
     pctEl.textContent = Math.floor(rawProgress * 100) + '%';
