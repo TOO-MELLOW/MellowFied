@@ -637,12 +637,22 @@ window.switchTab = function(id, e){
     }
     particles.forEach(p => updateParticle(p));
 
-    pulseRings(now);
-    pulseLogo(now);
+    // ...particles, rings, logo pulse...
+  pulseRings(now);
+  pulseLogo(now);
 
-  function finishLoader() {
-    if (animationFrame) cancelAnimationFrame(animationFrame);
-    
+  animationFrame = requestAnimationFrame(frame); // ← keep the loop going
+} // ← this closes frame()
+
+function finishLoader() {
+  // ...
+}
+
+window.addEventListener('load', function() {
+  // ...
+});
+
+animationFrame = requestAnimationFrame(frame);
     // Quickly animate to 100%
     bar.style.width = '100%';
     pctEl.textContent = '100%';
