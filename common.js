@@ -2,60 +2,7 @@
    MELLOW TECH SERVICES — SHARED JAVASCRIPT
    common.js — loaded on every page
 ════════════════════════════════════════════════════ */
-// Loader - show only once per session
-// Loader - show only once per session (simplified)
-(function() {
-  function initLoader() {
-    const loader = document.getElementById('loader');
-    if (!loader) return;
-    
-    // Check if loader has already been shown this session
-    if (sessionStorage.getItem('loaderShown')) {
-      // Hide immediately - no animation
-      loader.style.display = 'none';
-      loader.style.opacity = '0';
-      loader.style.visibility = 'hidden';
-      document.body.classList.remove('mt-hidden'); // Ensure body is visible
-      return;
-    }
-    
-    // First visit - mark as shown
-    sessionStorage.setItem('loaderShown', 'true');
-    
-    // Hide loader after page loads
-    window.addEventListener('load', function() {
-      if (loader) {
-        loader.classList.add('hide');
-        setTimeout(() => { 
-          if (loader) {
-            loader.style.display = 'none';
-            document.body.classList.remove('mt-hidden');
-          }
-        }, 600);
-      }
-    });
-    
-    // Fallback: hide after 5 seconds max
-    setTimeout(function() {
-      if (loader && !loader.classList.contains('hide')) {
-        loader.classList.add('hide');
-        setTimeout(() => { 
-          if (loader) {
-            loader.style.display = 'none';
-            document.body.classList.remove('mt-hidden');
-          }
-        }, 600);
-      }
-    }, 5000);
-  }
-  
-  // Run when DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initLoader);
-  } else {
-    initLoader();
-  }
-})();
+
 /* ── Nav scroll / hide ────────────────────────────── */
 (function(){
   var lastScroll = 0;
@@ -89,7 +36,6 @@
       spans[2].style.transform = '';
     }
   });
-  // close mobile menu on link click
   mobileMenu.querySelectorAll('a').forEach(function(a){
     a.addEventListener('click', function(){
       menuOpen = false;
@@ -353,7 +299,7 @@ window.switchTab = function(id, e){
 })();
 
 /* ═══════════════════════════════════════════════════
-   LOADER
+   LOADER (canvas background — mtLoader element)
 ════════════════════════════════════════════════════ */
 (function(){
   if(window._mtLdr) return;
@@ -458,26 +404,31 @@ window.switchTab = function(id, e){
   setTimeout(function(){if(!done){done=true;exit();}},dur+2500);
 })();
 
+/* ═══════════════════════════════════════════════════
+   LOADER (SVG scene — page-loader element)
+════════════════════════════════════════════════════ */
 (function() {
   const CX = 260, CY = 260, R = 170;
   const NS = 'http://www.w3.org/2000/svg';
-  
+  const MIN_DISPLAY_TIME = 3000;
+
   const services = [
-    { label: 'CV Writing', icon: '📄', angle: -90 },
-    { label: 'Web Dev', icon: '🌐', angle: -30 },
-    { label: 'Assignments', icon: '📝', angle: 30 },
-    { label: 'Tech Support', icon: '💻', angle: 90 },
-    { label: 'Graphic Design', icon: '🎨', angle: 150 },
-    { label: 'Google Digital Setup', icon: '📈', angle: 210 }
+    { label: 'CV Writing',          icon: '📄', angle: -90 },
+    { label: 'Web Dev',             icon: '🌐', angle: -30 },
+    { label: 'Assignments',         icon: '📝', angle:  30 },
+    { label: 'Tech Support',        icon: '💻', angle:  90 },
+    { label: 'Graphic Design',      icon: '🎨', angle: 150 },
+    { label: 'Google Digital Setup',icon: '📈', angle: 210 }
   ];
 
-  const svg = document.getElementById('loader-scene');
   const nodeGroup = document.getElementById('nodes');
   const connGroup = document.getElementById('connections');
   const partGroup = document.getElementById('particles');
+  if(!nodeGroup) return; // SVG loader not present on this page
+
   const nodeEls = [];
   const lineEls = [];
-  
+
   function deg2rad(d) { return d * Math.PI / 180; }
 
   // Build nodes and connection lines
@@ -576,9 +527,9 @@ window.switchTab = function(id, e){
 
   // Rings & Logo pulse
   const rings = document.querySelectorAll('.ring');
-  let lastRingTime = 0, ringPhase = 0;
+  let lastRingTime = 0;
   function pulseRings(now) {
-    if (now - lastRingTime > 1500) { lastRingTime = now; ringPhase = 0; }
+    if (now - lastRingTime > 1500) { lastRingTime = now; }
     const elapsed = now - lastRingTime;
     rings.forEach((ring, i) => {
       const delay = i * 400;
@@ -589,19 +540,20 @@ window.switchTab = function(id, e){
   }
   const logoGroup = document.getElementById('logo-group');
   function pulseLogo(now) {
+    if(!logoGroup) return;
     const scale = 1 + 0.025 * Math.sin(now / 900);
     logoGroup.setAttribute('transform', `translate(${CX},${CY}) scale(${scale}) translate(${-CX},${-CY})`);
   }
 
-  const bar = document.getElementById('progress-bar');
-  const pctEl = document.getElementById('pct');
-  const loader = document.getElementById('page-loader');
-  const mainContent = document.getElementById('main-content');
-  
+  const bar     = document.getElementById('progress-bar');
+  const pctEl   = document.getElementById('pct');
+  const loader  = document.getElementById('page-loader');
+
   let startTime = null, animationFrame = null, isLoaded = false;
   const LINE_STARTS = [0.02, 0.08, 0.14, 0.20, 0.26, 0.32];
   let particleSpawnCount = 0;
 
+  // ── Main animation frame ──────────────────────────
   function frame(now) {
     if (!startTime) startTime = now;
     const elapsed = now - startTime;
@@ -614,8 +566,7 @@ window.switchTab = function(id, e){
     lineEls.forEach((ln, i) => {
       const lineStart = LINE_STARTS[i];
       const lineP = Math.max(0, Math.min(1, (rawProgress - lineStart) / (0.9 - lineStart)));
-      const offset = ln.len * (1 - lineP);
-      ln.el.setAttribute('stroke-dashoffset', offset);
+      ln.el.setAttribute('stroke-dashoffset', ln.len * (1 - lineP));
     });
 
     nodeEls.forEach((n, i) => {
@@ -637,48 +588,38 @@ window.switchTab = function(id, e){
     }
     particles.forEach(p => updateParticle(p));
 
-    // ...particles, rings, logo pulse...
-  pulseRings(now);
-  pulseLogo(now);
+    pulseRings(now);
+    pulseLogo(now);
 
-  animationFrame = requestAnimationFrame(frame); // ← keep the loop going
-} // ← this closes frame()
+    animationFrame = requestAnimationFrame(frame); // keep loop running
+  }
 
-function finishLoader() {
-  // ...
-}
+  // ── Finish & hide loader ──────────────────────────
+  function finishLoader() {
+    if (animationFrame) cancelAnimationFrame(animationFrame);
 
-window.addEventListener('load', function() {
-  // ...
-});
-
-animationFrame = requestAnimationFrame(frame);
-    // Quickly animate to 100%
     bar.style.width = '100%';
     pctEl.textContent = '100%';
     lineEls.forEach(ln => ln.el.setAttribute('stroke-dashoffset', 0));
     nodeEls.forEach(n => n.g.setAttribute('opacity', 1));
-    
+
     setTimeout(() => {
-      document.getElementById('page-loader').classList.add('done');
+      if(loader) loader.classList.add('done');
     }, 400);
   }
 
+  // ── Wait for page load + minimum display time ─────
   window.addEventListener('load', function() {
     isLoaded = true;
     const elapsed = startTime ? performance.now() - startTime : 0;
-    const remainingTime = Math.max(0, MIN_DISPLAY_TIME - elapsed);
-    
-    if (remainingTime === 0) {
-      finishLoader();
-    } else {
-      setTimeout(finishLoader, remainingTime);
-    }
+    const remaining = Math.max(0, MIN_DISPLAY_TIME - elapsed);
+    setTimeout(finishLoader, remaining);
   });
 
-  animationFrame = requestAnimationFrame(frame); 
-  
+  // Kick off the animation
+  animationFrame = requestAnimationFrame(frame);
 })();
+
 /* ═══════════════════════════════════════════════════
    EMAILJS CONTACT FORM
 ════════════════════════════════════════════════════ */
