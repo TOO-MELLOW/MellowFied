@@ -1199,11 +1199,13 @@ window.switchTab = function(id, e){
 
     // ── Configure these selectors to match your widget's HTML ──────────
     const SEL = {
-      chatWindow: ".chat-messages, #chat-messages, .chatbot-messages, .chat-body, .mwt-window",
-      inputField: "#chat-input, .chat-input, input.chatbot-input, .message-input, .mwt-input",
-      sendButton: "#chat-send, .chat-send, button.send-btn, .send-button, .mwt-send",
-      chatToggle: ".chat-toggle, #chat-toggle, .chatbot-toggle, .chat-icon, .mwt-toggle",
-    };
+  container: '#mtPanel',
+  input: '#mtInput',
+  button: '.mt-send',
+  messages: '#mtBody',
+  typing: '#mtTyping',
+  chips: '#mtChips'
+};
 
     function $(s) {
       for (const sel of s.split(",").map(x => x.trim())) {
