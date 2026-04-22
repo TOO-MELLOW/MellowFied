@@ -481,7 +481,7 @@
 </footer>
 
 <!-- CHATBOT -->
-<button class="mt-open-btn" id="mtOpenBtn" onclick="mtOpenPanel()" title="Chat with us" aria-label="Open chat">⚡</button>
+<button class="mt-open-btn" id="mtOpenBtn" title="Chat with us" aria-label="Open chat">⚡</button>
 <div class="mt-panel" id="mtPanel">
   <div class="mt-header">
     <div class="mt-logo">⚡</div>
@@ -489,15 +489,15 @@
       <div class="mt-hname">MellowTech Assistant</div>
       <div class="mt-hstatus"><span class="mt-dot"></span>Online · Smart Engine Active</div>
     </div>
-    <button class="mt-close-btn" onclick="mtClosePanel()" aria-label="Close chat">✕</button>
+    <button class="mt-close-btn" aria-label="Close chat">✕</button>
   </div>
   <div class="mt-chips" id="mtChips">
-    <button class="mt-chip" onclick="mtSendChip('CV services')">📄 CV</button>
-    <button class="mt-chip" onclick="mtSendChip('Website development')">🌐 Website</button>
-    <button class="mt-chip" onclick="mtSendChip('Assignment help')">📝 Assignment</button>
-    <button class="mt-chip" onclick="mtSendChip('Laptop repair')">💻 Tech Support</button>
-    <button class="mt-chip" onclick="mtSendChip('Pricing')">💰 Pricing</button>
-    <button class="mt-chip" onclick="mtSendChip('How long does it take?')">⏱ Turnaround</button>
+    <button class="mt-chip" data-chip="CV services">📄 CV</button>
+    <button class="mt-chip" data-chip="Website development">🌐 Website</button>
+    <button class="mt-chip" data-chip="Assignment help">📝 Assignment</button>
+    <button class="mt-chip" data-chip="Laptop repair">💻 Tech Support</button>
+    <button class="mt-chip" data-chip="Pricing">💰 Pricing</button>
+    <button class="mt-chip" data-chip="How long does it take?">⏱ Turnaround</button>
   </div>
   <div class="mt-body" id="mtBody"></div>
   <div class="mt-typing" id="mtTyping">
@@ -506,9 +506,9 @@
   </div>
   <div class="mt-footer">
     <div class="mt-input-wrap">
-      <textarea class="mt-input" id="mtInput" placeholder="Ask about CVs, websites, assignments, tech support…" rows="1" onkeydown="mtHandleKey(event)" oninput="mtResize(this)"></textarea>
+      <textarea class="mt-input" id="mtInput" placeholder="Ask about CVs, websites, assignments, tech support…" rows="1"></textarea>
     </div>
-    <button class="mt-send" onclick="mtHandleSend()" aria-label="Send">↑</button>
+    <button class="mt-send" aria-label="Send">↑</button>
   </div>
 </div>
 
