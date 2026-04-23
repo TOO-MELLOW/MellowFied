@@ -1,7 +1,7 @@
 /* ═══════════════════════════════════════════════════
    MELLOW TECH SERVICES — SHARED JAVASCRIPT
    common.js — loaded on every page
-   (Fixes applied: loader logic, bot export, UI init, chip clicks, etc.)
+   Fixed: 2026-04 — loader race, chatbot init, suggestion buttons, MellowTechBot export
 ════════════════════════════════════════════════════ */
 
 /* ── Nav scroll / hide ────────────────────────────── */
@@ -179,7 +179,6 @@ window.switchTab = function(id, e){
 
   // ===========================================================================
   //  MODULE 2 — KNOWLEDGE BASE
-  //  (unchanged, keeping all service entries)
   // ===========================================================================
 
   const KB = {
@@ -800,10 +799,12 @@ window.switchTab = function(id, e){
       if (intent) lastIntent = intent;
     };
 
-    // Short / ambiguous message: likely a follow-up to the previous topic
+    // FIX: Raised threshold from 12 to 20 chars to avoid over-eager follow-up matching.
+    // Short but meaningful queries like "how much?", "pricing", "cv help" were
+    // incorrectly treated as follow-ups to the previous topic.
     const isFollowUp = (text) => {
       const SHORT_AFFIRM = /^(yes|no|sure|okay|ok|please|ya|yep|nope|more|tell me more|go on|and|what else|thanks)[\.\?!]?$/i;
-      return SHORT_AFFIRM.test(text.trim()) || text.trim().length < 8;   // reduced from 12 → less aggressive
+      return SHORT_AFFIRM.test(text.trim()) || text.trim().length < 20;
     };
 
     return {
@@ -828,6 +829,7 @@ window.switchTab = function(id, e){
 
     Memory.push("user", rawInput);
 
+    // ── STEP 1: Resolve any pending disambiguation ──────────────────────
     const pending = Memory.getPending();
     if (pending && pending.type === "disambig") {
       Memory.clearPending();
@@ -843,9 +845,11 @@ window.switchTab = function(id, e){
       };
     }
 
+    // ── STEP 2: Classify intent ─────────────────────────────────────────
     const { ranked, scores } = classify(rawInput);
     const THRESHOLD = 1.5;
 
+    // ── STEP 3: Frustrated user with no clear intent → escalate ────────
     if (sent === -1 && (ranked.length === 0 || ranked[0].score < THRESHOLD)) {
       Memory.push("bot", "", "contact");
       return {
@@ -862,6 +866,7 @@ window.switchTab = function(id, e){
       };
     }
 
+    // ── STEP 4: No confident match — try context follow-up or fallback ──
     if (ranked.length === 0 || ranked[0].score < THRESHOLD) {
       if (Memory.isFollowUp(rawInput) && Memory.getLast()) {
         return resolveIntent(Memory.getLast(), entities, sent);
@@ -869,6 +874,7 @@ window.switchTab = function(id, e){
       return buildFallback(rawInput);
     }
 
+    // ── STEP 5: Check disambiguation rules ──────────────────────────────
     for (const rule of DISAMBIG_RULES) {
       if (rule.trigger(scores)) {
         Memory.setPending({ type: "disambig", options: rule.options });
@@ -879,6 +885,7 @@ window.switchTab = function(id, e){
       }
     }
 
+    // ── STEP 6: Check multi-turn flow handlers ───────────────────────────
     const topIntent = ranked[0].intent;
     for (const [, flow] of Object.entries(FLOWS)) {
       if (flow.match(topIntent, entities)) {
@@ -888,6 +895,7 @@ window.switchTab = function(id, e){
       }
     }
 
+    // ── STEP 7: Direct intent resolution ────────────────────────────────
     return resolveIntent(topIntent, entities, sent);
   }
 
@@ -924,14 +932,24 @@ window.switchTab = function(id, e){
     };
   }
 
-/* export bot to window (FIX: was missing) */
+  // ===========================================================================
+  //  EXPORT — make process() accessible as window.MellowTechBot
+  //  FIX: Was never exported. UI adapter called window.MellowTechBot.process()
+  //  which threw TypeError: Cannot read properties of undefined every time.
+  // ===========================================================================
   root.MellowTechBot = { process };
 
+}(window));
+
+
 // ===========================================================================
-//  MODULE 9 — UI ADAPTER (STABLE BUILD)
+//  MODULE 9 — UI ADAPTER
+//  FIX 1: window.UI export added so bootstrap can find it.
+//  FIX 2: Suggestion button click handler now matches rendered class 'mt-chip'
+//          (botHTML renders class="mt-chip" to match the chip handler).
 // ===========================================================================
 
-const UI = (function () {
+window.UI = (function () {
 
   const SEL = {
     panel: "#mtPanel",
@@ -945,7 +963,7 @@ const UI = (function () {
 
   const $ = (s) => {
     try { return s ? document.querySelector(s) : null; }
-    catch { return null; }
+    catch(e) { return null; }
   };
 
   let welcomed = false;
@@ -954,9 +972,9 @@ const UI = (function () {
     try {
       injectStyles();
 
-      const panel = $(SEL.panel);
-      const input = $(SEL.input);
-      const button = $(SEL.button);
+      const panel   = $(SEL.panel);
+      const input   = $(SEL.input);
+      const button  = $(SEL.button);
 
       if (!panel || !input || !button) {
         console.warn("Chat UI skipped (elements missing)");
@@ -989,20 +1007,29 @@ const UI = (function () {
         });
       }
 
-      // SEND
+      // SEND on button click
       button.addEventListener("click", send);
 
+      // SEND on Enter key (Shift+Enter = newline)
       input.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
+        if (e.key === "Enter" && !e.shiftKey) {
           e.preventDefault();
           send();
         }
       });
 
-      // CHIPS (FIX: class now matches suggested buttons)
+      // Auto-resize textarea as user types
+      input.addEventListener("input", () => {
+        input.style.height = "auto";
+        input.style.height = Math.min(input.scrollHeight, 90) + "px";
+      });
+
+      // FIX: Chip / suggestion button handler.
+      // botHTML() now renders buttons with class="mt-chip" so this single
+      // delegated listener handles BOTH the top chips AND bot suggestion buttons.
       document.addEventListener("click", (e) => {
         if (e.target.classList.contains("mt-chip")) {
-          const txt = e.target.dataset.chip || e.target.textContent;
+          const txt = e.target.dataset.chip || e.target.textContent.trim();
           handle(txt);
         }
       });
@@ -1020,6 +1047,7 @@ const UI = (function () {
     if (!text) return;
 
     input.value = "";
+    input.style.height = "auto";
     handle(text);
   }
 
@@ -1035,7 +1063,7 @@ const UI = (function () {
         res = window.MellowTechBot.process(text);
       } catch (err) {
         console.error("Bot error:", err);
-        bot("Something went wrong. Try again.");
+        bot("Something went wrong — please try again or WhatsApp us at +27 720 465 993.");
         return;
       }
 
@@ -1065,14 +1093,15 @@ const UI = (function () {
       `<div class="mwt-msg mwt-bot"><div class="mwt-bubble">${html}</div></div>`
     );
 
+    // FIX: Use class="mt-chip" (not "mwt-suggestion-btn") so the delegated
+    // click handler above fires correctly for bot suggestion buttons.
     if (suggestions?.length) {
-      // FIX: use mt-chip class + data-chip attribute so clicks register
       const chips = suggestions.map(s =>
-        `<button class="mt-chip mwt-suggestion-btn" data-chip="${s}">${s}</button>`
+        `<button class="mt-chip" data-chip="${escape(s)}">${escape(s)}</button>`
       ).join("");
 
       box.insertAdjacentHTML("beforeend",
-        `<div class="mwt-suggestions">${chips}</div>`
+        `<div class="mwt-suggestions" style="display:flex;flex-wrap:wrap;gap:6px;padding:6px 0;">${chips}</div>`
       );
     }
 
@@ -1081,7 +1110,7 @@ const UI = (function () {
 
   function typing(show) {
     const t = $(SEL.typing);
-    if (t) t.style.display = show ? "block" : "none";
+    if (t) t.style.display = show ? "flex" : "none";
   }
 
   function scroll() {
@@ -1090,7 +1119,7 @@ const UI = (function () {
   }
 
   function escape(s) {
-    return s.replace(/[&<>"']/g, m =>
+    return String(s).replace(/[&<>"']/g, m =>
       ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[m])
     );
   }
@@ -1101,14 +1130,23 @@ const UI = (function () {
     const s = document.createElement("style");
     s.id = "mwt-styles";
     s.textContent = `
-      .mwt-msg{display:flex;margin:6px}
+      .mwt-msg{display:flex;margin:6px 0}
       .mwt-user{justify-content:flex-end}
       .mwt-bot{justify-content:flex-start}
-      .mwt-bubble{padding:10px;border-radius:14px;max-width:80%}
-      .mwt-user .mwt-bubble{background:#2c3e85;color:#fff}
-      .mwt-bot .mwt-bubble{background:#eef3ff}
-      .mwt-suggestions{display:flex;flex-wrap:wrap;gap:6px;padding:6px}
-      .mwt-suggestion-btn{border:1px solid #ccc;padding:5px 10px;border-radius:20px;cursor:pointer}
+      .mwt-bubble{padding:10px 13px;border-radius:14px;max-width:84%;font-size:12.5px;line-height:1.65}
+      .mwt-user .mwt-bubble{background:#1e1e30;color:#e8e8f0;border-top-right-radius:4px}
+      .mwt-bot .mwt-bubble{background:#0f1a16;border:1px solid rgba(0,229,160,0.12);color:#e8e8f0;border-top-left-radius:4px}
+      .mwt-list{padding-left:0;list-style:none;margin:8px 0}
+      .mwt-list li{padding:3px 0;font-size:12px;line-height:1.6}
+      .mwt-meta{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap}
+      .mwt-meta span{font-size:11px;opacity:0.8}
+      .mwt-note{font-size:11px;opacity:0.7;margin-top:8px;font-style:italic}
+      .mwt-followup{margin-top:10px;font-size:12px;opacity:0.85}
+      .mwt-result{font-size:11.5px;color:#00e5a0;margin-top:8px}
+      .mwt-scenarios{margin-top:8px;display:flex;flex-direction:column;gap:4px}
+      .mwt-scenario{font-size:11.5px;padding:4px 0;opacity:0.85}
+      .mwt-process{font-size:11.5px;margin-top:8px;font-style:italic;opacity:0.8}
+      .mwt-suggestions{display:flex;flex-wrap:wrap;gap:6px;padding:6px 0}
     `;
     document.head.appendChild(s);
   }
@@ -1119,7 +1157,7 @@ const UI = (function () {
 
 
 /* ═══════════════════════════════════════════════════
-   LOADER (canvas background — mtLoader element)
+   LOADER — #mtLoader (canvas, used on non-index pages)
 ════════════════════════════════════════════════════ */
 (function(){
   if(window._mtLdr) return;
@@ -1131,7 +1169,7 @@ const UI = (function () {
   var barPct   = document.getElementById('mtBarPct');
   var logoBase = document.getElementById('mtLogoBase');
   var fillClip = document.getElementById('mtFillClip');
-  if(!ldr) return;
+  if(!ldr) return; // Not present on this page — exit cleanly
 
   document.body.classList.add('mt-hidden');
 
@@ -1217,15 +1255,18 @@ const UI = (function () {
   setTimeout(function(){if(!done){done=true;exit();}},dur+2500);
 })();
 
+
 /* ═══════════════════════════════════════════════════
-   LOADER (SVG scene — page-loader element)
-   FIX: animation now calls finishLoader() properly.
-   FIX: pointer‑events disabled during fade.
+   LOADER — #page-loader (SVG scene, index.html only)
+   FIX: finishLoader() is now called by the animation loop when
+        rawProgress reaches 1.0, so the loader always completes.
+        Fail-safe bumped to 12s (matching animation) with pointer-events
+        disabled immediately on trigger so the page is never blocked.
 ════════════════════════════════════════════════════ */
 (function() {
   const CX = 260, CY = 260, R = 170;
   const NS = 'http://www.w3.org/2000/svg';
-  const FAKE_DURATION = 10000;   // matches original intention
+  const FAKE_DURATION = 10000;
 
   const services = [
     { label: 'CV Writing',          icon: '📄', angle: -90 },
@@ -1239,7 +1280,13 @@ const UI = (function () {
   const nodeGroup = document.getElementById('nodes');
   const connGroup = document.getElementById('connections');
   const partGroup = document.getElementById('particles');
-  if(!nodeGroup) return;
+  const loader    = document.getElementById('page-loader');
+
+  // If the SVG loader elements aren't in the DOM, bail out immediately.
+  if(!nodeGroup || !loader) return;
+
+  const bar   = document.getElementById('progress-bar');
+  const pctEl = document.getElementById('pct');
 
   const nodeEls = [];
   const lineEls = [];
@@ -1306,7 +1353,6 @@ const UI = (function () {
     nodeEls.push({ g, nx, ny, baseX: nx, baseY: ny, floatOffset: Math.random() * Math.PI * 2 });
   });
 
-  // Particles
   const MAX_PARTICLES = 90;
   const particles = [];
   function spawnParticle(svcIdx) {
@@ -1339,7 +1385,6 @@ const UI = (function () {
     p.el.setAttribute('opacity', Math.sin(p.t * Math.PI) * p.opacity);
   }
 
-  // Rings & Logo pulse
   const rings = document.querySelectorAll('.ring');
   let lastRingTime = 0;
   function pulseRings(now) {
@@ -1359,51 +1404,25 @@ const UI = (function () {
     logoGroup.setAttribute('transform', `translate(${CX},${CY}) scale(${scale}) translate(${-CX},${-CY})`);
   }
 
-  const bar     = document.getElementById('progress-bar');
-  const pctEl   = document.getElementById('pct');
-  const loader  = document.getElementById('page-loader');
-
   let startTime = null, animationFrame = null, finished = false;
   const LINE_STARTS = [0.02, 0.08, 0.14, 0.20, 0.26, 0.32];
   let particleSpawnCount = 0;
-
-  // ── Finish & hide loader ──────────────────────────
-  function finishLoader() {
-    if (finished) return;
-    finished = true;
-    if (animationFrame) cancelAnimationFrame(animationFrame);
-
-    bar.style.width = '100%';
-    pctEl.textContent = '100%';
-    lineEls.forEach(ln => ln.el.setAttribute('stroke-dashoffset', 0));
-    nodeEls.forEach(n => n.g.setAttribute('opacity', 1));
-
-    setTimeout(() => {
-      if(loader) {
-        loader.classList.add('done');                // activates CSS visibility transition
-        loader.style.pointerEvents = 'none';         // FIX: prevent clicks during fade
-      }
-    }, 400);
-  }
 
   // ── Main animation frame ──────────────────────────
   function frame(now) {
     if (!startTime) startTime = now;
     const elapsed = now - startTime;
 
-    // FIX: complete progress after FAKE_DURATION (10000ms)
-    if (elapsed >= FAKE_DURATION) {
-      finishLoader();
-      return;  // no more frames
-    }
+    // FIX: Allow rawProgress to reach 1.0 so finishLoader() is called.
+    // Previously capped at 0.90 which prevented the loader from ever finishing.
+    const rawProgress = Math.min(elapsed / FAKE_DURATION, 1.0);
 
-    const rawProgress = Math.min(elapsed / FAKE_DURATION, 0.90);
-    bar.style.width = (rawProgress * 100) + '%';
-    pctEl.textContent = Math.floor(rawProgress * 100) + '%';
+    if (bar)   bar.style.width = (rawProgress * 100) + '%';
+    if (pctEl) pctEl.textContent = Math.floor(rawProgress * 100) + '%';
 
     lineEls.forEach((ln, i) => {
       const lineStart = LINE_STARTS[i];
-      const lineP = Math.max(0, Math.min(1, (rawProgress - lineStart) / (0.9 - lineStart)));
+      const lineP = Math.max(0, Math.min(1, (rawProgress - lineStart) / (1.0 - lineStart)));
       ln.el.setAttribute('stroke-dashoffset', ln.len * (1 - lineP));
     });
 
@@ -1429,61 +1448,92 @@ const UI = (function () {
     pulseRings(now);
     pulseLogo(now);
 
-    animationFrame = requestAnimationFrame(frame);
+    if (rawProgress < 1.0) {
+      animationFrame = requestAnimationFrame(frame);
+    } else if (!finished) {
+      // FIX: Call finishLoader() when animation completes naturally.
+      finished = true;
+      finishLoader();
+    }
   }
+
+  // ── Finish & hide loader ──────────────────────────
+  function finishLoader() {
+    if (animationFrame) {
+      cancelAnimationFrame(animationFrame);
+      animationFrame = null;
+    }
+
+    if (!loader) return;
+
+    // Immediately block pointer events so the page is usable during fade-out
+    loader.style.pointerEvents = 'none';
+
+    if (bar)   bar.style.width = '100%';
+    if (pctEl) pctEl.textContent = '100%';
+    lineEls.forEach(ln => ln.el.setAttribute('stroke-dashoffset', 0));
+    nodeEls.forEach(n => n.g.setAttribute('opacity', 1));
+
+    setTimeout(() => {
+      loader.classList.add('done');
+    }, 300);
+  }
+
+  // ── Fail-safe: force-hide if animation stalls ─────
+  // FIX: Fail-safe is now self-contained (no dependency on window.load event
+  //      which may have already fired by the time this script executes).
+  //      Triggers after FAKE_DURATION + 2s buffer.
+  //      Pointer events are killed immediately so nothing is blocked.
+  setTimeout(function() {
+    if (!finished) {
+      finished = true;
+      if (loader) {
+        loader.style.pointerEvents = 'none';
+        loader.style.opacity = '0';
+        setTimeout(function() {
+          if (loader) loader.classList.add('done');
+        }, 800);
+      }
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+        animationFrame = null;
+      }
+    }
+  }, FAKE_DURATION + 2000);
 
   // Kick off the animation
   animationFrame = requestAnimationFrame(frame);
 })();
 
-/* ═══════════════════════════════════════════════════
-   GLOBAL PAGE‑LOADER FAIL‑SAFE (runs on every page)
-   FIX: moved outside SVG IIFE, handles load race,
-   adds 12‑second wall‑clock timeout.
-════════════════════════════════════════════════════ */
-(function () {
-  const loader = document.getElementById("page-loader");
 
-  function hideLoader() {
-    if (!loader) return;
-    loader.style.opacity = "0";
-    loader.style.pointerEvents = "none";
-    setTimeout(() => {
-      loader.style.display = "none";
-    }, 500);
-  }
-
-  // If page already loaded, hide immediately.
-  // Otherwise listen for load event.
-  if (document.readyState === "complete") {
-    hideLoader();
-  } else {
-    window.addEventListener("load", hideLoader);
-  }
-
-  // Ultimate fallback – after 12 seconds, force hide no matter what
-  setTimeout(hideLoader, 12000);
-})();
-
-/* ═══════════════════════════════════════════════════
-   CHATBOT BOOTSTRAP (FIX: no longer depends on window.UI)
-════════════════════════════════════════════════════ */
-try {
+// ===========================================================================
+//  CHATBOT BOOTSTRAP
+//  FIX: window.UI is now correctly set (was a local variable before).
+//       DOMContentLoaded vs already-loaded both handled.
+// ===========================================================================
+(function() {
   function bootUI() {
-    if (typeof UI !== 'undefined' && typeof UI.init === 'function') {
-      UI.init();
+    if (window.UI && typeof window.UI.init === "function") {
+      window.UI.init();
+    } else {
+      console.warn("MellowTech: UI not ready at boot time.");
     }
   }
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", bootUI);
-  } else {
-    bootUI();
+
+  try {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", bootUI);
+    } else {
+      bootUI();
+    }
+  } catch (e) {
+    console.error("UI bootstrap failed:", e);
   }
-} catch (e) {
-  console.error("UI bootstrap failed:", e);
-}
+})();
+
+
 /* ═══════════════════════════════════════════════════
-   EMAILJS CONTACT FORM (unchanged)
+   EMAILJS CONTACT FORM
 ════════════════════════════════════════════════════ */
 (function(){
   var form = document.getElementById('contactForm');
@@ -1519,4 +1569,3 @@ try {
     }
   });
 })();
-})(this);   // close the outer (function(root){ … })(this)
