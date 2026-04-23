@@ -1,18 +1,79 @@
+/* ═══════════════════════════════════════════════════
+JAVASCRIPT
+════════════════════════════════════════════════════ */
+
+/* ── Nav scroll / hide ────────────────────────────── */
+(function(){
+  var lastScroll = 0;
+  var navbar = document.getElementById('navbar');
+  if(!navbar) return;
+  window.addEventListener('scroll', function(){
+    var cur = window.scrollY;
+    navbar.classList.toggle('scrolled', cur > 40);
+    navbar.style.transform = (cur > lastScroll && cur > 100) ? 'translateY(-100%)' : 'translateY(0)';
+    lastScroll = cur;
+  }, {passive:true});
+})();
+
+/* ── Mobile menu ──────────────────────────────────── */
+(function(){
+  var hamburger = document.getElementById('hamburger');
+  var mobileMenu = document.getElementById('mobileMenu');
+  if(!hamburger || !mobileMenu) return;
+  var menuOpen = false;
+  hamburger.addEventListener('click', function(){
+    menuOpen = !menuOpen;
+    mobileMenu.classList.toggle('open', menuOpen);
+    var spans = hamburger.querySelectorAll('span');
+    if(menuOpen){
+      spans[0].style.transform = 'rotate(45deg) translate(5px,5px)';
+      spans[1].style.opacity = '0';
+      spans[2].style.transform = 'rotate(-45deg) translate(5px,-5px)';
+    } else {
+      spans[0].style.transform = '';
+      spans[1].style.opacity = '';
+      spans[2].style.transform = '';
+    }
+  });
+  mobileMenu.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){
+      menuOpen = false;
+      mobileMenu.classList.remove('open');
+      var spans = hamburger.querySelectorAll('span');
+      spans[0].style.transform = '';
+      spans[1].style.opacity = '';
+      spans[2].style.transform = '';
+    });
+  });
+})();
+
+/* ── Scroll reveal ────────────────────────────────── */
+(function(){
+  function triggerReveals(){
+    document.querySelectorAll('.reveal').forEach(function(el, i){
+      if(el.getBoundingClientRect().top < window.innerHeight - 80){
+        setTimeout(function(){ el.classList.add('visible'); }, i * 80);
+      }
+    });
+  }
+  window.addEventListener('scroll', triggerReveals, {passive:true});
+  window.addEventListener('load', function(){ setTimeout(triggerReveals, 100); });
+  triggerReveals();
+})();
+
+/* ── Audience tabs ────────────────────────────────── */
+window.switchTab = function(id, e){
+  document.querySelectorAll('.audience-tab').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.audience-content').forEach(function(c){ c.classList.remove('active'); });
+  e.target.classList.add('active');
+  var el = document.getElementById('tab-' + id);
+  if(el) el.classList.add('active');
+};
+
 /* ═══════════════════════════════════════════════════════════════════════════
    MELLOW TECH SERVICES — INTELLIGENT SALES BOT v3.0
    mellowtech-salesbot.js
    
-   Architecture:
-     MODULE 1  — NLP Pipeline       (normalize, tokenize, sentiment, deadline)
-     MODULE 2  — Knowledge Base     (service data, pricing, guarantees)
-     MODULE 3  — Intent Classifier  (scored synonym matching)
-     MODULE 4  — Conversation Memory (name, need, stage, history)
-     MODULE 5  — Sales Flow Engine  (greeting → discovery → qualify → close)
-     MODULE 6  — WhatsApp Redirect  (pre-filled message, proper encoding)
-     MODULE 7  — Response Builder   (HTML + suggestion chips)
-     MODULE 8  — Main Process       (entry point: window.MellowTechBot.process)
-     MODULE 9  — UI Adapter         (chat panel, send, typing, chips)
-     MODULE 10 — Bootstrap          (DOMContentLoaded safe init)
 ════════════════════════════════════════════════════════════════════════════ */
 
 ;(function (root) {
@@ -1145,3 +1206,42 @@ window.UI = (function () {
     console.error("MellowTech UI bootstrap failed:", e);
   }
 })();
+
+/* ═══════════════════════════════════════════════════
+   EMAILJS CONTACT FORM
+════════════════════════════════════════════════════ */
+(function(){
+  var form = document.getElementById('contactForm');
+  if(!form) return;
+  if(!window.__ejLoaded){
+    window.__ejLoaded=true;
+    var s=document.createElement('script');
+    s.src='https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
+    s.onload=function(){emailjs.init({publicKey:'xS49JkhsNjH8-uBMZ'});};
+    document.head.appendChild(s);
+  }
+  var SVC='service_ee5shgv',T1='template_16z5mzs',T2='template_49mvvnh';
+  var sending=false;
+  function setLoad(on){
+    var btn=document.getElementById('submitBtn');
+    btn.disabled=on;
+    btn.querySelector('.btn-text').style.display=on?'none':'';
+    btn.querySelector('.btn-loading').style.display=on?'inline':'none';
+  }
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    if(sending)return;
+    var data=Object.fromEntries(new FormData(form).entries());
+    if(!data.email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)){alert('Please enter a valid email address.');return;}
+    sending=true;setLoad(true);
+    try{
+      await Promise.all([emailjs.send(SVC,T1,data),emailjs.send(SVC,T2,data)]);
+      form.style.display='none';
+      document.getElementById('formSuccess').style.display='block';
+    }catch(err){
+      console.error(err);alert('Something went wrong. Please try again.');
+      sending=false;setLoad(false);
+    }
+  });
+})();
+
