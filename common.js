@@ -979,10 +979,10 @@ window.switchTab = function(id, e){
   }
 
 // ===========================================================================
-//  MODULE 9 — UI ADAPTER (FIXED)
+//  MODULE 9 — UI ADAPTER (STABLE BUILD)
 // ===========================================================================
 
-const UI = (() => {
+const UI = (function () {
 
   const SEL = {
     panel: "#mtPanel",
@@ -990,82 +990,80 @@ const UI = (() => {
     input: "#mtInput",
     button: ".mt-send",
     typing: "#mtTyping",
-    chips: "#mtChips",
     openBtn: ".mt-open-btn",
     closeBtn: ".mt-close-btn"
   };
 
-  // Safe query helper (FIXES your crash)
-  function $(selector) {
-    if (!selector) return null;
-    return document.querySelector(selector);
-  }
+  const $ = (s) => {
+    try { return s ? document.querySelector(s) : null; }
+    catch { return null; }
+  };
 
-  function $all(selector) {
-    if (!selector) return [];
-    return document.querySelectorAll(selector);
-  }
-
-  let hasWelcomed = false;
+  let welcomed = false;
 
   function init() {
-    injectStyles();
+    try {
+      injectStyles();
 
-    const panel = $(SEL.panel);
-    const input = $(SEL.input);
-    const button = $(SEL.button);
-    const openBtn = $(SEL.openBtn);
-    const closeBtn = $(SEL.closeBtn);
+      const panel = $(SEL.panel);
+      const input = $(SEL.input);
+      const button = $(SEL.button);
 
-    if (!panel || !input || !button) return;
+      if (!panel || !input || !button) {
+        console.warn("Chat UI skipped (elements missing)");
+        return;
+      }
 
-    // ── OPEN BUTTON ─────────────────────────────
-    if (openBtn) {
-      openBtn.addEventListener("click", () => {
-        panel.style.display = "flex";
+      // OPEN
+      const openBtn = $(SEL.openBtn);
+      if (openBtn) {
+        openBtn.addEventListener("click", () => {
+          panel.style.display = "flex";
+          setTimeout(() => input.focus(), 100);
 
-        setTimeout(() => input.focus(), 100);
+          if (!welcomed) {
+            welcomed = true;
+            bot("Hi 👋 How can I help?", [
+              "🛠️ Services",
+              "💰 Pricing",
+              "📞 Contact"
+            ]);
+          }
+        });
+      }
 
-        if (!hasWelcomed) {
-          hasWelcomed = true;
-          sendBot("Hi 👋 How can I help you today?", [
-            "🛠️ Services",
-            "💰 Pricing",
-            "📞 Contact",
-            "💻 PC Help"
-          ]);
+      // CLOSE
+      const closeBtn = $(SEL.closeBtn);
+      if (closeBtn) {
+        closeBtn.addEventListener("click", () => {
+          panel.style.display = "none";
+        });
+      }
+
+      // SEND
+      button.addEventListener("click", send);
+
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          send();
         }
       });
-    }
 
-    // ── CLOSE BUTTON ────────────────────────────
-    if (closeBtn) {
-      closeBtn.addEventListener("click", () => {
-        panel.style.display = "none";
+      // CHIPS
+      document.addEventListener("click", (e) => {
+        if (e.target.classList.contains("mt-chip")) {
+          const txt = e.target.dataset.chip || e.target.textContent;
+          handle(txt);
+        }
       });
+
+    } catch (err) {
+      console.error("UI init failed:", err);
     }
-
-    // ── SEND BUTTON ─────────────────────────────
-    button.addEventListener("click", handleSend);
-
-    // ── ENTER KEY ───────────────────────────────
-    input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        handleSend();
-      }
-    });
-
-    // ── QUICK CHIPS ─────────────────────────────
-    document.addEventListener("click", (e) => {
-      if (e.target.classList.contains("mt-chip")) {
-        const text = e.target.dataset.chip || e.target.textContent;
-        handleInput(text);
-      }
-    });
   }
 
-  function handleSend() {
+  function send() {
     const input = $(SEL.input);
     if (!input) return;
 
@@ -1073,130 +1071,99 @@ const UI = (() => {
     if (!text) return;
 
     input.value = "";
-    handleInput(text);
+    handle(text);
   }
 
-  function handleInput(text) {
-    renderUser(text);
-
-    showTyping();
+  function handle(text) {
+    user(text);
+    typing(true);
 
     setTimeout(() => {
-      hideTyping();
+      typing(false);
 
-      const res = MellowTechBot.process(text);
+      let res;
+      try {
+        res = window.MellowTechBot.process(text);
+      } catch (err) {
+        console.error("Bot error:", err);
+        bot("Something went wrong. Try again.");
+        return;
+      }
 
-      sendBotHTML(res.html, res.suggestions);
-    }, 500);
+      botHTML(res.html, res.suggestions);
+    }, 400);
   }
 
-  // ── RENDER USER MESSAGE ───────────────────────
-  function renderUser(text) {
-    const container = $(SEL.messages);
-    if (!container) return;
+  function user(text) {
+    const box = $(SEL.messages);
+    if (!box) return;
 
-    const msg = document.createElement("div");
-    msg.className = "mwt-msg mwt-user";
-
-    msg.innerHTML = `<div class="mwt-bubble">${escapeHtml(text)}</div>`;
-
-    container.appendChild(msg);
-    scrollToBottom();
+    box.insertAdjacentHTML("beforeend",
+      `<div class="mwt-msg mwt-user"><div class="mwt-bubble">${escape(text)}</div></div>`
+    );
+    scroll();
   }
 
-  // ── RENDER BOT MESSAGE ────────────────────────
-  function sendBot(text, suggestions = []) {
-    sendBotHTML(`<p>${text}</p>`, suggestions);
+  function bot(text, suggestions=[]) {
+    botHTML(`<p>${text}</p>`, suggestions);
   }
 
-  function sendBotHTML(html, suggestions = []) {
-    const container = $(SEL.messages);
-    if (!container) return;
+  function botHTML(html, suggestions=[]) {
+    const box = $(SEL.messages);
+    if (!box) return;
 
-    const msg = document.createElement("div");
-    msg.className = "mwt-msg mwt-bot";
+    box.insertAdjacentHTML("beforeend",
+      `<div class="mwt-msg mwt-bot"><div class="mwt-bubble">${html}</div></div>`
+    );
 
-    msg.innerHTML = `<div class="mwt-bubble">${html}</div>`;
+    if (suggestions?.length) {
+      const chips = suggestions.map(s =>
+        `<button class="mwt-suggestion-btn">${s}</button>`
+      ).join("");
 
-    container.appendChild(msg);
-
-    if (suggestions && suggestions.length) {
-      renderSuggestions(suggestions);
+      box.insertAdjacentHTML("beforeend",
+        `<div class="mwt-suggestions">${chips}</div>`
+      );
     }
 
-    scrollToBottom();
+    scroll();
   }
 
-  // ── SUGGESTION BUTTONS ────────────────────────
-  function renderSuggestions(list) {
-    const container = $(SEL.messages);
-    if (!container) return;
-
-    const wrap = document.createElement("div");
-    wrap.className = "mwt-suggestions";
-
-    list.forEach(text => {
-      const btn = document.createElement("button");
-      btn.className = "mwt-suggestion-btn";
-      btn.textContent = text;
-
-      btn.addEventListener("click", () => {
-        handleInput(text);
-      });
-
-      wrap.appendChild(btn);
-    });
-
-    container.appendChild(wrap);
+  function typing(show) {
+    const t = $(SEL.typing);
+    if (t) t.style.display = show ? "block" : "none";
   }
 
-  // ── TYPING INDICATOR ──────────────────────────
-  function showTyping() {
-    const typing = $(SEL.typing);
-    if (!typing) return;
-    typing.style.display = "block";
+  function scroll() {
+    const box = $(SEL.messages);
+    if (box) box.scrollTop = box.scrollHeight;
   }
 
-  function hideTyping() {
-    const typing = $(SEL.typing);
-    if (!typing) return;
-    typing.style.display = "none";
+  function escape(s) {
+    return s.replace(/[&<>"']/g, m =>
+      ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[m])
+    );
   }
 
-  function scrollToBottom() {
-    const container = $(SEL.messages);
-    if (!container) return;
-    container.scrollTop = container.scrollHeight;
-  }
-
-  function escapeHtml(s) {
-    return String(s)
-      .replace(/&/g,"&amp;")
-      .replace(/</g,"&lt;")
-      .replace(/>/g,"&gt;")
-      .replace(/"/g,"&quot;");
-  }
-
-  // ── STYLES (unchanged) ────────────────────────
   function injectStyles() {
     if (document.getElementById("mwt-styles")) return;
 
     const s = document.createElement("style");
     s.id = "mwt-styles";
     s.textContent = `
-      .mwt-msg{display:flex;margin:5px 10px}
-      .mwt-bot{justify-content:flex-start}
+      .mwt-msg{display:flex;margin:6px}
       .mwt-user{justify-content:flex-end}
-      .mwt-bubble{max-width:85%;padding:10px 14px;border-radius:16px}
-      .mwt-bot .mwt-bubble{background:#eef3ff}
+      .mwt-bot{justify-content:flex-start}
+      .mwt-bubble{padding:10px;border-radius:14px;max-width:80%}
       .mwt-user .mwt-bubble{background:#2c3e85;color:#fff}
+      .mwt-bot .mwt-bubble{background:#eef3ff}
       .mwt-suggestions{display:flex;flex-wrap:wrap;gap:6px;padding:6px}
       .mwt-suggestion-btn{border:1px solid #ccc;padding:5px 10px;border-radius:20px;cursor:pointer}
     `;
     document.head.appendChild(s);
   }
 
-  return { init, handleInput };
+  return { init };
 
 })();
   
