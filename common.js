@@ -1082,26 +1082,56 @@ window.switchTab = function(id, e){
     }
 
     function init() {
-      injectStyles();
+  injectStyles();
 
-      const input   = $(SEL.inputField);
-      const sendBtn = $(SEL.sendButton);
-      const toggle  = $(SEL.chatToggle);
+  // ── Open/Close Buttons ─────────────────────────
+  const openBtn = document.querySelector('.mt-open-btn');
+  const closeBtn = document.querySelector('.mt-close-btn');
+  const panel = document.querySelector(SEL.container);
+  if (openBtn && panel) {
+    openBtn.addEventListener('click', () => {
+      panel.style.display = 'flex';
+      // Optional: auto-focus input
+      const input = document.querySelector(SEL.input);
+      if (input) input.focus();
+    });
+  }
+  if (closeBtn && panel) {
+    closeBtn.addEventListener('click', () => {
+      panel.style.display = 'none';
+    });
+  }
 
-      if (sendBtn) {
-        sendBtn.addEventListener("click", () => {
-          const v = input?.value.trim();
-          if (v) handleInput(v);
-        });
+  // ── Input & Send ──────────────────────────────
+  const input   = $(SEL.input);
+  const sendBtn = $(SEL.button);
+  if (sendBtn) {
+    sendBtn.addEventListener('click', () => {
+      const v = input?.value.trim();
+      if (v) handleInput(v);
+    });
+  }
+  if (input) {
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        const v = input.value.trim();
+        if (v) handleInput(v);
       }
-      if (input) {
-        input.addEventListener("keydown", e => {
-          if (e.key === "Enter") {
-            const v = input.value.trim();
-            if (v) handleInput(v);
-          }
-        });
-      }
+    });
+  }
+
+  // Wire quick chips (if any)
+  document.querySelectorAll('.mt-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const text = chip.getAttribute('data-chip') || chip.textContent.trim();
+      handleInput(text);
+    });
+  });
+
+  // Send welcome message when panel first opens? Optional.
+  // Just keep existing behavior.
+}
 
       // Wire any existing quick-reply buttons already in your widget HTML
       document.querySelectorAll(
