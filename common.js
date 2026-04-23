@@ -1478,13 +1478,30 @@ const UI = (function () {
     }, 400);
   }
 
-  // ── Wait for page load + minimum display time ─────
-  window.addEventListener('load', function() {
-    isLoaded = true;
-    const elapsed = startTime ? performance.now() - startTime : 0;
-    const remaining = Math.max(0, MIN_DISPLAY_TIME - elapsed);
-    setTimeout(finishLoader, remaining);
-  });
+  // ===========================================================================
+//  FAIL-SAFE PAGE LOADER FIX
+// ===========================================================================
+
+(function () {
+  const loader = document.getElementById("page-loader");
+
+  function hideLoader() {
+    if (!loader) return;
+
+    loader.style.opacity = "0";
+    loader.style.pointerEvents = "none";
+
+    setTimeout(() => {
+      loader.style.display = "none";
+    }, 500);
+  }
+
+  // Normal case
+  window.addEventListener("load", hideLoader);
+
+  // 🚨 FAIL-SAFE: force hide after 3 seconds no matter what
+  setTimeout(hideLoader, 3000);
+})();
 
   // Kick off the animation
   animationFrame = requestAnimationFrame(frame);
