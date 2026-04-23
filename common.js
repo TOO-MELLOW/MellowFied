@@ -1489,7 +1489,25 @@ const UI = (function () {
   // Kick off the animation
   animationFrame = requestAnimationFrame(frame);
 })();
+// ===========================================================================
+//  CHATBOT BOOTSTRAP (SAFE INIT)
+// ===========================================================================
 
+try {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => {
+      if (window.UI && typeof UI.init === "function") {
+        UI.init();
+      }
+    });
+  } else {
+    if (window.UI && typeof UI.init === "function") {
+      UI.init();
+    }
+  }
+} catch (e) {
+  console.error("UI bootstrap failed:", e);
+}
 /* ═══════════════════════════════════════════════════
    EMAILJS CONTACT FORM
 ════════════════════════════════════════════════════ */
