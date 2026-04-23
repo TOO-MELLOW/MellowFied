@@ -978,81 +978,228 @@ window.switchTab = function(id, e){
     };
   }
 
+// ===========================================================================
+//  MODULE 9 — UI ADAPTER (FIXED)
+// ===========================================================================
 
-  // ===========================================================================
-  //  MODULE 9 — UI ADAPTER
-  //  Thin bridge between the engine and the existing widget HTML/CSS.
-  //  Adjust SEL selectors to match your actual widget element classes/IDs.
-  // ===========================================================================
+const UI = (() => {
 
+  const SEL = {
+    panel: "#mtPanel",
+    messages: "#mtBody",
+    input: "#mtInput",
+    button: ".mt-send",
+    typing: "#mtTyping",
+    chips: "#mtChips",
+    openBtn: ".mt-open-btn",
+    closeBtn: ".mt-close-btn"
+  };
 
-    // Scoped CSS — injected once, won't conflict with your existing styles
-    function injectStyles() {
-      if (document.getElementById("mwt-styles")) return;
-      const s = document.createElement("style");
-      s.id = "mwt-styles";
-      s.textContent = `
-        .mwt-msg{display:flex;margin:5px 10px;animation:mwtIn .22s ease}
-        .mwt-bot{justify-content:flex-start}
-        .mwt-user{justify-content:flex-end}
-        @keyframes mwtIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-
-        .mwt-bubble{max-width:84%;padding:10px 14px;border-radius:18px;font-size:13.5px;line-height:1.6}
-        .mwt-bot  .mwt-bubble{background:#f0f4ff;border-bottom-left-radius:4px;color:#1a1a2e}
-        .mwt-user .mwt-bubble{background:#2c3e85;border-bottom-right-radius:4px;color:#fff}
-        .mwt-bubble p{margin:0 0 7px}.mwt-bubble p:last-child{margin-bottom:0}
-        .mwt-bubble a{color:#2c3e85;text-decoration:underline}
-        .mwt-user .mwt-bubble a{color:#aac4ff}
-
-        ul.mwt-list{margin:5px 0;padding-left:0;list-style:none}
-        ul.mwt-list li{padding:2px 0 2px 4px;margin-bottom:3px;border-left:2px solid transparent}
-        ul.mwt-list li:hover{border-left-color:#2c3e85}
-
-        .mwt-scenarios{margin:6px 0}
-        .mwt-scenario{background:#e8eeff;border-left:3px solid #2c3e85;padding:5px 10px;margin-bottom:4px;border-radius:0 8px 8px 0;font-size:12.5px;color:#2a2a4a}
-
-        .mwt-meta{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 4px}
-        .mwt-meta span{background:#fff;border:1px solid #d0d8f0;border-radius:12px;padding:3px 11px;color:#2c3e85;font-weight:600;font-size:12.5px}
-
-        .mwt-result{background:#fffbea;border-left:3px solid #f0b429;padding:5px 10px;border-radius:0 8px 8px 0;font-size:12.5px;margin:5px 0}
-        .mwt-note{color:#666;font-size:12px;font-style:italic;margin-top:5px}
-        .mwt-followup{margin-top:9px;font-weight:600;color:#2c3e85;font-size:13px}
-        .mwt-process{color:#444;font-size:12.5px;margin-top:5px}
-
-        .mwt-suggestions{display:flex;flex-wrap:wrap;gap:6px;padding:3px 10px 8px}
-        .mwt-suggestion-btn{background:#fff;border:1.5px solid #c5d0f0;border-radius:20px;padding:5px 13px;font-size:12px;cursor:pointer;color:#2c3e85;font-weight:500;transition:all .15s;white-space:nowrap}
-        .mwt-suggestion-btn:hover{background:#dce6ff;border-color:#2c3e85;transform:translateY(-1px)}
-        .mwt-suggestion-btn:disabled{opacity:.4;cursor:default;transform:none}
-
-        .mwt-typing .mwt-bubble{display:flex;gap:5px;align-items:center;padding:14px 16px}
-        .mwt-typing .mwt-bubble span{width:7px;height:7px;background:#2c3e85;border-radius:50%;animation:mwtDot 1.1s infinite}
-        .mwt-typing .mwt-bubble span:nth-child(2){animation-delay:.18s}
-        .mwt-typing .mwt-bubble span:nth-child(3){animation-delay:.36s}
-        @keyframes mwtDot{0%,80%,100%{transform:scale(.65);opacity:.4}40%{transform:scale(1);opacity:1}}
-      `;
-      document.head.appendChild(s);
-    }
-
-    return { init, handleInput };
-  })();
-
-
-  // ===========================================================================
-  //  BOOTSTRAP
-  // ===========================================================================
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", UI.init);
-  } else {
-    UI.init();
+  // Safe query helper (FIXES your crash)
+  function $(selector) {
+    if (!selector) return null;
+    return document.querySelector(selector);
   }
 
-  // Public API — useful for debugging in the browser console:
-  // MellowTechBot.classify("my pc is slow")
-  // MellowTechBot.process("how much does a website cost")
-  root.MellowTechBot = { process, classify, NLP, Memory, UI, KB };
+  function $all(selector) {
+    if (!selector) return [];
+    return document.querySelectorAll(selector);
+  }
 
-})(window);
+  let hasWelcomed = false;
+
+  function init() {
+    injectStyles();
+
+    const panel = $(SEL.panel);
+    const input = $(SEL.input);
+    const button = $(SEL.button);
+    const openBtn = $(SEL.openBtn);
+    const closeBtn = $(SEL.closeBtn);
+
+    if (!panel || !input || !button) return;
+
+    // ── OPEN BUTTON ─────────────────────────────
+    if (openBtn) {
+      openBtn.addEventListener("click", () => {
+        panel.style.display = "flex";
+
+        setTimeout(() => input.focus(), 100);
+
+        if (!hasWelcomed) {
+          hasWelcomed = true;
+          sendBot("Hi 👋 How can I help you today?", [
+            "🛠️ Services",
+            "💰 Pricing",
+            "📞 Contact",
+            "💻 PC Help"
+          ]);
+        }
+      });
+    }
+
+    // ── CLOSE BUTTON ────────────────────────────
+    if (closeBtn) {
+      closeBtn.addEventListener("click", () => {
+        panel.style.display = "none";
+      });
+    }
+
+    // ── SEND BUTTON ─────────────────────────────
+    button.addEventListener("click", handleSend);
+
+    // ── ENTER KEY ───────────────────────────────
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        handleSend();
+      }
+    });
+
+    // ── QUICK CHIPS ─────────────────────────────
+    document.addEventListener("click", (e) => {
+      if (e.target.classList.contains("mt-chip")) {
+        const text = e.target.dataset.chip || e.target.textContent;
+        handleInput(text);
+      }
+    });
+  }
+
+  function handleSend() {
+    const input = $(SEL.input);
+    if (!input) return;
+
+    const text = input.value.trim();
+    if (!text) return;
+
+    input.value = "";
+    handleInput(text);
+  }
+
+  function handleInput(text) {
+    renderUser(text);
+
+    showTyping();
+
+    setTimeout(() => {
+      hideTyping();
+
+      const res = MellowTechBot.process(text);
+
+      sendBotHTML(res.html, res.suggestions);
+    }, 500);
+  }
+
+  // ── RENDER USER MESSAGE ───────────────────────
+  function renderUser(text) {
+    const container = $(SEL.messages);
+    if (!container) return;
+
+    const msg = document.createElement("div");
+    msg.className = "mwt-msg mwt-user";
+
+    msg.innerHTML = `<div class="mwt-bubble">${escapeHtml(text)}</div>`;
+
+    container.appendChild(msg);
+    scrollToBottom();
+  }
+
+  // ── RENDER BOT MESSAGE ────────────────────────
+  function sendBot(text, suggestions = []) {
+    sendBotHTML(`<p>${text}</p>`, suggestions);
+  }
+
+  function sendBotHTML(html, suggestions = []) {
+    const container = $(SEL.messages);
+    if (!container) return;
+
+    const msg = document.createElement("div");
+    msg.className = "mwt-msg mwt-bot";
+
+    msg.innerHTML = `<div class="mwt-bubble">${html}</div>`;
+
+    container.appendChild(msg);
+
+    if (suggestions && suggestions.length) {
+      renderSuggestions(suggestions);
+    }
+
+    scrollToBottom();
+  }
+
+  // ── SUGGESTION BUTTONS ────────────────────────
+  function renderSuggestions(list) {
+    const container = $(SEL.messages);
+    if (!container) return;
+
+    const wrap = document.createElement("div");
+    wrap.className = "mwt-suggestions";
+
+    list.forEach(text => {
+      const btn = document.createElement("button");
+      btn.className = "mwt-suggestion-btn";
+      btn.textContent = text;
+
+      btn.addEventListener("click", () => {
+        handleInput(text);
+      });
+
+      wrap.appendChild(btn);
+    });
+
+    container.appendChild(wrap);
+  }
+
+  // ── TYPING INDICATOR ──────────────────────────
+  function showTyping() {
+    const typing = $(SEL.typing);
+    if (!typing) return;
+    typing.style.display = "block";
+  }
+
+  function hideTyping() {
+    const typing = $(SEL.typing);
+    if (!typing) return;
+    typing.style.display = "none";
+  }
+
+  function scrollToBottom() {
+    const container = $(SEL.messages);
+    if (!container) return;
+    container.scrollTop = container.scrollHeight;
+  }
+
+  function escapeHtml(s) {
+    return String(s)
+      .replace(/&/g,"&amp;")
+      .replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;");
+  }
+
+  // ── STYLES (unchanged) ────────────────────────
+  function injectStyles() {
+    if (document.getElementById("mwt-styles")) return;
+
+    const s = document.createElement("style");
+    s.id = "mwt-styles";
+    s.textContent = `
+      .mwt-msg{display:flex;margin:5px 10px}
+      .mwt-bot{justify-content:flex-start}
+      .mwt-user{justify-content:flex-end}
+      .mwt-bubble{max-width:85%;padding:10px 14px;border-radius:16px}
+      .mwt-bot .mwt-bubble{background:#eef3ff}
+      .mwt-user .mwt-bubble{background:#2c3e85;color:#fff}
+      .mwt-suggestions{display:flex;flex-wrap:wrap;gap:6px;padding:6px}
+      .mwt-suggestion-btn{border:1px solid #ccc;padding:5px 10px;border-radius:20px;cursor:pointer}
+    `;
+    document.head.appendChild(s);
+  }
+
+  return { init, handleInput };
+
+})();
+  
 
 /* ═══════════════════════════════════════════════════
    LOADER (canvas background — mtLoader element)
