@@ -1207,6 +1207,7 @@ window.UI = (function () {
   }
 })();
 
+
 /* ═══════════════════════════════════════════════════
    EMAILJS CONTACT FORM
 ════════════════════════════════════════════════════ */
@@ -1244,4 +1245,5 @@ window.UI = (function () {
     }
   });
 })();
-
+var _l = document.getElementById('page-loader') || document.getElementById('mtLoader');
+if (_l) { _l.style.opacity = '0'; _l.style.pointerEvents = 'none'; setTimeout(function(){ if(_l.parentNode) _l.parentNode.removeChild(_l); }, 800); }
