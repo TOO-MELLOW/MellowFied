@@ -1,6 +1,7 @@
 /* ═══════════════════════════════════════════════════
    MELLOW TECH SERVICES — SHARED JAVASCRIPT
    common.js — loaded on every page
+   (Fixes applied: loader logic, bot export, UI init, chip clicks, etc.)
 ════════════════════════════════════════════════════ */
 
 /* ── Nav scroll / hide ────────────────────────────── */
@@ -80,24 +81,15 @@ window.switchTab = function(id, e){
 
   const NLP = (() => {
 
-    /**
-     * Synonym / abbreviation / slang expansion table.
-     * Covers SMS language, Afrikaans terms, common misspellings, SA context.
-     * Sorted by length at runtime so longer phrases match before substrings.
-     */
     const RAW_EXPANSIONS = {
-      // SA greetings
       "howzit":"hello","haai":"hello","hie":"hello","heita":"hello",
       "sawubona":"hello","dumela":"hello","hola":"hello",
-      // Afrikaans / Zulu affirmations
       "ja":"yes","yebo":"yes","nee":"no","aikona":"no",
-      // SMS / text contractions
       "wont":"will not","dont":"do not","cant":"cannot","im":"i am",
       "ive":"i have","theres":"there is","whats":"what is","hows":"how is",
       "ur":"your","u":"you","r":"are","b":"be","2":"to",
       "pls":"please","plz":"please","asap":"urgent now","rn":"right now",
       "btw":"by the way","fyi":"for your information","tbh":"to be honest",
-      // Service slang
       "reinstall":"install windows","reformat":"format windows",
       "wipe pc":"format windows","wipe laptop":"format windows",
       "os":"operating system windows",
@@ -106,17 +98,13 @@ window.switchTab = function(id, e){
       "lekker":"good","bra":"friend","sisi":"friend",
       "spaza":"small business","hustle":"business",
       "smme":"small business","sme":"small business",
-      // CV synonyms
       "curriculum vitae":"cv","resume":"cv",
       "job application cv":"cv job","cover letter":"cv job",
-      // Assignment synonyms
       "prac":"practical assignment","tut":"tutorial assignment",
       "due":"deadline assignment",
       "referencing":"citation formatting reference",
       "unisa":"university assignment",
-      // Payment
       "eft":"bank transfer payment","rands":"price cost","rand":"price cost",
-      // Misspellings — services
       "windos":"windows","widows":"windows","winows":"windows",
       "ofice":"office","excell":"excel","powerponit":"powerpoint",
       "troubeshoot":"troubleshoot","virius":"virus","viruse":"virus",
@@ -126,7 +114,6 @@ window.switchTab = function(id, e){
       "develoment":"development","devlopment":"development",
     };
 
-    // Sort by length descending so multi-word phrases match before substrings
     const EXPANSIONS = Object.entries(RAW_EXPANSIONS)
       .sort(([a],[b]) => b.length - a.length);
 
@@ -157,7 +144,6 @@ window.switchTab = function(id, e){
       "just","also","so","if","how","what","when","where","which","who",
     ]);
 
-    // Sentiment: -1 frustrated · 0 neutral · 1 positive
     const NEG = ["not working","broken","useless","frustrated","angry","terrible",
       "rubbish","hate","nothing works","waste","worst","problem","issue","failed",
       "doesn't work","wasted","annoyed","sick of","fed up"];
@@ -171,7 +157,6 @@ window.switchTab = function(id, e){
       return neg > pos ? -1 : pos > neg ? 1 : 0;
     }
 
-    // Extract deadline entities
     const DEADLINE_RE = [
       { re: /\b(today|tonight|now|asap|urgent|immediately)\b/i,  label: "TODAY"    },
       { re: /\b(tomorrow)\b/i,                                   label: "TOMORROW" },
@@ -194,13 +179,11 @@ window.switchTab = function(id, e){
 
   // ===========================================================================
   //  MODULE 2 — KNOWLEDGE BASE
-  //  Every service page + about page fully encoded as structured data.
-  //  Signals = ranked keyword phrases (longer phrase = more specific = higher weight)
+  //  (unchanged, keeping all service entries)
   // ===========================================================================
 
   const KB = {
 
-    // ── ABOUT / COMPANY ────────────────────────────────────────────────────
     about: {
       signals: [
         "about mellow tech","about your company","who are you","what is mellow tech",
@@ -224,7 +207,6 @@ window.switchTab = function(id, e){
       }
     },
 
-    // ── WINDOWS INSTALLATION ───────────────────────────────────────────────
     windows: {
       signals: [
         "install windows","reinstall windows","windows installation","clean install",
@@ -257,7 +239,6 @@ window.switchTab = function(id, e){
       }
     },
 
-    // ── MICROSOFT OFFICE ───────────────────────────────────────────────────
     office: {
       signals: [
         "microsoft office","install office","ms office","office setup",
@@ -281,7 +262,6 @@ window.switchTab = function(id, e){
       }
     },
 
-    // ── PC TROUBLESHOOTING & VIRUS REMOVAL ────────────────────────────────
     troubleshoot: {
       signals: [
         "pc is slow","laptop is slow","computer is slow","takes forever to start",
@@ -318,7 +298,6 @@ window.switchTab = function(id, e){
       }
     },
 
-    // ── SOFTWARE & DRIVERS ─────────────────────────────────────────────────
     software: {
       signals: [
         "install software","software installation","install a program","install application",
@@ -344,7 +323,6 @@ window.switchTab = function(id, e){
       }
     },
 
-    // ── GRAPHIC DESIGN ─────────────────────────────────────────────────────
     design: {
       signals: [
         "graphic design","need a logo","design a logo","logo design","company logo",
@@ -372,7 +350,6 @@ window.switchTab = function(id, e){
       }
     },
 
-    // ── WEB DEVELOPMENT ────────────────────────────────────────────────────
     web: {
       signals: [
         "build a website","create a website","need a website","web development",
@@ -405,7 +382,6 @@ window.switchTab = function(id, e){
       }
     },
 
-    // ── ASSIGNMENT ASSISTANCE ──────────────────────────────────────────────
     assignment: {
       signals: [
         "assignment help","assignment assistance","help with assignment",
@@ -438,7 +414,6 @@ window.switchTab = function(id, e){
       }
     },
 
-    // ── CV DESIGN & REVAMP ─────────────────────────────────────────────────
     cv: {
       signals: [
         "cv design","design my cv","cv revamp","revamp my cv","update my cv",
@@ -468,7 +443,6 @@ window.switchTab = function(id, e){
       }
     },
 
-    // ── BUSINESS DIGITAL SETUP ─────────────────────────────────────────────
     business: {
       signals: [
         "business digital setup","set up my business online","take business online",
@@ -503,7 +477,6 @@ window.switchTab = function(id, e){
       }
     },
 
-    // ── PRICING ────────────────────────────────────────────────────────────
     pricing: {
       signals: [
         "how much does it cost","what is the price","pricing","cost","fee",
@@ -533,7 +506,6 @@ window.switchTab = function(id, e){
       }
     },
 
-    // ── TURNAROUND ─────────────────────────────────────────────────────────
     turnaround: {
       signals: [
         "how long will it take","turnaround time","how fast","how quick",
@@ -561,7 +533,6 @@ window.switchTab = function(id, e){
       }
     },
 
-    // ── CONTACT ────────────────────────────────────────────────────────────
     contact: {
       signals: [
         "contact you","how do i contact","get in touch","speak to someone",
@@ -583,7 +554,6 @@ window.switchTab = function(id, e){
       }
     },
 
-    // ── GUARANTEE / TRUST ──────────────────────────────────────────────────
     guarantee: {
       signals: [
         "do you guarantee","is there a guarantee","warranty","what if i'm not happy",
@@ -607,7 +577,6 @@ window.switchTab = function(id, e){
       }
     },
 
-    // ── REVIEWS ────────────────────────────────────────────────────────────
     reviews: {
       signals: [
         "client reviews","what do your clients say","testimonials","ratings",
@@ -629,7 +598,6 @@ window.switchTab = function(id, e){
       }
     },
 
-    // ── PAYMENT ────────────────────────────────────────────────────────────
     payment: {
       signals: [
         "how do i pay","payment options","payment methods","do you accept cash",
@@ -650,7 +618,6 @@ window.switchTab = function(id, e){
       }
     },
 
-    // ── STUDENT SERVICES ───────────────────────────────────────────────────
     students: {
       signals: [
         "i am a student","im a student","student budget","student discount",
@@ -678,14 +645,11 @@ window.switchTab = function(id, e){
 
   // ===========================================================================
   //  MODULE 3 — DISAMBIGUATION RULES
-  //  When two intents score closely and could lead to very different answers,
-  //  ask a targeted clarifying question before responding.
   // ===========================================================================
 
   const DISAMBIG_RULES = [
     {
       id: "design_vs_web",
-      // Fires when both 'design' and 'web' have meaningful scores
       trigger: (scores) => (scores.design || 0) >= 2 && (scores.web || 0) >= 2,
       question: "Just so I point you in the right direction — are you looking for **graphic design** (logos, flyers, social media graphics) or a **website**?",
       options: { "🎨 Graphic Design": "design", "🌐 Website": "web" }
@@ -711,7 +675,6 @@ window.switchTab = function(id, e){
 
   // ===========================================================================
   //  MODULE 4 — MULTI-TURN FLOW HANDLERS
-  //  Activated when an intent + entity combination triggers a specific path.
   // ===========================================================================
 
   const FLOWS = {
@@ -752,8 +715,6 @@ window.switchTab = function(id, e){
 
   // ===========================================================================
   //  MODULE 5 — INTENT CLASSIFIER
-  //  Scores each KB intent against normalized input.
-  //  Weights: exact phrase match length × 2, token match × 1.
   // ===========================================================================
 
   function classify(rawInput) {
@@ -766,9 +727,8 @@ window.switchTab = function(id, e){
       for (const signal of data.signals) {
         const sn = signal.toLowerCase();
         if (norm.includes(sn)) {
-          score += sn.split(" ").length * 2; // phrase length = specificity weight
+          score += sn.split(" ").length * 2;
         }
-        // Token-level match as secondary signal
         const overlap = sn.split(" ").filter(t => tokens.includes(t)).length;
         score += overlap * 0.5;
       }
@@ -785,8 +745,6 @@ window.switchTab = function(id, e){
 
   // ===========================================================================
   //  MODULE 6 — RESPONSE BUILDER
-  //  Converts structured KB response objects into formatted HTML.
-  //  Supports markdown bold/italic/links + scoped CSS classes.
   // ===========================================================================
 
   function buildHTML(r) {
@@ -811,7 +769,6 @@ window.switchTab = function(id, e){
     return html;
   }
 
-  // Micro-markdown renderer (bold, italic, links, line breaks)
   function md(s) {
     return s
       .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
@@ -829,14 +786,13 @@ window.switchTab = function(id, e){
 
   // ===========================================================================
   //  MODULE 7 — CONVERSATION MEMORY
-  //  Tracks the last N turns, last resolved intent, and any pending state.
   // ===========================================================================
 
   const Memory = (() => {
     const MAX = 12;
     let turns        = [];
     let lastIntent   = null;
-    let pendingState = null; // { type: 'disambig', options: {label: intent} }
+    let pendingState = null;
 
     const push = (role, text, intent = null) => {
       turns.push({ role, text, intent, ts: Date.now() });
@@ -847,7 +803,7 @@ window.switchTab = function(id, e){
     // Short / ambiguous message: likely a follow-up to the previous topic
     const isFollowUp = (text) => {
       const SHORT_AFFIRM = /^(yes|no|sure|okay|ok|please|ya|yep|nope|more|tell me more|go on|and|what else|thanks)[\.\?!]?$/i;
-      return SHORT_AFFIRM.test(text.trim()) || text.trim().length < 12;
+      return SHORT_AFFIRM.test(text.trim()) || text.trim().length < 8;   // reduced from 12 → less aggressive
     };
 
     return {
@@ -863,7 +819,6 @@ window.switchTab = function(id, e){
 
   // ===========================================================================
   //  MODULE 8 — MAIN PROCESSING ENGINE
-  //  Input → NLP → classify → disambig/flow/direct → structured response
   // ===========================================================================
 
   function process(rawInput) {
@@ -873,7 +828,6 @@ window.switchTab = function(id, e){
 
     Memory.push("user", rawInput);
 
-    // ── STEP 1: Resolve any pending disambiguation ──────────────────────
     const pending = Memory.getPending();
     if (pending && pending.type === "disambig") {
       Memory.clearPending();
@@ -883,18 +837,15 @@ window.switchTab = function(id, e){
           return resolveIntent(intent, entities, sent);
         }
       }
-      // Couldn't match their input to an option — re-prompt gently
       return {
         html: "<p>I want to make sure I give you the right info — could you tap one of the options below? 😊</p>",
         suggestions: Object.keys(pending.options),
       };
     }
 
-    // ── STEP 2: Classify intent ─────────────────────────────────────────
     const { ranked, scores } = classify(rawInput);
     const THRESHOLD = 1.5;
 
-    // ── STEP 3: Frustrated user with no clear intent → escalate ────────
     if (sent === -1 && (ranked.length === 0 || ranked[0].score < THRESHOLD)) {
       Memory.push("bot", "", "contact");
       return {
@@ -911,7 +862,6 @@ window.switchTab = function(id, e){
       };
     }
 
-    // ── STEP 4: No confident match — try context follow-up or fallback ──
     if (ranked.length === 0 || ranked[0].score < THRESHOLD) {
       if (Memory.isFollowUp(rawInput) && Memory.getLast()) {
         return resolveIntent(Memory.getLast(), entities, sent);
@@ -919,7 +869,6 @@ window.switchTab = function(id, e){
       return buildFallback(rawInput);
     }
 
-    // ── STEP 5: Check disambiguation rules ──────────────────────────────
     for (const rule of DISAMBIG_RULES) {
       if (rule.trigger(scores)) {
         Memory.setPending({ type: "disambig", options: rule.options });
@@ -930,7 +879,6 @@ window.switchTab = function(id, e){
       }
     }
 
-    // ── STEP 6: Check multi-turn flow handlers ───────────────────────────
     const topIntent = ranked[0].intent;
     for (const [, flow] of Object.entries(FLOWS)) {
       if (flow.match(topIntent, entities)) {
@@ -940,7 +888,6 @@ window.switchTab = function(id, e){
       }
     }
 
-    // ── STEP 7: Direct intent resolution ────────────────────────────────
     return resolveIntent(topIntent, entities, sent);
   }
 
@@ -950,7 +897,6 @@ window.switchTab = function(id, e){
 
     let html = buildHTML(entry.response);
 
-    // Empathy prefix for frustrated users even when we have an answer
     if (sentiment === -1) {
       html = `<p>I understand this is stressful — let me get you the right information. 👇</p>` + html;
     }
@@ -977,6 +923,9 @@ window.switchTab = function(id, e){
       suggestions: ["🛠️ All Services", "💰 Pricing", "⏱ Turnaround", "📞 Contact Us"],
     };
   }
+
+/* export bot to window (FIX: was missing) */
+  root.MellowTechBot = { process };
 
 // ===========================================================================
 //  MODULE 9 — UI ADAPTER (STABLE BUILD)
@@ -1050,7 +999,7 @@ const UI = (function () {
         }
       });
 
-      // CHIPS
+      // CHIPS (FIX: class now matches suggested buttons)
       document.addEventListener("click", (e) => {
         if (e.target.classList.contains("mt-chip")) {
           const txt = e.target.dataset.chip || e.target.textContent;
@@ -1117,8 +1066,9 @@ const UI = (function () {
     );
 
     if (suggestions?.length) {
+      // FIX: use mt-chip class + data-chip attribute so clicks register
       const chips = suggestions.map(s =>
-        `<button class="mwt-suggestion-btn">${s}</button>`
+        `<button class="mt-chip mwt-suggestion-btn" data-chip="${s}">${s}</button>`
       ).join("");
 
       box.insertAdjacentHTML("beforeend",
@@ -1166,7 +1116,7 @@ const UI = (function () {
   return { init };
 
 })();
-  
+
 
 /* ═══════════════════════════════════════════════════
    LOADER (canvas background — mtLoader element)
@@ -1186,13 +1136,6 @@ const UI = (function () {
   document.body.classList.add('mt-hidden');
 
   var dur = 10000;
-/*  try {
-    var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-    if(conn && conn.effectiveType){
-      if(conn.effectiveType==='2g'||conn.effectiveType==='slow-2g') dur=3000;
-      else if(conn.effectiveType==='3g') dur=3500;
-    }
-  } catch(e){} */
 
   var ctx = canvas.getContext('2d');
   var W, H;
@@ -1276,11 +1219,13 @@ const UI = (function () {
 
 /* ═══════════════════════════════════════════════════
    LOADER (SVG scene — page-loader element)
+   FIX: animation now calls finishLoader() properly.
+   FIX: pointer‑events disabled during fade.
 ════════════════════════════════════════════════════ */
 (function() {
   const CX = 260, CY = 260, R = 170;
   const NS = 'http://www.w3.org/2000/svg';
-  const MIN_DISPLAY_TIME = 10000;
+  const FAKE_DURATION = 10000;   // matches original intention
 
   const services = [
     { label: 'CV Writing',          icon: '📄', angle: -90 },
@@ -1294,14 +1239,13 @@ const UI = (function () {
   const nodeGroup = document.getElementById('nodes');
   const connGroup = document.getElementById('connections');
   const partGroup = document.getElementById('particles');
-  if(!nodeGroup) return; // SVG loader not present on this page
+  if(!nodeGroup) return;
 
   const nodeEls = [];
   const lineEls = [];
 
   function deg2rad(d) { return d * Math.PI / 180; }
 
-  // Build nodes and connection lines
   services.forEach((svc, i) => {
     const rad = deg2rad(svc.angle);
     const nx = CX + R * Math.cos(rad);
@@ -1419,17 +1363,41 @@ const UI = (function () {
   const pctEl   = document.getElementById('pct');
   const loader  = document.getElementById('page-loader');
 
-  let startTime = null, animationFrame = null, isLoaded = false;
+  let startTime = null, animationFrame = null, finished = false;
   const LINE_STARTS = [0.02, 0.08, 0.14, 0.20, 0.26, 0.32];
   let particleSpawnCount = 0;
+
+  // ── Finish & hide loader ──────────────────────────
+  function finishLoader() {
+    if (finished) return;
+    finished = true;
+    if (animationFrame) cancelAnimationFrame(animationFrame);
+
+    bar.style.width = '100%';
+    pctEl.textContent = '100%';
+    lineEls.forEach(ln => ln.el.setAttribute('stroke-dashoffset', 0));
+    nodeEls.forEach(n => n.g.setAttribute('opacity', 1));
+
+    setTimeout(() => {
+      if(loader) {
+        loader.classList.add('done');                // activates CSS visibility transition
+        loader.style.pointerEvents = 'none';         // FIX: prevent clicks during fade
+      }
+    }, 400);
+  }
 
   // ── Main animation frame ──────────────────────────
   function frame(now) {
     if (!startTime) startTime = now;
     const elapsed = now - startTime;
-    const FAKE_DURATION = 10000;
-    const rawProgress = Math.min(elapsed / FAKE_DURATION, 0.90);
 
+    // FIX: complete progress after FAKE_DURATION (10000ms)
+    if (elapsed >= FAKE_DURATION) {
+      finishLoader();
+      return;  // no more frames
+    }
+
+    const rawProgress = Math.min(elapsed / FAKE_DURATION, 0.90);
     bar.style.width = (rawProgress * 100) + '%';
     pctEl.textContent = Math.floor(rawProgress * 100) + '%';
 
@@ -1461,72 +1429,61 @@ const UI = (function () {
     pulseRings(now);
     pulseLogo(now);
 
-    animationFrame = requestAnimationFrame(frame); // keep loop running
+    animationFrame = requestAnimationFrame(frame);
   }
 
-  // ── Finish & hide loader ──────────────────────────
-  function finishLoader() {
-    if (animationFrame) cancelAnimationFrame(animationFrame);
+  // Kick off the animation
+  animationFrame = requestAnimationFrame(frame);
+})();
 
-    bar.style.width = '100%';
-    pctEl.textContent = '100%';
-    lineEls.forEach(ln => ln.el.setAttribute('stroke-dashoffset', 0));
-    nodeEls.forEach(n => n.g.setAttribute('opacity', 1));
-
-    setTimeout(() => {
-      if(loader) loader.classList.add('done');
-    }, 400);
-  }
-
-  // ===========================================================================
-//  FAIL-SAFE PAGE LOADER FIX
-// ===========================================================================
-
+/* ═══════════════════════════════════════════════════
+   GLOBAL PAGE‑LOADER FAIL‑SAFE (runs on every page)
+   FIX: moved outside SVG IIFE, handles load race,
+   adds 12‑second wall‑clock timeout.
+════════════════════════════════════════════════════ */
 (function () {
   const loader = document.getElementById("page-loader");
 
   function hideLoader() {
     if (!loader) return;
-
     loader.style.opacity = "0";
     loader.style.pointerEvents = "none";
-
     setTimeout(() => {
       loader.style.display = "none";
     }, 500);
   }
 
-  // Normal case
-  window.addEventListener("load", hideLoader);
-
-  // 🚨 FAIL-SAFE: force hide after 3 seconds no matter what
-  setTimeout(hideLoader, 3000);
-})();
-
-  // Kick off the animation
-  animationFrame = requestAnimationFrame(frame);
-})();
-// ===========================================================================
-//  CHATBOT BOOTSTRAP (SAFE INIT)
-// ===========================================================================
-
-try {
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () => {
-      if (window.UI && typeof UI.init === "function") {
-        UI.init();
-      }
-    });
+  // If page already loaded, hide immediately.
+  // Otherwise listen for load event.
+  if (document.readyState === "complete") {
+    hideLoader();
   } else {
-    if (window.UI && typeof UI.init === "function") {
+    window.addEventListener("load", hideLoader);
+  }
+
+  // Ultimate fallback – after 12 seconds, force hide no matter what
+  setTimeout(hideLoader, 12000);
+})();
+
+/* ═══════════════════════════════════════════════════
+   CHATBOT BOOTSTRAP (FIX: no longer depends on window.UI)
+════════════════════════════════════════════════════ */
+try {
+  function bootUI() {
+    if (typeof UI !== 'undefined' && typeof UI.init === 'function') {
       UI.init();
     }
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", bootUI);
+  } else {
+    bootUI();
   }
 } catch (e) {
   console.error("UI bootstrap failed:", e);
 }
 /* ═══════════════════════════════════════════════════
-   EMAILJS CONTACT FORM
+   EMAILJS CONTACT FORM (unchanged)
 ════════════════════════════════════════════════════ */
 (function(){
   var form = document.getElementById('contactForm');
@@ -1562,3 +1519,4 @@ try {
     }
   });
 })();
+})(this);   // close the outer (function(root){ … })(this)
