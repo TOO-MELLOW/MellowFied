@@ -1,5 +1,6 @@
 /* ═══════════════════════════════════════════════════
-JAVASCRIPT
+JAVASCRIPT — NAV / MOBILE MENU / REVEAL / TABS
+(unchanged from original)
 ════════════════════════════════════════════════════ */
 
 /* ── Nav scroll / hide ────────────────────────────── */
@@ -70,62 +71,193 @@ window.switchTab = function(id, e){
   if(el) el.classList.add('active');
 };
 
+
 /* ═══════════════════════════════════════════════════════════════════════════
-   MELLOW TECH SERVICES — INTELLIGENT SALES BOT v3.0
+   MELLOW TECH SERVICES — INTELLIGENT SALES BOT v4.0
    mellowtech-salesbot.js
-   
+
+   WHAT'S NEW IN v4:
+   • Context-aware pricing — "how much" resolves against lastIntent first
+   • Multi-service basket — tracks every service mentioned, smart close
+   • 3× wider signal lists with SA slang, broken English, natural speech
+   • Smarter fallback — partial match suggestions, never a dead-end
+   • Name collected once, stored, pre-fills WhatsApp with full basket
+   • Basket close — "I see you need CV + Windows — want both or just one?"
 ════════════════════════════════════════════════════════════════════════════ */
 
 ;(function (root) {
   "use strict";
 
   // ══════════════════════════════════════════════════════════════════════════
-  //  MODULE 1 — NLP PIPELINE
+  //  MODULE 1 — NLP PIPELINE (expanded)
   // ══════════════════════════════════════════════════════════════════════════
   const NLP = (() => {
 
-    // Slang / abbreviation expansions (sorted longest-first for safe replacement)
+    // Slang / abbreviation / typo expansions — sorted longest-first for safe replacement
     const RAW_EXP = {
-      // Greetings
+      // ── Greetings & openers
       "howzit":"hello","haai":"hello","hie":"hello","heita":"hello",
       "sawubona":"hello","dumela":"hello","hola":"hello","sup":"hello",
-      "yo":"hello","hey":"hello",
-      // Affirmations
-      "ja":"yes","yebo":"yes","nee":"no","aikona":"no","nah":"no",
-      "yep":"yes","yup":"yes","nope":"no",
-      // Contractions
+      "yo":"hello","hey there":"hello","morning":"hello","afternoon":"hello",
+      "evening":"hello","good day":"hello","greetings":"hello",
+      "hi there":"hello","what's good":"hello","wassup":"hello",
+
+      // ── Affirmations / negations
+      "ja":"yes","yebo":"yes","ewe":"yes","yep":"yes","yup":"yes","yeah":"yes",
+      "nee":"no","aikona":"no","nah":"no","nope":"no","no ways":"no",
+
+      // ── Contractions
       "wont":"will not","dont":"do not","cant":"cannot","im":"i am",
       "ive":"i have","theres":"there is","whats":"what is","hows":"how is",
-      "id":"i would","ill":"i will","its":"it is","ive":"i have",
-      // Text speak
+      "id":"i would","ill":"i will","its":"it is","doesnt":"does not",
+      "havent":"have not","isnt":"is not","arent":"are not","wasnt":"was not",
+
+      // ── Text speak / chat shorthand
       "ur":"your","u":"you","r":"are","b":"be","2":"to","4":"for",
       "pls":"please","plz":"please","asap":"urgent now","rn":"right now",
-      "btw":"by the way","tbh":"to be honest","lol":"",
-      // Tech terms
+      "btw":"by the way","tbh":"to be honest","lol":"","lmk":"let me know",
+      "dm":"contact","msg":"message","txt":"text","ngl":"honestly",
+      "nvm":"never mind","omg":"wow","smh":"frustrated","imo":"i think",
+
+      // ── Tech terms
       "reinstall":"install windows","reformat":"format windows",
       "wipe pc":"format windows","wipe laptop":"format windows",
+      "wipe my pc":"format windows","wipe my laptop":"format windows",
+      "format my laptop":"format windows","format my pc":"format windows",
       "os":"operating system windows","bsod":"blue screen crash error",
       "lagging":"slow performance","lag":"slow","hanging":"freezing",
-      // SA business
-      "lekker":"good","bra":"friend","sisi":"friend",
-      "spaza":"small business","hustle":"business",
-      "smme":"small business","sme":"small business",
-      // CV synonyms
+      "ram":"memory performance","hdd":"hard drive storage",
+      "ssd":"storage performance","wifi":"internet connection",
+      "internet not working":"connection troubleshoot",
+      "no internet":"connection troubleshoot",
+      "driver":"software driver install","drivers":"software driver install",
+      "printer":"printer install setup","antivirus":"virus protection install",
+      "pop ups":"malware virus","popups":"malware virus","ads popping":"malware virus",
+
+      // ── SA business / social context
+      "lekker":"good","bra":"friend","sisi":"friend","china":"friend",
+      "spaza":"small business","hustle":"business","side hustle":"business",
+      "smme":"small business","sme":"small business","startup":"new business",
+      "jozi":"johannesburg","pta":"pretoria","limpopo":"polokwane",
+      "kasi":"township community","location":"area",
+
+      // ── CV synonyms (expanded)
       "curriculum vitae":"cv","resume":"cv","job application cv":"cv job",
-      "cover letter":"cv job",
-      // Academic
+      "cover letter":"cv job","job profile":"cv","my cv":"cv",
+      "need a cv":"cv","want a cv":"cv","cv done":"cv",
+      "cv written":"cv","write my cv":"cv","create cv":"cv",
+      "new cv":"cv","cv help":"cv","fix my cv":"cv","update cv":"cv",
+      "my resume":"cv","job search":"cv job","job hunting":"cv job",
+      "looking for work":"cv job","need work":"cv job","finding a job":"cv job",
+      "applying for a job":"cv job","job apps":"cv job",
+      "getting interviews":"cv","no interviews":"cv","not getting called":"cv",
+      "no call backs":"cv","not hearing back":"cv",
+
+      // ── Assignment synonyms (expanded)
       "prac":"practical assignment","tut":"tutorial assignment",
       "due":"deadline assignment","referencing":"citation formatting",
       "unisa":"university assignment","tvet":"college assignment",
-      // Payment
-      "eft":"bank transfer payment","rands":"price cost","rand":"price cost",
-      // Typos
+      "assignment due":"assignment deadline","homework":"assignment",
+      "research paper":"assignment essay","essay help":"assignment",
+      "formatting":"assignment format","apa":"assignment apa format",
+      "harvard":"assignment harvard format","mla":"assignment mla format",
+      "cite":"citation formatting","citations":"citation formatting",
+      "references":"citation formatting","bibliography":"citation formatting",
+      "school work":"assignment","varsity work":"assignment",
+      "uni work":"assignment","college work":"assignment",
+      "failing":"assignment help","lecturer":"assignment help",
+      "marks dropping":"assignment help","bad marks":"assignment help",
+
+      // ── Windows synonyms (expanded)
       "windos":"windows","widows":"windows","winows":"windows",
-      "websit":"website","web site":"website","sight":"website",
+      "window":"windows","os install":"windows install","operating system":"windows install",
+      "fresh install":"windows install","clean install":"windows install",
+      "factory reset":"windows reset","reset pc":"windows reset","reset laptop":"windows reset",
+      "wont boot":"windows boot error","wont start":"windows boot error",
+      "not booting":"windows boot error","no os":"windows install",
+      "corrupt windows":"windows repair","corrupted windows":"windows repair",
+      "windows update":"windows repair","stuck on update":"windows repair",
+      "activation":"windows activate","not activated":"windows activate",
+      "activate my pc":"windows activate","license":"windows license",
+      "product key":"windows license","windows key":"windows license",
+      "second hand laptop":"windows install","bought a laptop":"windows install",
+      "new laptop":"laptop setup","new pc":"laptop setup",
+      "got a laptop":"laptop setup","just got a laptop":"laptop setup",
+
+      // ── Design synonyms (expanded)
       "grafic":"graphic","desing":"design","dessign":"design",
+      "graphic design":"design","logo":"logo design","flyer":"flyer design",
+      "poster":"poster design","branding":"brand design",
+      "brand":"brand design","social media post":"social media design",
+      "insta post":"social media design","ig post":"social media design",
+      "facebook post":"social media design","fb post":"social media design",
+      "banner":"banner design","business card":"business card design",
+      "letterhead":"letterhead design","company profile":"brand design",
+      "marketing material":"design","pamphlet":"flyer design",
+      "leaflet":"flyer design","signage":"design",
+
+      // ── Office synonyms (expanded)
+      "ofice":"office","excell":"excel","powerponit":"powerpoint",
+      "ms office":"microsoft office","ms word":"microsoft office",
+      "microsoft word":"microsoft office","word document":"microsoft office",
+      "need word":"microsoft office","need excel":"microsoft office",
+      "install word":"microsoft office","install excel":"microsoft office",
+      "365":"microsoft office","office 365":"microsoft office",
+      "microsoft 365":"microsoft office","outlook email":"microsoft office",
+
+      // ── Website synonyms (expanded)
+      "websit":"website","web site":"website","sight":"website",
+      "online shop":"website ecommerce","online store":"website ecommerce",
+      "ecommerce":"website ecommerce","sell online":"website ecommerce",
+      "shopify":"website ecommerce","woocommerce":"website ecommerce",
+      "portfolio":"website portfolio","landing page":"website landing",
+      "one pager":"website landing","web presence":"website",
+      "go online":"website","get online":"website","appear online":"website",
+      "my own website":"website","personal website":"website",
+      "need a website":"website","want a website":"website",
+      "business website":"website business","company website":"website business",
+
+      // ── Business digital synonyms
+      "google maps":"google business listing","google listing":"google business listing",
+      "appear on google":"google business listing","google my business":"google business listing",
+      "business email":"business digital email","professional email":"business digital email",
+      "email address":"business digital email","domain":"domain registration",
+      "website domain":"domain registration","register domain":"domain registration",
+      "whatsapp business":"business digital whatsapp",
+      "business whatsapp":"business digital whatsapp",
+      "facebook page":"business digital facebook","instagram page":"business digital instagram",
+      "social media setup":"business digital social","go digital":"business digital",
+      "take my business online":"business digital","online presence":"business digital",
+
+      // ── Troubleshoot synonyms (expanded)
       "buisness":"business","bussiness":"business","bizness":"business",
       "develoment":"development","devlopment":"development",
-      "ofice":"office","excell":"excel","powerponit":"powerpoint",
+      "slow computer":"pc slow","slow laptop":"pc slow","sluggish":"pc slow",
+      "taking forever":"pc slow","freezes":"pc freezing","frozen":"pc freezing",
+      "keeps freezing":"pc freezing","crashing":"pc crash","keeps crashing":"pc crash",
+      "random shutdown":"pc crash","black screen":"pc crash","blue screen":"pc crash",
+      "weird noises":"pc hardware issue","fan loud":"pc hardware issue",
+      "overheating":"pc overheating","getting hot":"pc overheating",
+      "virus":"malware virus","malware":"malware virus","hacked":"malware virus",
+      "ransomware":"malware virus","suspicious":"malware virus",
+      "something wrong with pc":"pc troubleshoot","something wrong with laptop":"pc troubleshoot",
+      "pc acting up":"pc troubleshoot","laptop acting up":"pc troubleshoot",
+      "not working properly":"pc troubleshoot","behaving weird":"pc troubleshoot",
+      "needs repair":"pc repair","fix my laptop":"pc repair","fix my computer":"pc repair",
+      "broken laptop":"pc repair","broken pc":"pc repair",
+
+      // ── Payment / pricing phrases
+      "eft":"bank transfer payment","rands":"price cost","rand":"price cost",
+      "payment plan":"payment","pay later":"payment","instalment":"payment",
+      "deposit":"payment","pay upfront":"payment",
+      "how much does it cost":"pricing","what does it cost":"pricing",
+      "what are your prices":"pricing","whats the price":"pricing",
+      "price list":"pricing","all prices":"pricing","your rates":"pricing",
+      "affordable":"pricing affordable","cheap":"pricing affordable",
+      "student price":"pricing student","student discount":"pricing student",
+      "student rate":"pricing student","im a student":"pricing student",
+      "broke":"pricing affordable","tight budget":"pricing affordable",
+      "dont have much":"pricing affordable",
     };
 
     const EXPANSIONS = Object.entries(RAW_EXP)
@@ -148,6 +280,7 @@ window.switchTab = function(id, e){
       "is","it","this","that","my","i","me","we","you","do","can","will","be",
       "am","are","was","were","have","has","had","just","also","so","if","how",
       "what","when","where","which","who","please","okay","ok","yes","no",
+      "get","need","want","like","help","make","give","see","use",
     ]);
 
     function tokenize(text) {
@@ -159,10 +292,13 @@ window.switchTab = function(id, e){
       "not working","broken","useless","frustrated","angry","terrible",
       "rubbish","hate","nothing works","waste","worst","problem","issue",
       "failed","doesn't work","wasted","annoyed","sick of","fed up","scam",
+      "this is kak","kak service","useless","pathetic","not helping",
+      "doesn't make sense","confused","lost","don't understand",
     ];
     const POS_PHRASES = [
       "thanks","thank you","great","awesome","perfect","love","excellent",
-      "amazing","fantastic","helpful","wonderful","appreciate","brilliant","lekker",
+      "amazing","fantastic","helpful","wonderful","appreciate","brilliant",
+      "lekker","nice one","sharp","dankie","baie dankie","sorted","eish good",
     ];
 
     function sentiment(raw) {
@@ -176,16 +312,17 @@ window.switchTab = function(id, e){
       "hi","hello","hey","help","need","want","looking","please","a","the","and",
       "or","my","me","i","is","it","yes","no","ok","okay","thanks","good","great",
       "fine","sure","of","for","with","some","what","just","can","you","we","do",
+      "got","have","has","get","give","make","use","take","come","go","see",
     ]);
 
     function extractName(text) {
-      // Patterns: "my name is X", "I am X", "I'm X", "call me X"
       const patterns = [
         /my name is ([A-Za-z]{2,20})/i,
         /i(?:'m| am) ([A-Za-z]{2,20})/i,
         /call me ([A-Za-z]{2,20})/i,
         /it's ([A-Za-z]{2,20})/i,
-        /^([A-Za-z]{2,20})$/i,   // single word response (after name prompt)
+        /they call me ([A-Za-z]{2,20})/i,
+        /^([A-Za-z]{2,20})$/i,
       ];
       for (const re of patterns) {
         const m = text.match(re);
@@ -200,11 +337,12 @@ window.switchTab = function(id, e){
     }
 
     const DEADLINE_RE = [
-      { re: /\b(today|tonight|now|asap|urgent|immediately|right now)\b/i, label: "TODAY" },
-      { re: /\b(tomorrow)\b/i,                                             label: "TOMORROW" },
-      { re: /\bin (\d+)\s*(hour|hours|hr|hrs)\b/i,                         label: "HOURS" },
-      { re: /\bin (\d+)\s*(day|days)\b/i,                                  label: "DAYS" },
-      { re: /\b(monday|tuesday|wednesday|thursday|friday|saturday)\b/i,    label: "WEEKDAY" },
+      { re: /\b(today|tonight|now|asap|urgent|immediately|right now|right away|straight away)\b/i, label: "TODAY" },
+      { re: /\b(tomorrow|tmrw|tom)\b/i,                                                           label: "TOMORROW" },
+      { re: /\bin (\d+)\s*(hour|hours|hr|hrs)\b/i,                                                label: "HOURS" },
+      { re: /\bin (\d+)\s*(day|days)\b/i,                                                         label: "DAYS" },
+      { re: /\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b/i,                    label: "WEEKDAY" },
+      { re: /\b(this week|next week|end of week|by friday|by monday)\b/i,                         label: "WEEK" },
     ];
 
     function extractDeadline(text) {
@@ -215,12 +353,32 @@ window.switchTab = function(id, e){
       return null;
     }
 
-    return { normalize, tokenize, sentiment, extractName, extractDeadline };
+    // Extract partial/fuzzy service hints from free text
+    function extractPartialHints(norm) {
+      const hints = [];
+      const MAP = {
+        web:          ["web","site","online","page","seo","domain","ecommerce","shop"],
+        cv:           ["cv","resume","job","interview","apply","work","employ"],
+        assignment:   ["assignment","essay","format","apa","harvard","cite","submit","marks","uni","varsity","college","school"],
+        windows:      ["windows","install","format","boot","activate","license","key","os","laptop","pc","computer"],
+        troubleshoot: ["slow","virus","crash","freeze","repair","diagnose","problem","broken","fix"],
+        design:       ["logo","flyer","poster","design","brand","graphic","social","banner","card"],
+        office:       ["office","word","excel","powerpoint","outlook","365","microsoft"],
+        business:     ["google","maps","email","domain","facebook","instagram","whatsapp","digital","online"],
+      };
+      for (const [intent, keywords] of Object.entries(MAP)) {
+        const matches = keywords.filter(k => norm.includes(k)).length;
+        if (matches >= 1) hints.push({ intent, matches });
+      }
+      return hints.sort((a,b) => b.matches - a.matches);
+    }
+
+    return { normalize, tokenize, sentiment, extractName, extractDeadline, extractPartialHints };
   })();
 
 
   // ══════════════════════════════════════════════════════════════════════════
-  //  MODULE 2 — KNOWLEDGE BASE
+  //  MODULE 2 — KNOWLEDGE BASE (3× expanded signals)
   // ══════════════════════════════════════════════════════════════════════════
   const KB = {
 
@@ -228,19 +386,43 @@ window.switchTab = function(id, e){
       signals: [
         "hello","hi","hey","good morning","good afternoon","good evening",
         "howzit","heita","sawubona","dumela","hola","greetings","start",
+        "good day","morning","afternoon","evening","hi there","hey there",
+        "what's good","wassup","yo","sup","haai","hie",
+        "can you help","i need help","help me","help please",
+        "is anyone there","hello anyone","anybody there","hello mellow",
       ],
       score_boost: 3,
     },
 
     web: {
       signals: [
+        // Core
         "website","web development","web design","build a site","create a website",
         "need a website","business website","portfolio website","landing page",
         "online store","ecommerce","web page","web app","responsive site",
         "website for my business","website for my brand","seo website",
         "website is slow","website not working","website redesign","update website",
         "new website","website development","build site","make website",
-        "online presence website",
+        "online presence website","web presence",
+        // Natural / conversational
+        "i need a site","i want a website","build me a website","make me a site",
+        "how much is a website","website price","website cost","how much website",
+        "can you build me a website","can you make a website","do you make websites",
+        "create a site for me","design a website","design my website",
+        "fix my website","my website is not working","website is broken",
+        "get me online","take me online","appear online","go online",
+        "i want to go online","i need to go online","business online",
+        "my business needs a website","i have a business need website",
+        // SA slang / broken English
+        "bra i need a site","sisi i need a website","lekker website",
+        "nice website","clean website","professional website","cheap website",
+        "affordable website","student website","small business website",
+        "startup website","sell online","i want to sell online",
+        // Specific types
+        "portfolio site","personal site","ecommerce site","shop online",
+        "online shop","booking website","appointment website","menu website",
+        "restaurant website","hair salon website","nails website",
+        "shop website","store website","product website",
       ],
       name: "Website Development",
       emoji: "🌐",
@@ -259,12 +441,35 @@ window.switchTab = function(id, e){
 
     cv: {
       signals: [
+        // Core
         "cv","resume","curriculum vitae","job application","cover letter",
         "cv design","design my cv","cv revamp","update my cv","new cv",
         "cv from scratch","cv looks bad","not getting interviews","no callbacks",
         "applying for jobs","job hunting","interview cv","graduate cv",
         "entry level cv","career change cv","ats cv","linkedin profile",
         "need a job","job seeker","cv help","professional cv",
+        // Natural / conversational
+        "help me with my cv","fix my cv","my cv is bad","i need a cv",
+        "write my cv","create my cv","build my cv","redo my cv",
+        "can you do my cv","can you make a cv","make me a cv",
+        "how much is a cv","cv price","cv cost","how much for a cv",
+        "i'm looking for work","i'm job hunting","i need to find work",
+        "i want a new job","i'm applying for jobs","i keep applying but nothing",
+        "nobody calls me back","not getting responses","sending cvs not getting replies",
+        "my cv is old","my cv needs updating","i haven't updated my cv",
+        // SA slang / broken English
+        "bra help me with cv","my cv is kak","cv is rubbish",
+        "need work bra","looking for a job sisi","i need cv done",
+        "do my cv for me","sort out my cv","do my resume","fix my resume",
+        "no one is hiring me","jobs not coming","struggling to find work",
+        "just graduated","matric certificate","matric cv","grade 12 cv",
+        "first time cv","never had a job cv","first job cv",
+        "i want to change jobs","i am tired of my job","changing career",
+        // Specific types
+        "nursing cv","teaching cv","it cv","engineering cv","admin cv",
+        "call centre cv","driver cv","security cv","warehouse cv",
+        "construction cv","sales cv","marketing cv","accounting cv",
+        "graduate cv","student cv","intern cv","internship cv",
       ],
       name: "CV Design & Revamp",
       emoji: "📄",
@@ -283,6 +488,7 @@ window.switchTab = function(id, e){
 
     assignment: {
       signals: [
+        // Core
         "assignment","assignment help","assignment assistance","format assignment",
         "proofread","essay","research paper","academic writing","apa format",
         "harvard referencing","mla format","citation","referencing style",
@@ -290,6 +496,29 @@ window.switchTab = function(id, e){
         "university assignment","college assignment","tvet","unisa","school work",
         "struggling with assignment","formatting help","assignment due","marks",
         "lecturer said","wrong format",
+        // Natural / conversational
+        "help me with my assignment","do my assignment","can you help with assignment",
+        "format my assignment","fix my assignment","proofread my essay",
+        "how much to format assignment","assignment price","cost of assignment help",
+        "my assignment is due","assignment is due tomorrow","due tonight",
+        "i have an assignment due","submitting assignment","need to submit",
+        "my lecturer said format is wrong","wrong referencing","bad references",
+        "my marks are dropping","failing because of format","lost marks for formatting",
+        "apa is confusing","harvard is confusing","don't know how to reference",
+        "i don't know how to cite","i can't do apa","help with apa",
+        // SA slang / broken English
+        "bra help with prac","my assignment is kak","need help with my work",
+        "unisa assignment help","tvet assignment","varsity assignment",
+        "school essay","matric essay","matric assignment","grade 12 essay",
+        "class assignment","module assignment","sem assignment",
+        "research assignment","literature review","dissertation","thesis help",
+        "prac report","lab report","case study","group assignment",
+        "last minute assignment","urgent assignment","late assignment",
+        // Specific
+        "apa 7","apa 6","harvard style","chicago style","mla format",
+        "table of contents","page numbering","margins","font size formatting",
+        "bibliography","works cited","in text citation","footnotes",
+        "abstract writing","methodology","introduction help","conclusion help",
       ],
       name: "Assignment Assistance",
       emoji: "📝",
@@ -308,6 +537,7 @@ window.switchTab = function(id, e){
 
     windows: {
       signals: [
+        // Core
         "install windows","reinstall windows","windows installation","clean install",
         "format pc","format laptop","fresh install","windows 10","windows 11",
         "activate windows","windows activation","windows license","expired license",
@@ -315,6 +545,28 @@ window.switchTab = function(id, e){
         "boot loop","no operating system","no os","new laptop setup",
         "second hand laptop","bought a laptop","corrupted windows","windows is broken",
         "windows not working","factory reset","os installation",
+        // Natural / conversational
+        "install windows for me","put windows on my laptop","put windows on my pc",
+        "how much to install windows","windows installation price","format pc price",
+        "my windows is not working","windows messed up","windows giving problems",
+        "windows keeps crashing","windows blue screen","getting blue screen",
+        "my laptop wont start","my pc wont start","pc wont turn on","laptop wont turn on",
+        "stuck on loading screen","stuck on windows logo","won't get past loading",
+        "needs a fresh install","fresh windows","clean windows","new windows",
+        "activate my laptop","windows not activated","says not activated",
+        "windows watermark","watermark on desktop","not genuine windows",
+        "windows expired","trial expired","windows trial","need genuine windows",
+        // SA slang / broken English
+        "bra my windows is broken","my pc is broken windows","laptop has no windows",
+        "format my lappy","format my machine","lappy wont boot","machine wont start",
+        "my comp needs windows","pc needs formatting","laptop needs formatting",
+        "second hand pc need windows","bought pc no windows","no os on laptop",
+        "my screen went blue","blue screen of death","bsod error",
+        // Specific
+        "windows 10 install","windows 11 install","win 10","win 11",
+        "w10","w11","64 bit windows","32 bit windows","windows home","windows pro",
+        "dell windows install","hp windows install","lenovo windows install",
+        "acer windows install","asus windows install","samsung windows install",
       ],
       name: "Windows Installation & Activation",
       emoji: "💻",
@@ -333,6 +585,7 @@ window.switchTab = function(id, e){
 
     troubleshoot: {
       signals: [
+        // Core
         "pc is slow","laptop is slow","computer is slow","slow boot","slow startup",
         "running slow","virus","malware","ransomware","suspicious popups","random ads",
         "crashing","laptop crashing","keeps crashing","random shutdown","black screen",
@@ -340,6 +593,32 @@ window.switchTab = function(id, e){
         "error message","overheating","diagnose pc","fix my pc","pc repair",
         "pc not working","broken","something wrong","computer problems",
         "laptop problems","tech support","repair","help with pc","help with laptop",
+        // Natural / conversational
+        "my pc is acting up","my laptop is acting up","something wrong with my pc",
+        "something is wrong with my laptop","my computer is doing weird things",
+        "pc is giving me problems","laptop is giving me problems",
+        "help me fix my pc","help me fix my laptop","can you fix my pc",
+        "how much to fix pc","pc repair price","laptop repair price",
+        "diagnose my laptop","check my pc","scan my laptop","clean my pc",
+        "my pc is very slow","so slow it's painful","takes forever to load",
+        "internet is slow on my pc","wifi slow on laptop","downloads slow",
+        "apps crashing","programs crashing","keeps closing by itself","shuts down randomly",
+        "overheating laptop","laptop is hot","fan running loud","strange noises",
+        "black screen of death","blank screen","display not working","no display",
+        "cursor freezing","mouse not working","keyboard not working","trackpad frozen",
+        // SA slang / broken English
+        "my lappy is slow","my machine is slow","comp is slow","pc is kak slow",
+        "my pc is proper slow","super slow bra","running like a snail",
+        "got a virus bra","i think i have a virus","think its hacked",
+        "laptop feels heavy","comp feels laggy","pc hangs a lot",
+        "gets hot all the time","burning hot laptop","laptop shuts off by itself",
+        "random popups","weird ads","ads everywhere","browser hijacked",
+        "lost files","missing files","deleted files","recover files",
+        // Specific
+        "startup repair","windows repair","disk cleanup","registry clean",
+        "defrag","disk full","storage full","c drive full","no space",
+        "memory leak","high cpu usage","100 percent cpu","cpu at 100",
+        "ram full","memory full","high memory usage","task manager shows",
       ],
       name: "PC Troubleshooting & Repair",
       emoji: "🔧",
@@ -358,11 +637,35 @@ window.switchTab = function(id, e){
 
     design: {
       signals: [
+        // Core
         "graphic design","logo","logo design","company logo","flyer","poster",
         "flyer design","poster design","social media graphics","instagram graphics",
         "facebook graphics","banner design","business card","letterhead","branding",
         "brand identity","brand design","marketing materials","visual identity",
         "creative design","design work","need a design",
+        // Natural / conversational
+        "design me a logo","make me a logo","create a logo","logo for my business",
+        "i need a logo","how much is a logo","logo price","logo cost",
+        "design a flyer","make a flyer","create a flyer","flyer for my business",
+        "design a poster","make a poster","create a poster",
+        "social media posts design","design my socials","content for socials",
+        "instagram content","facebook content","social media content",
+        "design my brand","rebrand my business","brand package",
+        "business card design","make business cards","print ready files",
+        "company letterhead","email signature design","company profile design",
+        // SA slang / broken English
+        "bra design me a logo","lekker logo","nice logo","clean logo",
+        "professional logo","cheap logo","affordable logo","student logo",
+        "logo for my spaza","logo for my salon","logo for my business bra",
+        "i need something to post","need a flyer for my event","event flyer",
+        "birthday flyer","party flyer","church flyer","funeral flyer",
+        "hair salon flyer","nail salon flyer","braids flyer","food flyer",
+        "music flyer","dj flyer","promoter flyer","club night flyer",
+        // Specific
+        "vector logo","png logo","jpg logo","transparent logo","svg logo",
+        "full colour logo","black and white logo","flat logo","3d logo",
+        "animated logo","logo revamp","redesign logo","update logo",
+        "a4 flyer","a5 flyer","square flyer","digital flyer","print flyer",
       ],
       name: "Graphic Design & Branding",
       emoji: "🎨",
@@ -381,11 +684,29 @@ window.switchTab = function(id, e){
 
     office: {
       signals: [
+        // Core
         "microsoft office","install office","ms office","office setup",
         "word and excel","word excel powerpoint","outlook","microsoft 365",
         "office 365","install word","install excel","install powerpoint",
         "office activation","office not working","office expired","cant open word",
         "cant open excel",
+        // Natural / conversational
+        "install microsoft office for me","put office on my laptop","put office on my pc",
+        "how much to install office","office installation price","office price",
+        "my office is not working","word is not working","excel is not working",
+        "office keeps crashing","word keeps crashing","office is expired",
+        "office says trial","trial has ended","30 day trial expired",
+        "i need word and excel","i need microsoft","i need office suite",
+        "i need powerpoint","can you install office","do you install office",
+        // SA slang / broken English
+        "bra install office for me","need word bra","put office on my lappy",
+        "my word is not opening","my excel wont open","word has an error",
+        "i just need word","i just need excel","i just need powerpoint",
+        "student needs office","i'm a student need office","uni needs office",
+        // Specific
+        "office home","office professional","office home and student",
+        "office 2019","office 2021","office 2024","office ltsc",
+        "remote office install","online office install","screen share office",
       ],
       name: "Microsoft Office Installation",
       emoji: "📊",
@@ -402,12 +723,35 @@ window.switchTab = function(id, e){
 
     business: {
       signals: [
+        // Core
         "business digital setup","take business online","go digital","digital presence",
         "online presence","google business","google maps","appear on google",
         "business email","professional email","email domain","domain name",
         "register domain","facebook business","instagram business","whatsapp business",
         "social media for business","small business setup","startup setup",
         "new business","business whatsapp",
+        // Natural / conversational
+        "set up my business online","take my business online","go online with my business",
+        "i need a professional email","i need a business email","create a business email",
+        "how much is a business email","email with my domain","yourname at yourbusiness",
+        "i want to appear on google","google listing for my business","google maps listing",
+        "verify my business on google","google my business setup","gmb setup",
+        "create a facebook page","make a facebook page","facebook for my business",
+        "instagram for my business","instagram page for my business",
+        "set up whatsapp business","whatsapp business setup","business whatsapp profile",
+        "i need a domain","buy a domain","register a domain","get a domain name",
+        "domain and email","domain name and hosting","get my business online",
+        // SA slang / broken English
+        "bra i need my business online","take my spaza online","get my hustle online",
+        "i'm starting a business need setup","new business need digital","startup setup",
+        "salon needs facebook page","hair salon online","nails business online",
+        "food business online","catering business online","cleaning business online",
+        "tutoring business online","freelance business setup","contractor business online",
+        // Specific
+        "google workspace","gsuite","microsoft 365 business","business hosting",
+        "shared hosting","cpanel hosting","website hosting","email hosting",
+        "ssl certificate","https setup","secure website","business instagram",
+        "tiktok business","linkedin company page","youtube business channel",
       ],
       name: "Business Digital Setup",
       emoji: "🏢",
@@ -430,6 +774,13 @@ window.switchTab = function(id, e){
         "affordable","student price","student discount","expensive","budget",
         "cheap","rand","rands","payment plan","price list","all prices",
         "what does it cost","how much for","how much does",
+        "how much do you charge","what are your rates","is it expensive",
+        "is it cheap","can i afford","budget friendly","any discounts",
+        "payment options","can i pay","how do i pay","payment methods",
+        "do you have a price list","show me prices","what do you charge",
+        "can i get a quote","give me a quote","need a quote","free quote",
+        "estimate","ballpark","rough price","price range","starting price",
+        "minimum price","how much minimum","how much maximum",
       ],
     },
 
@@ -438,13 +789,21 @@ window.switchTab = function(id, e){
         "contact","whatsapp","phone","call","email","speak to someone","talk to",
         "reach you","book","schedule","appointment","human","real person",
         "team","contact details","how to reach","where to contact",
+        "talk to a person","talk to someone","speak to a human","speak to a person",
+        "call you","phone you","whatsapp you","message you","send you a message",
+        "what is your number","your phone number","your whatsapp number",
+        "your email address","how do i contact you","how can i reach you",
+        "where are you","are you in polokwane","polokwane office",
+        "can i come in","walk in","in person","come to you","your address",
+        "working hours","when are you open","hours","open on weekends",
+        "do you work on weekends","saturday","sunday","after hours",
       ],
     },
   };
 
 
   // ══════════════════════════════════════════════════════════════════════════
-  //  MODULE 3 — INTENT CLASSIFIER
+  //  MODULE 3 — INTENT CLASSIFIER (unchanged core, improved scoring)
   // ══════════════════════════════════════════════════════════════════════════
   function classify(rawInput) {
     const norm   = NLP.normalize(rawInput);
@@ -457,11 +816,9 @@ window.switchTab = function(id, e){
 
       for (const signal of data.signals) {
         const sn = signal.toLowerCase();
-        // Phrase match (weighted by phrase length)
         if (norm.includes(sn)) {
           score += sn.split(" ").length * 2.5;
         }
-        // Token overlap
         const overlap = sn.split(" ").filter(t => tokens.includes(t)).length;
         score += overlap * 0.6;
       }
@@ -480,16 +837,16 @@ window.switchTab = function(id, e){
 
 
   // ══════════════════════════════════════════════════════════════════════════
-  //  MODULE 4 — CONVERSATION MEMORY
+  //  MODULE 4 — CONVERSATION MEMORY (upgraded with serviceBasket)
   // ══════════════════════════════════════════════════════════════════════════
   const Memory = (() => {
-    const MAX_TURNS = 16;
+    const MAX_TURNS = 20;
 
     let state = {
       userName:          null,
-      userNeed:          null,
+      serviceBasket:     [],      // ← NEW: array of { intent, name, emoji }
       lastIntent:        null,
-      conversationStage: "greeting",  // greeting | discovery | qualify | value | close
+      conversationStage: "greeting",
       askedName:         false,
       pendingState:      null,
       turns:             [],
@@ -498,11 +855,26 @@ window.switchTab = function(id, e){
     function push(role, text, intent = null) {
       state.turns.push({ role, text, intent, ts: Date.now() });
       if (state.turns.length > MAX_TURNS) state.turns = state.turns.slice(-MAX_TURNS);
-      if (intent) state.lastIntent = intent;
+      if (intent && intent !== "greeting" && intent !== "pricing" && intent !== "contact") {
+        state.lastIntent = intent;
+      }
     }
 
+    // Add a service to the basket (deduped by intent key)
+    function addToBasket(intentKey) {
+      const svc = KB[intentKey];
+      if (!svc || !svc.name) return;
+      const already = state.serviceBasket.find(s => s.intent === intentKey);
+      if (!already) {
+        state.serviceBasket.push({ intent: intentKey, name: svc.name, emoji: svc.emoji });
+      }
+    }
+
+    function getBasket()        { return state.serviceBasket; }
+    function clearBasket()      { state.serviceBasket = []; }
+
     function isShortOrAffirm(text) {
-      const SHORT = /^(yes|no|sure|okay|ok|please|ya|yep|nope|more|go on|thanks|and|what else|tell me more)[\.\?!]?$/i;
+      const SHORT = /^(yes|no|sure|okay|ok|please|ya|yep|nope|more|go on|thanks|and|what else|tell me more|both|just one|all of them)[\.\?!]?$/i;
       return SHORT.test(text.trim()) || text.trim().length < 18;
     }
 
@@ -510,8 +882,6 @@ window.switchTab = function(id, e){
     function getStage()        { return state.conversationStage; }
     function setName(n)        { state.userName = n; }
     function getName()         { return state.userName; }
-    function setNeed(n)        { state.userNeed = n; }
-    function getNeed()         { return state.userNeed; }
     function getLast()         { return state.lastIntent; }
     function askedNameBefore() { return state.askedName; }
     function markAskedName()   { state.askedName = true; }
@@ -519,9 +889,17 @@ window.switchTab = function(id, e){
     function getPending()      { return state.pendingState; }
     function clearPending()    { state.pendingState = null; }
 
+    // Legacy: userNeed derived from basket for WhatsApp message
+    function getNeed() {
+      const basket = state.serviceBasket;
+      if (!basket.length) return null;
+      return basket.map(s => s.name).join(" + ");
+    }
+
     return {
       push, isShortOrAffirm, setStage, getStage,
-      setName, getName, setNeed, getNeed, getLast,
+      setName, getName, getNeed, getLast,
+      addToBasket, getBasket, clearBasket,
       askedNameBefore, markAskedName,
       setPending, getPending, clearPending,
     };
@@ -529,101 +907,107 @@ window.switchTab = function(id, e){
 
 
   // ══════════════════════════════════════════════════════════════════════════
-  //  MODULE 5 — SALES FLOW ENGINE
+  //  MODULE 5 — CONTEXT-AWARE PRICING
+  //  NEW: "how much" → checks lastIntent → returns that service's price first
   // ══════════════════════════════════════════════════════════════════════════
+  function contextAwarePricingResponse(lastIntent) {
+    const svc = KB[lastIntent];
 
-  const SERVICE_INTENTS = new Set(["web","cv","assignment","windows","troubleshoot","design","office","business"]);
-
-  // Varied response phrases to avoid robotic repetition
-  const GREETINGS = [
-    "Hey! 👋 Welcome to Mellow Tech. What can we help you with today?",
-    "Hi there! 😊 You've reached Mellow Tech — what do you need help with?",
-    "Hey, great to have you here! 👋 What brings you to Mellow Tech today?",
-    "Welcome! I'm the Mellow Tech assistant. What can I sort out for you today?",
-  ];
-
-  const NAME_ASKS = [
-    "Before we go further — what's your name? 😊",
-    "Quick one — what should I call you?",
-    "What's your name? That way I can personalise this for you 👇",
-  ];
-
-  const QUALIFY_TRANSITIONS = [
-    "Got it! One quick question before I give you the details:",
-    "Perfect — just so I give you the right info:",
-    "Great choice! Quick question to narrow it down:",
-  ];
-
-  function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-
-  function buildServiceResponse(intentKey, entities) {
-    const svc = KB[intentKey];
-    if (!svc || !svc.name) return null;
-
-    Memory.setNeed(svc.name);
-    Memory.setStage("qualify");
-
-    const stage = Memory.getStage();
-    const name  = Memory.getName();
-
-    // Check for urgent assignment
-    if (intentKey === "assignment" && entities.deadline?.urgency === "TODAY") {
-      Memory.setStage("close");
+    // If we know what they were last talking about, give that price directly
+    if (svc && svc.price) {
+      const name = Memory.getName();
+      const greeting = name ? `, ${name}` : "";
       return {
         html: buildHTML({
-          text: "⚡ That's urgent — but we've handled this before.",
-          details: [
-            "1️⃣ WhatsApp us now: **+27 720 465 993**",
-            "2️⃣ Send your brief and any existing work",
-            "3️⃣ Tell us the submission time and referencing style required",
-            "4️⃣ We'll confirm and get started immediately",
-          ],
-          note: "Same-day formatting from R80. Reply confirmed on WhatsApp.",
+          text: `**${svc.emoji} ${svc.name}${greeting} — here's the pricing:**`,
+          details: [`💰 **${svc.price}**`, `⏱ Turnaround: ${svc.turnaround}`],
+          note: "🎓 Student? Mention it when you contact us — we always work within your budget.",
+          followUp: "Ready to get started, or do you have any other questions?",
         }),
-        suggestions: ["📱 WhatsApp Now", "💰 Assignment Pricing", "📝 More About This Service"],
+        suggestions: ["✅ Let's Go!", "📞 Contact Now", "🛠️ Other Services", "💰 All Prices"],
       };
     }
 
-    // Value delivery + soft qualify
-    const qualifyLine = rand(QUALIFY_TRANSITIONS);
-    let html = buildHTML({
-      text: `**${svc.emoji} ${svc.name}** — ${svc.pitch}`,
-      details: svc.details,
-      turnaround: `⏱ ${svc.turnaround}`,
-      price: `💰 ${svc.price}`,
-      followUp: `${qualifyLine} ${svc.qualify_q}`,
-    });
-
-    return {
-      html,
-      suggestions: getServiceSuggestions(intentKey),
-    };
+    // No context → full price list
+    return pricingResponse();
   }
 
-  function getServiceSuggestions(intentKey) {
-    const map = {
-      web:          ["🏢 Business Site", "🖼️ Portfolio Site", "🛒 Online Store", "💰 Get a Quote"],
-      cv:           ["📄 Build from Scratch", "♻️ Revamp Existing CV", "💰 Pricing", "📞 Order Now"],
-      assignment:   ["⏰ Deadline is Today", "📅 I Have a Few Days", "📐 Referencing Help Only", "💰 What's the Cost?"],
-      windows:      ["💥 PC Keeps Crashing", "🔑 Need Activation", "🆕 New Laptop Setup", "💰 Get Exact Quote"],
-      troubleshoot: ["🐌 Very Slow PC", "🦠 Think I Have a Virus", "💥 Crashing / Blue Screen", "📞 Urgent — Call Me"],
-      design:       ["🏢 Business Logo", "📄 Flyer / Poster", "📱 Social Media Pack", "💼 Full Branding"],
-      office:       ["🌐 Remote Install", "📍 In-Person Polokwane", "💻 Windows + Office Bundle", "💰 Pricing"],
-      business:     ["🆕 New Business", "🏪 Existing Business Online", "💰 Package Pricing", "🌐 Just a Website"],
+  function pricingResponse() {
+    return {
+      html: buildHTML({
+        text: "**Transparent pricing — no hidden fees, ever. You know the cost before we start.**",
+        details: [
+          "📝 Assignment Assistance — **from R80**",
+          "📄 CV Revamp — **from R150** · New CV — **from R200**",
+          "📊 Microsoft Office Install — **from R100**",
+          "⚙️ Software / Driver Install — **from R80 per item**",
+          "🔧 PC Troubleshooting & Virus Removal — **from R150**",
+          "💻 Windows Installation — **from R200**",
+          "🎨 Flyer / Poster Design — **from R150**",
+          "🎨 Logo Design — **from R250**",
+          "📱 Social Media Graphics Pack — **from R300**",
+          "🌐 Website Development — **from R800**",
+          "🏢 Business Digital Setup — **package pricing**",
+        ],
+        note: "🎓 Student? Tell us when you contact us — we always work within your budget.",
+        followUp: "Which service are you interested in? I can give you a more specific breakdown.",
+      }),
+      suggestions: ["📄 CV Pricing", "💻 PC / Windows", "🎨 Design Pricing", "🌐 Website Pricing"],
     };
-    return map[intentKey] || ["💰 Pricing", "📞 Contact Us", "🛠️ Other Services"];
   }
 
 
   // ══════════════════════════════════════════════════════════════════════════
-  //  MODULE 6 — WHATSAPP REDIRECT
+  //  MODULE 6 — MULTI-SERVICE BASKET CLOSE
+  //  NEW: checks basket for multiple services → smart close question
+  // ══════════════════════════════════════════════════════════════════════════
+  function buildBasketClose() {
+    const basket = Memory.getBasket();
+    const name   = Memory.getName();
+
+    if (basket.length > 1) {
+      // Multiple services — ask which ones
+      const serviceList = basket.map(s => `**${s.emoji} ${s.name}**`).join(" and ");
+      const nameGreet   = name ? `, ${name}` : "";
+      return {
+        html: buildHTML({
+          text: `I see you've mentioned ${serviceList}${nameGreet}. 🎯`,
+          followUp: "Do you want all of them, or just one? Let me know so I can create the right WhatsApp message for you.",
+        }),
+        suggestions: [
+          "✅ I want all of them",
+          ...basket.map(s => `Just the ${s.name}`),
+          "🛠️ Something else",
+        ],
+      };
+    }
+
+    // Single service — direct close
+    if (basket.length === 1) {
+      const svc = basket[0];
+      const nameGreet = name ? `, ${name}` : "";
+      return {
+        html: buildHTML({
+          text: `Perfect${nameGreet}! Ready to get your **${svc.emoji} ${svc.name}** sorted? 🚀`,
+          followUp: "Click below to connect with us on WhatsApp — your details will be pre-filled.",
+        }),
+        suggestions: ["✅ Yes, let's go!", "💰 What's the price?", "🛠️ Other Services"],
+      };
+    }
+
+    return null;
+  }
+
+
+  // ══════════════════════════════════════════════════════════════════════════
+  //  MODULE 7 — WHATSAPP REDIRECT
   // ══════════════════════════════════════════════════════════════════════════
   const WA_NUMBER = "27720465993";
 
   function buildWhatsAppLink(name, need, extra = "") {
     const nm  = name || "a potential client";
     const svc = need || "your services";
-    const msg = `Hi, I came from your website. My name is ${nm} and I would like help with ${svc}.${extra ? " " + extra : ""}`;
+    const msg = `Hi, I came from your website. My name is ${nm} and I would like help with: ${svc}.${extra ? " " + extra : ""}`;
     return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
   }
 
@@ -642,7 +1026,7 @@ window.switchTab = function(id, e){
 
 
   // ══════════════════════════════════════════════════════════════════════════
-  //  MODULE 7 — RESPONSE BUILDER
+  //  MODULE 8 — RESPONSE BUILDER
   // ══════════════════════════════════════════════════════════════════════════
   function buildHTML(r) {
     let html = "";
@@ -676,32 +1060,6 @@ window.switchTab = function(id, e){
       .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
   }
 
-  // Pricing summary response
-  function pricingResponse() {
-    return {
-      html: buildHTML({
-        text: "**Transparent pricing — no hidden fees, ever. You know the cost before we start.**",
-        details: [
-          "📝 Assignment Assistance — **from R80**",
-          "📄 CV Revamp — **from R150** · New CV — **from R200**",
-          "📊 Microsoft Office Install — **from R100**",
-          "⚙️ Software / Driver Install — **from R80 per item**",
-          "🔧 PC Troubleshooting & Virus Removal — **from R150**",
-          "💻 Windows Installation — **from R200**",
-          "🎨 Flyer / Poster Design — **from R150**",
-          "🎨 Logo Design — **from R250**",
-          "📱 Social Media Graphics Pack — **from R300**",
-          "🌐 Website Development — **from R800**",
-          "🏢 Business Digital Setup — **package pricing**",
-        ],
-        note: "🎓 Student? Tell us when you contact us — we always work within your budget.",
-        followUp: "Which service are you interested in? I can give you a more specific breakdown.",
-      }),
-      suggestions: ["📄 CV Pricing", "💻 PC / Windows", "🎨 Design Pricing", "🌐 Website Pricing"],
-    };
-  }
-
-  // Contact response
   function contactResponse() {
     return {
       html: buildHTML({
@@ -717,14 +1075,40 @@ window.switchTab = function(id, e){
     };
   }
 
-  // Fallback response
+  // Smarter fallback — uses partial hints to suggest relevant services
   function fallback(input) {
     Memory.push("bot", "", null);
+    const norm   = NLP.normalize(input);
+    const hints  = NLP.extractPartialHints(norm);
     const snippet = input.length > 55 ? input.slice(0, 55) + "…" : input;
+
+    // If we got partial hints, suggest the closest service
+    if (hints.length > 0) {
+      const top = hints[0];
+      const svc = KB[top.intent];
+      return {
+        html: buildHTML({
+          text: snippet
+            ? `Not 100% sure about *"${escHtml(snippet)}"* — did you mean something about **${svc?.emoji || ""} ${svc?.name || top.intent}**?`
+            : `Let me point you in the right direction — are you looking for **${svc?.name || top.intent}**?`,
+          details: [
+            "📱 **WhatsApp: +27 720 465 993** ← fastest way to get an answer",
+          ],
+          followUp: "Or pick what fits best:",
+        }),
+        suggestions: [
+          svc ? `${svc.emoji} ${svc.name}` : "🛠️ This Service",
+          "🛠️ All Services",
+          "💰 Pricing",
+          "📞 Talk to a Person",
+        ],
+      };
+    }
+
     return {
       html: buildHTML({
         text: snippet
-          ? `Not sure about *"${escHtml(snippet)}"* — but let's get you to the right place.`
+          ? `Not sure about *"${escHtml(snippet)}"* — let's get you to the right place.`
           : "Not sure about that one — let me help you find the right service 👇",
         details: [
           "📱 **WhatsApp: +27 720 465 993** ← fastest way to get an answer",
@@ -736,9 +1120,88 @@ window.switchTab = function(id, e){
     };
   }
 
+  const SERVICE_INTENTS = new Set(["web","cv","assignment","windows","troubleshoot","design","office","business"]);
+
+  const GREETINGS = [
+    "Hey! 👋 Welcome to Mellow Tech. What can we help you with today?",
+    "Hi there! 😊 You've reached Mellow Tech — what do you need help with?",
+    "Hey, great to have you here! 👋 What brings you to Mellow Tech today?",
+    "Welcome! I'm the Mellow Tech assistant. What can I sort out for you today?",
+    "Howzit! 👋 Mellow Tech here — what can we help you with?",
+  ];
+
+  const NAME_ASKS = [
+    "Before we go further — what's your name? 😊",
+    "Quick one — what should I call you?",
+    "What's your name? That way I can personalise this for you 👇",
+    "Mind if I get your name first? Makes it easier to help you.",
+  ];
+
+  const QUALIFY_TRANSITIONS = [
+    "Got it! One quick question before I give you the details:",
+    "Perfect — just so I give you the right info:",
+    "Great choice! Quick question to narrow it down:",
+    "Noted! Just need to know one thing:",
+    "Lekker! Quick question first:",
+  ];
+
+  function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+  function buildServiceResponse(intentKey, entities) {
+    const svc = KB[intentKey];
+    if (!svc || !svc.name) return null;
+
+    // Add to basket
+    Memory.addToBasket(intentKey);
+    Memory.setStage("qualify");
+
+    // Check for urgent assignment
+    if (intentKey === "assignment" && entities.deadline?.urgency === "TODAY") {
+      Memory.setStage("close");
+      return {
+        html: buildHTML({
+          text: "⚡ That's urgent — but we've handled this before.",
+          details: [
+            "1️⃣ WhatsApp us now: **+27 720 465 993**",
+            "2️⃣ Send your brief and any existing work",
+            "3️⃣ Tell us the submission time and referencing style required",
+            "4️⃣ We'll confirm and get started immediately",
+          ],
+          note: "Same-day formatting from R80. Reply confirmed on WhatsApp.",
+        }),
+        suggestions: ["📱 WhatsApp Now", "💰 Assignment Pricing", "📝 More About This Service"],
+      };
+    }
+
+    const qualifyLine = rand(QUALIFY_TRANSITIONS);
+    const html = buildHTML({
+      text: `**${svc.emoji} ${svc.name}** — ${svc.pitch}`,
+      details: svc.details,
+      turnaround: `⏱ ${svc.turnaround}`,
+      price: `💰 ${svc.price}`,
+      followUp: `${qualifyLine} ${svc.qualify_q}`,
+    });
+
+    return { html, suggestions: getServiceSuggestions(intentKey) };
+  }
+
+  function getServiceSuggestions(intentKey) {
+    const map = {
+      web:          ["🏢 Business Site", "🖼️ Portfolio Site", "🛒 Online Store", "💰 Get a Quote"],
+      cv:           ["📄 Build from Scratch", "♻️ Revamp Existing CV", "💰 Pricing", "📞 Order Now"],
+      assignment:   ["⏰ Deadline is Today", "📅 I Have a Few Days", "📐 Referencing Help Only", "💰 What's the Cost?"],
+      windows:      ["💥 PC Keeps Crashing", "🔑 Need Activation", "🆕 New Laptop Setup", "💰 Get Exact Quote"],
+      troubleshoot: ["🐌 Very Slow PC", "🦠 Think I Have a Virus", "💥 Crashing / Blue Screen", "📞 Urgent — Call Me"],
+      design:       ["🏢 Business Logo", "📄 Flyer / Poster", "📱 Social Media Pack", "💼 Full Branding"],
+      office:       ["🌐 Remote Install", "📍 In-Person Polokwane", "💻 Windows + Office Bundle", "💰 Pricing"],
+      business:     ["🆕 New Business", "🏪 Existing Business Online", "💰 Package Pricing", "🌐 Just a Website"],
+    };
+    return map[intentKey] || ["💰 Pricing", "📞 Contact Us", "🛠️ Other Services"];
+  }
+
 
   // ══════════════════════════════════════════════════════════════════════════
-  //  MODULE 8 — MAIN PROCESSING ENGINE
+  //  MODULE 9 — MAIN PROCESSING ENGINE (upgraded)
   // ══════════════════════════════════════════════════════════════════════════
   function process(rawInput) {
     const sent     = NLP.sentiment(rawInput);
@@ -776,16 +1239,11 @@ window.switchTab = function(id, e){
         Memory.setName(extractedName);
         const need = Memory.getNeed();
         if (need) {
-          // Have name + need → push to WhatsApp
           Memory.setStage("close");
           const html = whatsAppCTA(extractedName, need);
           Memory.push("bot", html, "close");
-          return {
-            html,
-            suggestions: ["📱 Open WhatsApp", "🛠️ Other Services"],
-          };
+          return { html, suggestions: ["📱 Open WhatsApp", "🛠️ Other Services"] };
         } else {
-          // Have name, no need yet → discovery
           Memory.setStage("discovery");
           const html = buildHTML({
             text: `Great, ${extractedName}! 😊 What do you need help with?`,
@@ -798,34 +1256,62 @@ window.switchTab = function(id, e){
           };
         }
       } else {
-        // Couldn't parse a name — try again once
         Memory.setPending({ type: "name_capture" });
-        const html = "<p>What's your name? I just need a first name is fine 😊</p>";
+        const html = "<p>What's your name? Just a first name is fine 😊</p>";
         Memory.push("bot", html, null);
         return { html, suggestions: [] };
       }
     }
 
-    // ── STEP 2: Pending confirmation (soft close) ────────────────────────
+    // ── STEP 2: Pending basket confirm (multi-service) ───────────────────
+    if (pending && pending.type === "basket_confirm") {
+      Memory.clearPending();
+      const norm = NLP.normalize(rawInput);
+
+      // "I want all of them" / "both" / "all"
+      if (/all|both|everything|all of them|yes all/i.test(norm)) {
+        // Keep full basket → go to name capture or WhatsApp
+        return proceedToClose();
+      }
+
+      // Check if they picked a specific service name
+      for (const svc of Memory.getBasket()) {
+        const svcNorm = NLP.normalize(svc.name);
+        if (norm.includes(svcNorm) || norm.includes(svc.intent)) {
+          // They only want this one
+          Memory.clearBasket();
+          Memory.addToBasket(svc.intent);
+          return proceedToClose();
+        }
+      }
+
+      // Partial match on "just cv", "just the website" etc.
+      for (const [intentKey] of Object.entries(KB)) {
+        if (!SERVICE_INTENTS.has(intentKey)) continue;
+        if (norm.includes(intentKey) || (KB[intentKey].name && norm.includes(NLP.normalize(KB[intentKey].name)))) {
+          Memory.clearBasket();
+          Memory.addToBasket(intentKey);
+          return proceedToClose();
+        }
+      }
+
+      // Couldn't parse — ask again
+      return {
+        html: "<p>Which one would you like to go with? 😊</p>",
+        suggestions: [
+          "✅ I want all of them",
+          ...Memory.getBasket().map(s => `Just the ${s.name}`),
+        ],
+      };
+    }
+
+    // ── STEP 3: Pending confirm close (soft close yes/no) ────────────────
     if (pending && pending.type === "confirm_close") {
       Memory.clearPending();
       const norm = NLP.normalize(rawInput);
-      if (/yes|sure|okay|ok|ya|yep|please|go ahead|do it/i.test(norm)) {
-        // Confirmed — go to name if we don't have it
-        if (!Memory.getName()) {
-          Memory.markAskedName();
-          Memory.setPending({ type: "name_capture" });
-          const html = `<p>${rand(NAME_ASKS)}</p>`;
-          Memory.push("bot", html, null);
-          return { html, suggestions: [] };
-        } else {
-          Memory.setStage("close");
-          const html = whatsAppCTA(Memory.getName(), Memory.getNeed());
-          Memory.push("bot", html, "close");
-          return { html, suggestions: ["📱 Open WhatsApp", "🛠️ Other Services"] };
-        }
+      if (/yes|sure|okay|ok|ya|yep|please|go ahead|do it|both|all|let's go|lets go/i.test(norm)) {
+        return proceedToClose();
       } else {
-        // Not ready — keep exploring
         const html = "<p>No problem! 😊 What else can I help clarify?</p>";
         Memory.push("bot", html, null);
         return {
@@ -835,11 +1321,11 @@ window.switchTab = function(id, e){
       }
     }
 
-    // ── STEP 3: Classify intent ──────────────────────────────────────────
+    // ── STEP 4: Classify intent ──────────────────────────────────────────
     const { ranked, scores } = classify(rawInput);
     const THRESHOLD = 1.5;
 
-    // ── STEP 4: Frustrated user — escalate fast ──────────────────────────
+    // ── STEP 5: Frustrated user — escalate fast ──────────────────────────
     if (sent === -1 && (ranked.length === 0 || ranked[0].score < THRESHOLD)) {
       Memory.push("bot", "", "contact");
       return {
@@ -855,7 +1341,7 @@ window.switchTab = function(id, e){
       };
     }
 
-    // ── STEP 5: No confident match — follow-up or fallback ───────────────
+    // ── STEP 6: No confident match — smart fallback ──────────────────────
     if (ranked.length === 0 || ranked[0].score < THRESHOLD) {
       if (Memory.isShortOrAffirm(rawInput) && Memory.getLast()) {
         return resolveService(Memory.getLast(), entities, sent);
@@ -865,7 +1351,7 @@ window.switchTab = function(id, e){
 
     const topIntent = ranked[0].intent;
 
-    // ── STEP 6: Greeting ─────────────────────────────────────────────────
+    // ── STEP 7: Greeting ─────────────────────────────────────────────────
     if (topIntent === "greeting") {
       Memory.setStage("discovery");
       const html = `<p>${rand(GREETINGS)}</p>`;
@@ -876,21 +1362,24 @@ window.switchTab = function(id, e){
       };
     }
 
-    // ── STEP 7: Pricing intent ───────────────────────────────────────────
+    // ── STEP 8: Pricing intent — CONTEXT AWARE ───────────────────────────
     if (topIntent === "pricing") {
       Memory.push("bot", "", "pricing");
-      const res = pricingResponse();
-      return res;
+      const lastIntent = Memory.getLast();
+      // If we know what service they were talking about — answer that price
+      if (lastIntent && SERVICE_INTENTS.has(lastIntent)) {
+        return contextAwarePricingResponse(lastIntent);
+      }
+      return pricingResponse();
     }
 
-    // ── STEP 8: Contact intent ───────────────────────────────────────────
+    // ── STEP 9: Contact intent ───────────────────────────────────────────
     if (topIntent === "contact") {
       Memory.push("bot", "", "contact");
       return contactResponse();
     }
 
-    // ── STEP 9: Disambiguation ───────────────────────────────────────────
-    // Design vs Web
+    // ── STEP 10: Disambiguation ──────────────────────────────────────────
     if ((scores.design || 0) >= 2 && (scores.web || 0) >= 2) {
       Memory.setPending({
         type: "disambig",
@@ -901,7 +1390,6 @@ window.switchTab = function(id, e){
         suggestions: ["🎨 Graphic Design", "🌐 Website"],
       };
     }
-    // Windows vs Troubleshoot
     if ((scores.windows || 0) >= 2 && (scores.troubleshoot || 0) >= 2) {
       const w = scores.windows, t = scores.troubleshoot;
       if (Math.abs(w - t) <= 3) {
@@ -916,15 +1404,17 @@ window.switchTab = function(id, e){
       }
     }
 
-    // ── STEP 10: Service intent → value delivery + qualify ───────────────
+    // ── STEP 11: Service intent → value delivery + qualify ───────────────
     if (SERVICE_INTENTS.has(topIntent)) {
       const res = buildServiceResponse(topIntent, entities);
       if (res) {
         Memory.push("bot", res.html, topIntent);
 
-        // After value delivery: if we have name + need, show soft close
-        const name = Memory.getName();
-        const need = Memory.getNeed();
+        const name   = Memory.getName();
+        const basket = Memory.getBasket();
+        const need   = Memory.getNeed();
+
+        // If name + need → direct WhatsApp close
         if (name && need) {
           Memory.setStage("close");
           const waHtml = whatsAppCTA(name, need);
@@ -935,7 +1425,20 @@ window.switchTab = function(id, e){
           };
         }
 
-        // Soft close if we have a need but no name yet
+        // Multiple services in basket → basket close
+        if (basket.length > 1 && !Memory.askedNameBefore()) {
+          Memory.setPending({ type: "basket_confirm" });
+          const basketClose = buildBasketClose();
+          if (basketClose) {
+            Memory.push("bot", basketClose.html, "basket_close");
+            return {
+              html: res.html + basketClose.html,
+              suggestions: basketClose.suggestions,
+            };
+          }
+        }
+
+        // Single service soft close
         if (need && !Memory.askedNameBefore()) {
           Memory.setPending({ type: "confirm_close" });
           return {
@@ -948,12 +1451,46 @@ window.switchTab = function(id, e){
       }
     }
 
-    // ── STEP 11: Default fallback ─────────────────────────────────────────
+    // ── STEP 12: Default fallback ─────────────────────────────────────────
     return fallback(rawInput);
   }
 
+  // Helper: proceed to name capture or WhatsApp redirect
+  function proceedToClose() {
+    const name = Memory.getName();
+    const need = Memory.getNeed();
+
+    if (!name && !Memory.askedNameBefore()) {
+      Memory.markAskedName();
+      Memory.setPending({ type: "name_capture" });
+      const html = `<p>${rand(NAME_ASKS)}</p>`;
+      Memory.push("bot", html, null);
+      return { html, suggestions: [] };
+    }
+
+    if (name && need) {
+      Memory.setStage("close");
+      const html = whatsAppCTA(name, need);
+      Memory.push("bot", html, "close");
+      return { html, suggestions: ["📱 Open WhatsApp", "🛠️ Other Services"] };
+    }
+
+    // Fallback close without name
+    const link = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent("Hi, I came from your website and I need some help.")}`;
+    const html = buildHTML({
+      text: "Ready to go! Click below to chat with us on WhatsApp:",
+      details: [`📱 <a href="${link}" target="_blank" rel="noopener"><strong>Click here to WhatsApp us →</strong></a>`],
+    });
+    Memory.push("bot", html, "close");
+    return { html, suggestions: ["📱 Open WhatsApp", "🛠️ Other Services"] };
+  }
+
   function resolveService(intentKey, entities, sentiment) {
-    if (intentKey === "pricing") return pricingResponse();
+    if (intentKey === "pricing") {
+      const lastIntent = Memory.getLast();
+      if (lastIntent && SERVICE_INTENTS.has(lastIntent)) return contextAwarePricingResponse(lastIntent);
+      return pricingResponse();
+    }
     if (intentKey === "contact") return contactResponse();
 
     const svc = KB[intentKey];
@@ -974,14 +1511,13 @@ window.switchTab = function(id, e){
     return { html, suggestions: res.suggestions };
   }
 
-  // ── Export process() ──────────────────────────────────────────────────
   root.MellowTechBot = { process };
 
 }(window));
 
 
 // ══════════════════════════════════════════════════════════════════════════
-//  MODULE 9 — UI ADAPTER
+//  MODULE 10 — UI ADAPTER (unchanged from v3)
 // ══════════════════════════════════════════════════════════════════════════
 window.UI = (function () {
 
@@ -999,7 +1535,6 @@ window.UI = (function () {
 
   let welcomed = false;
 
-  // Greeting messages with buying intent chip shown up front
   const WELCOME_CHIPS = [
     "🌐 Website",
     "📄 CV Help",
@@ -1022,7 +1557,6 @@ window.UI = (function () {
         return;
       }
 
-      // Open chatbot
       const openBtn = $(SEL.openBtn);
       if (openBtn) {
         openBtn.addEventListener("click", () => {
@@ -1038,27 +1572,22 @@ window.UI = (function () {
         });
       }
 
-      // Close chatbot
       const closeBtn = $(SEL.closeBtn);
       if (closeBtn) {
         closeBtn.addEventListener("click", () => { panel.style.display = "none"; });
       }
 
-      // Send on button click
       button.addEventListener("click", send);
 
-      // Send on Enter (Shift+Enter = newline)
       input.addEventListener("keydown", (e) => {
         if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); }
       });
 
-      // Auto-resize textarea
       input.addEventListener("input", () => {
         input.style.height = "auto";
         input.style.height = Math.min(input.scrollHeight, 90) + "px";
       });
 
-      // Delegated chip/suggestion click handler
       document.addEventListener("click", (e) => {
         const chip = e.target.closest(".mt-chip");
         if (chip) {
@@ -1085,10 +1614,7 @@ window.UI = (function () {
   function handle(text) {
     user(text);
     typing(true);
-
-    // Realistic typing delay (longer for longer responses)
     const delay = 350 + Math.min(text.length * 8, 900);
-
     setTimeout(() => {
       typing(false);
       let res;
@@ -1115,11 +1641,9 @@ window.UI = (function () {
   function botHTML(html, suggestions = []) {
     const box = $(SEL.messages);
     if (!box) return;
-
     box.insertAdjacentHTML("beforeend",
       `<div class="mwt-msg mwt-bot"><div class="mwt-bubble">${html}</div></div>`
     );
-
     if (suggestions?.length) {
       const chips = suggestions
         .map(s => `<button class="mt-chip" data-chip="${esc(s)}">${esc(s)}</button>`)
@@ -1128,7 +1652,6 @@ window.UI = (function () {
         `<div class="mwt-suggestions">${chips}</div>`
       );
     }
-
     scroll();
   }
 
@@ -1186,7 +1709,7 @@ window.UI = (function () {
 
 
 // ══════════════════════════════════════════════════════════════════════════
-//  MODULE 10 — BOOTSTRAP
+//  MODULE 11 — BOOTSTRAP
 // ══════════════════════════════════════════════════════════════════════════
 (function () {
   function bootUI() {
@@ -1209,7 +1732,7 @@ window.UI = (function () {
 
 
 /* ═══════════════════════════════════════════════════
-   EMAILJS CONTACT FORM
+   EMAILJS CONTACT FORM (unchanged)
 ════════════════════════════════════════════════════ */
 (function(){
   var form = document.getElementById('contactForm');
