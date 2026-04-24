@@ -83,7 +83,7 @@ window.switchTab = function(id, e){
    • Smarter fallback — partial match suggestions, never a dead-end
    • Name collected once, stored, pre-fills WhatsApp with full basket
    • Basket close — "I see you need CV + Windows — want both or just one?"
-════════════════════════════════════════════════════════════════════════════ */
+════════════════════════════════════════════════════════════════════════════ 
 
 ;(function (root) {
   "use strict";
@@ -1809,7 +1809,7 @@ window.UI = (function () {
     console.error("MellowTech UI bootstrap failed:", e);
   }
 })();
-
+*/
 
 /* ═══════════════════════════════════════════════════
    EMAILJS CONTACT FORM (unchanged)
