@@ -1122,6 +1122,71 @@ window.switchTab = function(id, e){
 
   const SERVICE_INTENTS = new Set(["web","cv","assignment","windows","troubleshoot","design","office","business"]);
 
+  // Phrases that signal the user is asking for a price, not a service intro
+  const PRICE_TRIGGER_WORDS = [
+    "how much","how much is","how much for","how much does","how much do",
+    "what does it cost","what is the cost","what is the price","what's the price",
+    "whats the price","what are your prices","what do you charge","how much to",
+    "price for","price of","cost of","cost for","fee for","charge for",
+    "rates for","how expensive","is it expensive","affordable","how cheap",
+    "how much would","how much will","what will it cost","quote for",
+    "rand","rands","r150","r200","r250","r300","r800","r80","r100",
+  ];
+
+  // Maps service intent → short inline price answer
+  const SERVICE_INLINE_PRICE = {
+    cv:           { line: "**CV Revamp — from R150 · New CV — from R200.**", follow: "Are you revamping an existing one or starting from scratch?" },
+    web:          { line: "**Website development starts from R800.**", follow: "Business site, portfolio, or online store?" },
+    assignment:   { line: "**Assignment assistance starts from R80.**", follow: "What's your deadline? That determines if same-day is doable." },
+    windows:      { line: "**Windows installation starts from R200** (includes drivers + genuine activation).", follow: "Is the PC crashing, unactivated, or need a full fresh install?" },
+    troubleshoot: { line: "**PC troubleshooting & repair starts from R150.**", follow: "What's your PC doing — slow, crashing, virus?" },
+    design:       { line: "**Logo from R250 · Flyer from R150 · Social media pack from R300.**", follow: "What do you need designed?" },
+    office:       { line: "**Microsoft Office installation starts from R100** (genuine activation, under 1 hour).", follow: "In Polokwane in-person or remote via screen share?" },
+    business:     { line: "**Business digital setup is package-priced** — depends on what you need.", follow: "New business or existing one going online?" },
+  };
+
+  // Detects if the message is asking for a price for a specific service
+  // Returns { isPriceQuery: true, intentKey } or { isPriceQuery: false }
+  function detectPriceQuery(rawInput, scores) {
+    const norm = NLP.normalize(rawInput);
+    const hasPriceTrigger = PRICE_TRIGGER_WORDS.some(p => norm.includes(p));
+    if (!hasPriceTrigger) return { isPriceQuery: false };
+
+    // Find highest-scoring service intent in this message
+    let bestIntent = null, bestScore = 0;
+    for (const [intent, score] of Object.entries(scores)) {
+      if (SERVICE_INTENTS.has(intent) && score > bestScore) {
+        bestScore = score;
+        bestIntent = intent;
+      }
+    }
+
+    if (bestIntent && bestScore >= 1.5) {
+      return { isPriceQuery: true, intentKey: bestIntent };
+    }
+
+    // Also check lastIntent — "how much is that?" with no new service signal
+    return { isPriceQuery: hasPriceTrigger, intentKey: null };
+  }
+
+  // Short, direct price reply — no pitch, no bullet list of service details
+  function inlinePriceResponse(intentKey) {
+    const svc  = KB[intentKey];
+    const data = SERVICE_INLINE_PRICE[intentKey];
+    if (!svc || !data) return contextAwarePricingResponse(intentKey);
+
+    // Set lastIntent so follow-up "how much" still resolves correctly
+    Memory.addToBasket(intentKey);
+
+    return {
+      html: buildHTML({
+        text: `${svc.emoji} ${data.line}`,
+        followUp: data.follow,
+      }),
+      suggestions: ["✅ Let's Go!", "📋 Tell Me More", "📞 Contact Now", "💰 All Prices"],
+    };
+  }
+
   const GREETINGS = [
     "Hey! 👋 Welcome to Mellow Tech. What can we help you with today?",
     "Hi there! 😊 You've reached Mellow Tech — what do you need help with?",
@@ -1324,6 +1389,21 @@ window.switchTab = function(id, e){
     // ── STEP 4: Classify intent ──────────────────────────────────────────
     const { ranked, scores } = classify(rawInput);
     const THRESHOLD = 1.5;
+
+    // ── STEP 4b: Price-query intercept ───────────────────────────────────
+    // "how much for a cv", "website cost?", "how much is a logo" etc.
+    // Runs BEFORE service routing so pricing always wins when explicit.
+    const priceCheck = detectPriceQuery(rawInput, scores);
+    if (priceCheck.isPriceQuery) {
+      const intentKey = priceCheck.intentKey || Memory.getLast();
+      if (intentKey && SERVICE_INTENTS.has(intentKey)) {
+        Memory.push("bot", "", "pricing");
+        return inlinePriceResponse(intentKey);
+      }
+      // Price question but no service context → full list
+      Memory.push("bot", "", "pricing");
+      return pricingResponse();
+    }
 
     // ── STEP 5: Frustrated user — escalate fast ──────────────────────────
     if (sent === -1 && (ranked.length === 0 || ranked[0].score < THRESHOLD)) {
