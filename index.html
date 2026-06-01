@@ -169,6 +169,19 @@
 @media(max-width:1024px){.hero-bg-video{width:100%;opacity:0.35}}
 @media(max-width:768px){.hero-bg-video{width:100%;opacity:0.25}.hero-stats{gap:24px}}
 @media(max-width:480px){.hero-btns{flex-direction:column}}
+  /* Eliminate any white edge / gap around the video */
+.hero-bg-video {
+  background: #0a0b10;  /* dark fallback behind video */
+}
+
+.hero-bg-video video {
+  display: block;
+  border: none;
+  outline: none;
+  margin: 0;
+  padding: 0;
+  background-color: black; /* prevents white flash from video itself */
+}
 </style>
 </head>
 <body>
