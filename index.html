@@ -18,25 +18,26 @@
   width: 55%;
   overflow: hidden;
   z-index: 0;
-}
-  .hero-bg-video {
-  background: #0a0b10; /* same as hero background */
+  background: #0a0b10;
 }
 .hero-bg-video video {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: top center;
+  display: block;
+  border: none;
+  outline: none;
+  margin: 0;
+  padding: 0;
+  background-color: #0a0b10;
 }
 .hero-bg-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to right, #0a0b10 0%, rgba(10,11,16,0.5) 25%, rgba(10,11,16,0.03) 60%, transparent 100%);
+  background: linear-gradient(to right, #0a0b10 0%, rgba(10,11,16,0.75) 40%, rgba(10,11,16,0.2) 70%, transparent 100%);
   z-index: 1;
 }
- .hero-bg-overlay, .hero-bg-overlay::after {
-  background: none !important;
-} 
 .hero-bg-overlay::after {
   content: '';
   position: absolute;
@@ -169,19 +170,6 @@
 @media(max-width:1024px){.hero-bg-video{width:100%;opacity:0.35}}
 @media(max-width:768px){.hero-bg-video{width:100%;opacity:0.25}.hero-stats{gap:24px}}
 @media(max-width:480px){.hero-btns{flex-direction:column}}
-  /* Eliminate any white edge / gap around the video */
-.hero-bg-video {
-  background: #0a0b10;  /* dark fallback behind video */
-}
-
-.hero-bg-video video {
-  display: block;
-  border: none;
-  outline: none;
-  margin: 0;
-  padding: 0;
-  background-color: black; /* prevents white flash from video itself */
-}
 </style>
 </head>
 <body>
@@ -308,14 +296,13 @@
 <!-- HERO -->
 <section class="hero">
   <div class="hero-bg-video">
-  <!-- Corrected paths: lowercase folder + root fallback -->
-  <video autoplay muted loop playsinline poster="images/herobg.jpg">
-    <source src="video/backvid.mp4" type="video/mp4">
-    <source src="backvid.mp4" type="video/mp4">
-  </video>
-  <div class="hero-bg-overlay"></div>
-</div>
-<div class="hero-grid-overlay"></div>
+    <video autoplay muted loop playsinline poster="images/herobg.jpg">
+      <source src="video/backvid.mp4" type="video/mp4">
+      <source src="backvid.mp4" type="video/mp4">
+    </video>
+    <div class="hero-bg-overlay"></div>
+  </div>
+  <div class="hero-grid-overlay"></div>
   <div class="hero-inner">
     <div class="hero-text">
       <div class="hero-eyebrow"></div>
