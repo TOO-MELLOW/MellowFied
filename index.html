@@ -6,11 +6,8 @@
 <title>Mellow Tech Services - Smart Tech Solutions</title>
 <meta name="description" content="Mellow Tech Services offers Windows installation, PC troubleshooting, graphic design, web development, CV design, and business digital setup.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@300;400;500&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 
-<!-- ═══════════════════════════════════════════════════
-     SITE STYLES (unchanged)
-════════════════════════════════════════════════════ -->
 <style>
 :root {
   --ink: #0d0f14;
@@ -311,6 +308,180 @@ footer{background:#080a0f;color:white;padding:80px 0 40px}
 .form-success .success-icon{font-size:3rem;margin-bottom:16px}
 .form-success h4{font-size:1.4rem;margin-bottom:12px}
 .form-success p{color:rgba(13,15,20,0.6)}
+
+/* ═══════════════════════════════════════════════════
+   MT-CHATBOT STYLES
+════════════════════════════════════════════════════ */
+:root {
+  --mt-bg: #0a0a0f;
+  --mt-surface: #13131c;
+  --mt-surface2: #1c1c2a;
+  --mt-border: #2a2a3d;
+  --mt-accent: #00e5a0;
+  --mt-accent2: #7b5ea7;
+  --mt-text: #e8e8f0;
+  --mt-muted: #7070a0;
+  --mt-dim: #4a4a70;
+  --mt-user-bg: #1e1e30;
+  --mt-bot-bg: #0f1a16;
+  --mt-font-mono: 'DM Mono', monospace;
+}
+.mt-open-btn{position:fixed;bottom:28px;right:28px;z-index:8000;width:58px;height:58px;background:linear-gradient(135deg,var(--mt-accent),var(--mt-accent2));border:none;border-radius:16px;cursor:pointer;font-size:22px;box-shadow:0 8px 32px rgba(0,229,160,0.35);display:flex;align-items:center;justify-content:center;transition:transform 0.25s,box-shadow 0.25s}
+.mt-open-btn:hover{transform:scale(1.08);box-shadow:0 12px 40px rgba(0,229,160,0.45)}
+.mt-panel{position:fixed;bottom:28px;right:28px;width:400px;height:min(680px,calc(100vh - 56px));background:var(--mt-surface);border:1px solid var(--mt-border);border-radius:20px;display:none;flex-direction:column;overflow:hidden;z-index:8001;box-shadow:0 0 0 1px rgba(0,229,160,0.05),0 40px 80px rgba(0,0,0,0.65),inset 0 1px 0 rgba(255,255,255,0.04)}
+.mt-panel.mt-visible{display:flex;animation:mtPanelIn 0.4s cubic-bezier(0.16,1,0.3,1) both}
+@keyframes mtPanelIn{from{opacity:0;transform:translateY(24px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mt-header{padding:14px 18px;background:var(--mt-surface2);border-bottom:1px solid var(--mt-border);display:flex;align-items:center;gap:12px;flex-shrink:0}
+.mt-logo{width:36px;height:36px;background:linear-gradient(135deg,var(--mt-accent),var(--mt-accent2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.mt-hinfo{flex:1}
+.mt-hname{font-size:13.5px;font-weight:700;font-family:'Syne',sans-serif;color:var(--mt-text);letter-spacing:0.01em}
+.mt-hstatus{font-size:10.5px;font-family:var(--mt-font-mono);color:var(--mt-accent);display:flex;align-items:center;gap:5px;margin-top:2px}
+.mt-dot{width:6px;height:6px;border-radius:50%;background:var(--mt-accent);animation:mtPulse 2s ease-in-out infinite}
+@keyframes mtPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.75)}}
+.mt-close-btn{width:30px;height:30px;background:transparent;border:1px solid var(--mt-border);border-radius:8px;cursor:pointer;color:var(--mt-muted);font-size:14px;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.mt-close-btn:hover{background:var(--mt-border);color:var(--mt-text)}
+.mt-chips{padding:10px 16px 0;display:flex;flex-wrap:wrap;gap:6px;flex-shrink:0}
+.mt-chip{padding:4px 11px;border-radius:20px;border:1px solid var(--mt-border);font-size:10.5px;font-family:var(--mt-font-mono);color:var(--mt-muted);cursor:pointer;background:transparent;transition:all 0.18s;letter-spacing:0.02em}
+.mt-chip:hover{border-color:var(--mt-accent);color:var(--mt-accent);background:rgba(0,229,160,0.06)}
+.mt-body{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth}
+.mt-body::-webkit-scrollbar{width:4px}
+.mt-body::-webkit-scrollbar-track{background:transparent}
+.mt-body::-webkit-scrollbar-thumb{background:var(--mt-border);border-radius:2px}
+.mt-msg{display:flex;gap:9px;animation:mtMsgIn 0.3s cubic-bezier(0.16,1,0.3,1) both}
+.mt-msg.mt-user{flex-direction:row-reverse}
+@keyframes mtMsgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.mt-avatar{width:26px;height:26px;border-radius:7px;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:12px}
+.mt-msg.mt-bot .mt-avatar{background:linear-gradient(135deg,var(--mt-accent),var(--mt-accent2))}
+.mt-msg.mt-user .mt-avatar{background:var(--mt-surface2);border:1px solid var(--mt-border)}
+.mt-bubble{max-width:84%;padding:10px 13px;border-radius:13px;font-size:12.5px;line-height:1.65;font-family:var(--mt-font-mono);font-weight:300;color:var(--mt-text)}
+.mt-msg.mt-bot .mt-bubble{background:var(--mt-bot-bg);border:1px solid rgba(0,229,160,0.12);border-top-left-radius:4px}
+.mt-msg.mt-user .mt-bubble{background:var(--mt-user-bg);border:1px solid var(--mt-border);border-top-right-radius:4px}
+.mt-card{background:rgba(0,229,160,0.04);border:1px solid rgba(0,229,160,0.15);border-radius:10px;padding:11px 13px;margin-top:9px}
+.mt-card-label{font-size:9.5px;letter-spacing:0.1em;color:var(--mt-accent);text-transform:uppercase;margin-bottom:7px;font-weight:500}
+.mt-row{display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+.mt-row:last-child{border-bottom:none}
+.mt-rkey{color:var(--mt-muted);font-size:11px}
+.mt-rval{color:var(--mt-text);font-weight:500;font-size:12px}
+.mt-rval.mt-hi{color:var(--mt-accent)}
+.mt-wa-btn{display:inline-flex;align-items:center;gap:7px;margin-top:11px;padding:8px 14px;background:#25D366;color:#fff;border-radius:8px;font-size:11.5px;font-weight:600;text-decoration:none;transition:all 0.2s;font-family:'Syne',sans-serif}
+.mt-wa-btn:hover{background:#1ebc58;transform:translateY(-1px)}
+.mt-suggest{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}
+.mt-sitem{padding:7px 10px;border:1px solid var(--mt-border);border-radius:8px;font-size:10.5px;color:var(--mt-muted);cursor:pointer;transition:all 0.18s}
+.mt-sitem:hover{border-color:var(--mt-accent);color:var(--mt-accent);background:rgba(0,229,160,0.04)}
+.mt-sitem-icon{font-size:13px;margin-bottom:2px}
+.mt-typing{display:none;gap:9px;align-items:flex-end;padding:0 16px 8px;flex-shrink:0}
+.mt-typing.mt-show{display:flex}
+.mt-typing-dots{background:var(--mt-bot-bg);border:1px solid rgba(0,229,160,0.12);border-radius:13px;border-bottom-left-radius:4px;padding:9px 13px;display:flex;gap:4px;align-items:center}
+.mt-typing-dots span{width:5px;height:5px;border-radius:50%;background:var(--mt-accent);animation:mtDot 1.2s ease-in-out infinite}
+.mt-typing-dots span:nth-child(2){animation-delay:0.15s}
+.mt-typing-dots span:nth-child(3){animation-delay:0.3s}
+@keyframes mtDot{0%,80%,100%{transform:translateY(0);opacity:0.4}40%{transform:translateY(-5px);opacity:1}}
+.mt-footer{padding:12px 16px;background:var(--mt-surface2);border-top:1px solid var(--mt-border);display:flex;gap:8px;align-items:flex-end;flex-shrink:0}
+.mt-input-wrap{flex:1}
+.mt-input{width:100%;background:var(--mt-surface);border:1px solid var(--mt-border);border-radius:11px;padding:10px 13px;font-family:var(--mt-font-mono);font-size:12.5px;color:var(--mt-text);resize:none;outline:none;max-height:90px;min-height:38px;transition:border-color 0.2s;line-height:1.5}
+.mt-input::placeholder{color:var(--mt-dim)}
+.mt-input:focus{border-color:rgba(0,229,160,0.4)}
+.mt-send{width:38px;height:38px;flex-shrink:0;background:var(--mt-accent);border:none;border-radius:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#000;font-size:15px;font-weight:700;transition:all 0.2s}
+.mt-send:hover{background:#00c98a;transform:scale(1.06)}
+.mt-send:active{transform:scale(0.97)}
+
+/* ═══════════════════════════════════════════════════
+   PAGE LOADER
+════════════════════════════════════════════════════ */
+/* ─── LOADER OVERLAY ─── */
+#loader {
+  position: fixed; inset: 0; z-index: 9999;
+  background: radial-gradient(ellipse 80% 60% at 50% 40%, #0E1B2E 0%, #080C10 100%);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+#loader.done { opacity:0; visibility:hidden; pointer-events:none; }
+
+/* subtle grid overlay */
+#loader::before {
+  content:''; position:absolute; inset:0;
+  background-image:
+    linear-gradient(rgba(75,207,250,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(75,207,250,0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events:none;
+}
+
+/* corner decorations */
+.corner { position:absolute; width:80px; height:80px; opacity:.35; }
+.corner svg { width:100%; height:100%; }
+.corner.tl { top:24px; left:24px; }
+.corner.tr { top:24px; right:24px; transform:scaleX(-1); }
+.corner.bl { bottom:24px; left:24px; transform:scaleY(-1); }
+.corner.br { bottom:24px; right:24px; transform:scale(-1); }
+
+/* ─── CANVAS WRAPPER ─── */
+#canvas-wrap {
+  position: relative;
+  width: 520px; height: 520px;
+  flex-shrink: 0;
+}
+#scene { width:100%; height:100%; }
+
+/* ─── BOTTOM STATUS ─── */
+#status-zone {
+  position: absolute;
+  bottom: 48px; left: 0; right: 0;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+}
+#status-text {
+  font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(205,232,248,0.45); font-weight: 500;
+}
+#status-text span { color: #4BCFFA; }
+#progress-bar-wrap {
+  width: min(380px, 80vw);
+  height: 3px;
+  background: rgba(75,207,250,0.1);
+  border-radius: 99px; overflow: hidden;
+  position: relative;
+}
+#progress-bar {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, #4BCFFA 0%, #E8B84B 100%);
+  border-radius: 99px;
+  transition: width 0.15s linear;
+  box-shadow: 0 0 10px rgba(75,207,250,0.55);
+  position: relative;
+}
+#progress-bar::after {
+  content:'';
+  position:absolute; right:0; top:-2px;
+  width:8px; height:7px; border-radius:50%;
+  background: #E8B84B;
+  box-shadow: 0 0 8px 2px #E8B84B;
+}
+#pct {
+  font-size: 12px; color: #E8B84B;
+  font-family: 'Space Grotesk', sans-serif;
+  letter-spacing: 0.08em; font-weight: 500;
+}
+@keyframes dots {
+  0%,20%   { content:'.' }
+  40%,60%  { content:'..' }
+  80%,100% { content:'...' }
+}
+.dots::after {
+  content:'.';
+  animation: dots 1.4s steps(1) infinite;
+}
+
+/* body state during load */
+body.mt-loader-active > *:not(#loader) { visibility: hidden; }
+
+@media (max-width: 560px) {
+  #canvas-wrap { width: 340px; height: 340px; }
+}
+
+/* ═══════════════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════════════════ */
 @media(max-width:1024px){
   .solutions-grid{grid-template-columns:1fr 1fr}
   .sh-grid{grid-template-columns:1fr 1fr}
@@ -360,356 +531,130 @@ footer{background:#080a0f;color:white;padding:80px 0 40px}
   .marquee-track{animation:none}
   .reveal{transition:none}
 }
-
-/* ═══════════════════════════════════════════════════
-   MT-CHATBOT STYLES  (all prefixed mt- — zero clashes)
-════════════════════════════════════════════════════ */
-:root {
-  --mt-bg: #0a0a0f;
-  --mt-surface: #13131c;
-  --mt-surface2: #1c1c2a;
-  --mt-border: #2a2a3d;
-  --mt-accent: #00e5a0;
-  --mt-accent2: #7b5ea7;
-  --mt-text: #e8e8f0;
-  --mt-muted: #7070a0;
-  --mt-dim: #4a4a70;
-  --mt-user-bg: #1e1e30;
-  --mt-bot-bg: #0f1a16;
-  --mt-font-mono: 'DM Mono', monospace;
-}
-
-/* Open button */
-.mt-open-btn {
-  position: fixed;
-  bottom: 28px;
-  right: 28px;
-  z-index: 8000;
-  width: 58px;
-  height: 58px;
-  background: linear-gradient(135deg, var(--mt-accent), var(--mt-accent2));
-  border: none;
-  border-radius: 16px;
-  cursor: pointer;
-  font-size: 22px;
-  box-shadow: 0 8px 32px rgba(0,229,160,0.35);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.25s, box-shadow 0.25s;
-}
-.mt-open-btn:hover { transform: scale(1.08); box-shadow: 0 12px 40px rgba(0,229,160,0.45); }
-
-/* Panel */
-.mt-panel {
-  position: fixed;
-  bottom: 28px;
-  right: 28px;
-  width: 400px;
-  height: min(680px, calc(100vh - 56px));
-  background: var(--mt-surface);
-  border: 1px solid var(--mt-border);
-  border-radius: 20px;
-  display: none;
-  flex-direction: column;
-  overflow: hidden;
-  z-index: 8001;
-  box-shadow: 0 0 0 1px rgba(0,229,160,0.05),
-              0 40px 80px rgba(0,0,0,0.65),
-              inset 0 1px 0 rgba(255,255,255,0.04);
-}
-.mt-panel.mt-visible {
-  display: flex;
-  animation: mtPanelIn 0.4s cubic-bezier(0.16,1,0.3,1) both;
-}
-@keyframes mtPanelIn {
-  from { opacity: 0; transform: translateY(24px) scale(0.97); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-/* Header */
-.mt-header {
-  padding: 14px 18px;
-  background: var(--mt-surface2);
-  border-bottom: 1px solid var(--mt-border);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-shrink: 0;
-}
-.mt-logo {
-  width: 36px; height: 36px;
-  background: linear-gradient(135deg, var(--mt-accent), var(--mt-accent2));
-  border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px; flex-shrink: 0;
-}
-.mt-hinfo { flex: 1; }
-.mt-hname {
-  font-size: 13.5px; font-weight: 700;
-  font-family: 'Syne', sans-serif;
-  color: var(--mt-text);
-  letter-spacing: 0.01em;
-}
-.mt-hstatus {
-  font-size: 10.5px;
-  font-family: var(--mt-font-mono);
-  color: var(--mt-accent);
-  display: flex; align-items: center; gap: 5px;
-  margin-top: 2px;
-}
-.mt-dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--mt-accent);
-  animation: mtPulse 2s ease-in-out infinite;
-}
-@keyframes mtPulse {
-  0%,100% { opacity:1; transform:scale(1); }
-  50%      { opacity:0.4; transform:scale(0.75); }
-}
-.mt-close-btn {
-  width: 30px; height: 30px;
-  background: transparent;
-  border: 1px solid var(--mt-border);
-  border-radius: 8px;
-  cursor: pointer;
-  color: var(--mt-muted);
-  font-size: 14px;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.2s;
-}
-.mt-close-btn:hover { background: var(--mt-border); color: var(--mt-text); }
-
-/* Quick chips */
-.mt-chips {
-  padding: 10px 16px 0;
-  display: flex; flex-wrap: wrap; gap: 6px;
-  flex-shrink: 0;
-}
-.mt-chip {
-  padding: 4px 11px;
-  border-radius: 20px;
-  border: 1px solid var(--mt-border);
-  font-size: 10.5px;
-  font-family: var(--mt-font-mono);
-  color: var(--mt-muted);
-  cursor: pointer;
-  background: transparent;
-  transition: all 0.18s;
-  letter-spacing: 0.02em;
-}
-.mt-chip:hover { border-color: var(--mt-accent); color: var(--mt-accent); background: rgba(0,229,160,0.06); }
-
-/* Messages body */
-.mt-body {
-  flex: 1;
-  overflow-y: auto;
-  padding: 14px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  scroll-behavior: smooth;
-}
-.mt-body::-webkit-scrollbar { width: 4px; }
-.mt-body::-webkit-scrollbar-track { background: transparent; }
-.mt-body::-webkit-scrollbar-thumb { background: var(--mt-border); border-radius: 2px; }
-
-/* Message rows */
-.mt-msg {
-  display: flex;
-  gap: 9px;
-  animation: mtMsgIn 0.3s cubic-bezier(0.16,1,0.3,1) both;
-}
-.mt-msg.mt-user { flex-direction: row-reverse; }
-@keyframes mtMsgIn {
-  from { opacity:0; transform:translateY(8px); }
-  to   { opacity:1; transform:translateY(0); }
-}
-.mt-avatar {
-  width: 26px; height: 26px;
-  border-radius: 7px;
-  flex-shrink: 0; margin-top: 2px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 12px;
-}
-.mt-msg.mt-bot .mt-avatar  { background: linear-gradient(135deg, var(--mt-accent), var(--mt-accent2)); }
-.mt-msg.mt-user .mt-avatar { background: var(--mt-surface2); border: 1px solid var(--mt-border); }
-
-.mt-bubble {
-  max-width: 84%;
-  padding: 10px 13px;
-  border-radius: 13px;
-  font-size: 12.5px;
-  line-height: 1.65;
-  font-family: var(--mt-font-mono);
-  font-weight: 300;
-  color: var(--mt-text);
-}
-.mt-msg.mt-bot .mt-bubble {
-  background: var(--mt-bot-bg);
-  border: 1px solid rgba(0,229,160,0.12);
-  border-top-left-radius: 4px;
-}
-.mt-msg.mt-user .mt-bubble {
-  background: var(--mt-user-bg);
-  border: 1px solid var(--mt-border);
-  border-top-right-radius: 4px;
-}
-
-/* Rich card */
-.mt-card {
-  background: rgba(0,229,160,0.04);
-  border: 1px solid rgba(0,229,160,0.15);
-  border-radius: 10px;
-  padding: 11px 13px;
-  margin-top: 9px;
-}
-.mt-card-label {
-  font-size: 9.5px;
-  letter-spacing: 0.1em;
-  color: var(--mt-accent);
-  text-transform: uppercase;
-  margin-bottom: 7px;
-  font-weight: 500;
-}
-.mt-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 3px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-}
-.mt-row:last-child { border-bottom: none; }
-.mt-rkey { color: var(--mt-muted); font-size: 11px; }
-.mt-rval { color: var(--mt-text); font-weight: 500; font-size: 12px; }
-.mt-rval.mt-hi { color: var(--mt-accent); }
-
-/* WhatsApp button */
-.mt-wa-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  margin-top: 11px;
-  padding: 8px 14px;
-  background: #25D366;
-  color: #fff;
-  border-radius: 8px;
-  font-size: 11.5px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.2s;
-  font-family: 'Syne', sans-serif;
-}
-.mt-wa-btn:hover { background: #1ebc58; transform: translateY(-1px); }
-
-/* Suggestion grid */
-.mt-suggest {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 7px;
-  margin-top: 10px;
-}
-.mt-sitem {
-  padding: 7px 10px;
-  border: 1px solid var(--mt-border);
-  border-radius: 8px;
-  font-size: 10.5px;
-  color: var(--mt-muted);
-  cursor: pointer;
-  transition: all 0.18s;
-}
-.mt-sitem:hover { border-color: var(--mt-accent); color: var(--mt-accent); background: rgba(0,229,160,0.04); }
-.mt-sitem-icon { font-size: 13px; margin-bottom: 2px; }
-
-/* Typing indicator */
-.mt-typing {
-  display: none;
-  gap: 9px;
-  align-items: flex-end;
-  padding: 0 16px 8px;
-  flex-shrink: 0;
-}
-.mt-typing.mt-show { display: flex; }
-.mt-typing-dots {
-  background: var(--mt-bot-bg);
-  border: 1px solid rgba(0,229,160,0.12);
-  border-radius: 13px;
-  border-bottom-left-radius: 4px;
-  padding: 9px 13px;
-  display: flex; gap: 4px; align-items: center;
-}
-.mt-typing-dots span {
-  width: 5px; height: 5px; border-radius: 50%;
-  background: var(--mt-accent);
-  animation: mtDot 1.2s ease-in-out infinite;
-}
-.mt-typing-dots span:nth-child(2) { animation-delay: 0.15s; }
-.mt-typing-dots span:nth-child(3) { animation-delay: 0.3s; }
-@keyframes mtDot {
-  0%,80%,100% { transform: translateY(0); opacity: 0.4; }
-  40%          { transform: translateY(-5px); opacity: 1; }
-}
-
-/* Footer input */
-.mt-footer {
-  padding: 12px 16px;
-  background: var(--mt-surface2);
-  border-top: 1px solid var(--mt-border);
-  display: flex; gap: 8px; align-items: flex-end;
-  flex-shrink: 0;
-}
-.mt-input-wrap { flex: 1; }
-.mt-input {
-  width: 100%;
-  background: var(--mt-surface);
-  border: 1px solid var(--mt-border);
-  border-radius: 11px;
-  padding: 10px 13px;
-  font-family: var(--mt-font-mono);
-  font-size: 12.5px;
-  color: var(--mt-text);
-  resize: none;
-  outline: none;
-  max-height: 90px;
-  min-height: 38px;
-  transition: border-color 0.2s;
-  line-height: 1.5;
-}
-.mt-input::placeholder { color: var(--mt-dim); }
-.mt-input:focus { border-color: rgba(0,229,160,0.4); }
-.mt-send {
-  width: 38px; height: 38px; flex-shrink: 0;
-  background: var(--mt-accent);
-  border: none; border-radius: 11px;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  color: #000; font-size: 15px; font-weight: 700;
-  transition: all 0.2s;
-}
-.mt-send:hover { background: #00c98a; transform: scale(1.06); }
-.mt-send:active { transform: scale(0.97); }
-
-@media (max-width: 480px) {
-  .mt-panel {
-    bottom: 0; right: 0; left: 0;
-    width: 100%; height: 100vh;
-    border-radius: 0;
-  }
-  .mt-open-btn { bottom: 20px; right: 20px; }
-}
 </style>
 </head>
-<body>
+<body class="mt-loader-active">
 
+<!-- ═══════════════════════════════════════════════════
+     PAGE LOADER
+════════════════════════════════════════════════════ -->
+<!-- ─── LOADER ─── -->
+<div id="loader">
 
-<!-- ═══════════════════════════════════════ SITE HTML (unchanged) ═══════════════════════════════════════ -->
+  <!-- Corner decorations -->
+  <div class="corner tl"><svg viewBox="0 0 80 80" fill="none"><path d="M4 76 L4 4 L76 4" stroke="#4BCFFA" stroke-width="1.5" stroke-linecap="round"/><circle cx="4" cy="4" r="3" fill="#C8992E"/></svg></div>
+  <div class="corner tr"><svg viewBox="0 0 80 80" fill="none"><path d="M4 76 L4 4 L76 4" stroke="#4BCFFA" stroke-width="1.5" stroke-linecap="round"/><circle cx="4" cy="4" r="3" fill="#C8992E"/></svg></div>
+  <div class="corner bl"><svg viewBox="0 0 80 80" fill="none"><path d="M4 76 L4 4 L76 4" stroke="#4BCFFA" stroke-width="1.5" stroke-linecap="round"/><circle cx="4" cy="4" r="3" fill="#C8992E"/></svg></div>
+  <div class="corner br"><svg viewBox="0 0 80 80" fill="none"><path d="M4 76 L4 4 L76 4" stroke="#4BCFFA" stroke-width="1.5" stroke-linecap="round"/><circle cx="4" cy="4" r="3" fill="#C8992E"/></svg></div>
+
+  <!-- Main canvas -->
+  <div id="canvas-wrap">
+    <svg id="scene" viewBox="0 0 520 520" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="glow-blue" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur"/>
+          <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.3 0 0 0 0 0.8 0 0 0 0 1 0 0 0 0.9 0"/>
+          <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="glow-gold" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur"/>
+          <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.8 0 0 0 0 0.55 0 0 0 0 0.1 0 0 0 0.9 0"/>
+          <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="glow-node" x="-80%" y="-80%" width="260%" height="260%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="soft-glow" x="-100%" y="-100%" width="300%" height="300%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="18"/>
+        </filter>
+        <radialGradient id="bg-radial" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#1a3050" stop-opacity=".6"/>
+          <stop offset="100%" stop-color="#080C10" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="logo-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#e8f8ff"/>
+          <stop offset="100%" stop-color="#4BCFFA"/>
+        </linearGradient>
+        <linearGradient id="line-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#4BCFFA" stop-opacity=".9"/>
+          <stop offset="100%" stop-color="#C8992E" stop-opacity=".7"/>
+        </linearGradient>
+        <clipPath id="line-clip-0"><rect id="lc0" x="260" y="0" width="0" height="520"/></clipPath>
+        <clipPath id="line-clip-1"><rect id="lc1" x="260" y="0" width="0" height="520"/></clipPath>
+        <clipPath id="line-clip-2"><rect id="lc2" x="260" y="0" width="0" height="520"/></clipPath>
+        <clipPath id="line-clip-3"><rect id="lc3" x="260" y="0" width="0" height="520"/></clipPath>
+        <clipPath id="line-clip-4"><rect id="lc4" x="260" y="0" width="0" height="520"/></clipPath>
+        <clipPath id="line-clip-5"><rect id="lc5" x="260" y="0" width="0" height="520"/></clipPath>
+      </defs>
+
+      <!-- Background radial halo -->
+      <circle cx="260" cy="260" r="240" fill="url(#bg-radial)"/>
+
+      <!-- Pulse rings (animated via JS) -->
+      <g id="rings">
+        <circle class="ring" cx="260" cy="260" r="70"  fill="none" stroke="#4BCFFA" stroke-width="1" opacity="0"/>
+        <circle class="ring" cx="260" cy="260" r="100" fill="none" stroke="#4BCFFA" stroke-width=".7" opacity="0"/>
+        <circle class="ring" cx="260" cy="260" r="140" fill="none" stroke="#4BCFFA" stroke-width=".5" opacity="0"/>
+      </g>
+
+      <!-- Orbit track -->
+      <circle cx="260" cy="260" r="170" fill="none" stroke="rgba(75,207,250,0.08)" stroke-width="1" stroke-dasharray="4 6"/>
+
+      <!-- Connection lines (drawn progressively) -->
+      <g id="connections"></g>
+
+      <!-- Particles layer -->
+      <g id="particles"></g>
+
+      <!-- Service nodes -->
+      <g id="nodes"></g>
+
+      <!-- Central logo plate -->
+      <g id="logo-group">
+        <circle cx="260" cy="260" r="62" fill="#4BCFFA" opacity=".08" filter="url(#soft-glow)"/>
+        <circle cx="260" cy="260" r="56" fill="#0E1B2E" stroke="rgba(75,207,250,0.3)" stroke-width="1.5"/>
+        <circle cx="260" cy="260" r="56" fill="none" stroke="#4BCFFA" stroke-width=".5" opacity=".5" filter="url(#glow-blue)"/>
+        <g transform="translate(225, 248) scale(0.6)" opacity="0.4">
+          <circle cx="0" cy="0" r="8" fill="none" stroke="#C8992E" stroke-width="2"/>
+          <circle cx="0" cy="0" r="4" fill="none" stroke="#C8992E" stroke-width="1.5"/>
+          <line x1="0" y1="-12" x2="0" y2="-8" stroke="#C8992E" stroke-width="2"/>
+          <line x1="0" y1="8" x2="0" y2="12" stroke="#C8992E" stroke-width="2"/>
+          <line x1="-12" y1="0" x2="-8" y2="0" stroke="#C8992E" stroke-width="2"/>
+          <line x1="8" y1="0" x2="12" y2="0" stroke="#C8992E" stroke-width="2"/>
+        </g>
+        <rect x="240" y="242" width="40" height="28" rx="3" fill="#0E1B2E" stroke="#4BCFFA" stroke-width="1.5" filter="url(#glow-blue)"/>
+        <rect x="243" y="245" width="34" height="22" rx="2" fill="#080C10" opacity="0.4"/>
+        <path d="M250 256 L255 261 L270 248" stroke="#E8B84B" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow-gold)"/>
+        <line x1="268" y1="254" x2="268" y2="260" stroke="#4BCFFA" stroke-width="1.5" opacity="0.6"/>
+        <path d="M258 270 L260 276 L262 270" stroke="#4BCFFA" stroke-width="1.5" fill="none" opacity="0.6"/>
+        <line x1="252" y1="276" x2="268" y2="276" stroke="#4BCFFA" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+      </g>
+
+      <text x="260" y="330" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-size="14" font-weight="700" fill="#cde8f8" letter-spacing="2" opacity=".9"></text>
+      <text x="260" y="346" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="9.5" font-weight="400" fill="#4BCFFA" letter-spacing="4" opacity=".7"></text>
+    </svg>
+  </div>
+
+  <!-- Status zone -->
+  <div id="status-zone">
+    <div id="status-text">Connecting you to <span>Mellow Tech Services</span><span class="dots"></span></div>
+    <div id="progress-bar-wrap">
+      <div id="progress-bar"></div>
+    </div>
+    <div id="pct">0%</div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     SITE HTML
+════════════════════════════════════════════════════ -->
 <nav id="navbar">
   <div class="nav-inner">
-    
     <a class="nav-logo" href="#" onclick="showPage('home')">
       <img src="images/logo.png" style="height:50px;width:auto;" alt="logo">
     </a>
-
     <div class="nav-links">
       <a href="#" onclick="showPage('home')" id="nav-home" class="active">Home</a>
       <a href="#" onclick="showPage('services')" id="nav-services">Services</a>
@@ -914,7 +859,7 @@ footer{background:#080a0f;color:white;padding:80px 0 40px}
         <div class="footer-brand">
           <div class="nav-logo" style="margin-bottom:16px"><span>Mellow Tech Services</span></div>
           <p>Simple, affordable technology solutions for students, professionals, and businesses. We make tech easy for everyone.</p>
-          <div class="footer-contact" style="margin-top:20px">📧 <span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="83eaede5ecc3eee6efefecf4f7e6e0ebade0ecadf9e2">[email&#160;protected]</a></span><br><span style="display:block;margin-top:6px">📱 <span>+27 720 465 993</span></span></div>
+          <div class="footer-contact" style="margin-top:20px">📧 <span>mellowtech@email.com</span><br><span style="display:block;margin-top:6px">📱 <span>+27 720 465 993</span></span></div>
         </div>
         <div class="footer-col"><h4>Services</h4><ul><li><a href="#" onclick="showServiceDetail('windows')">Windows Installation</a></li><li><a href="#" onclick="showServiceDetail('office')">Microsoft Office</a></li><li><a href="#" onclick="showServiceDetail('troubleshoot')">PC Troubleshooting</a></li><li><a href="#" onclick="showServiceDetail('software')">Software &amp; Drivers</a></li><li><a href="#" onclick="showServiceDetail('design')">Graphic Design</a></li></ul></div>
         <div class="footer-col"><h4>More Services</h4><ul><li><a href="#" onclick="showServiceDetail('web')">Web Development</a></li><li><a href="#" onclick="showServiceDetail('assignment')">Assignment Help</a></li><li><a href="#" onclick="showServiceDetail('cv')">CV Design</a></li><li><a href="#" onclick="showServiceDetail('business')">Business Digital Setup</a></li></ul></div>
@@ -1068,7 +1013,7 @@ footer{background:#080a0f;color:white;padding:80px 0 40px}
         <div class="reveal">
           <h2>Get in touch</h2>
           <p>Have a tech problem? Need a quote? Just want to ask a question? We're here to help.</p>
-          <div class="contact-method"><div class="cm-icon">📧</div><div class="cm-text"><h4>Email</h4><p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b3daddd5dcf3ded6dfdfdcc4c7d6d0db9dd0dc9dc9d2">[email&#160;protected]</a></p></div></div>
+          <div class="contact-method"><div class="cm-icon">📧</div><div class="cm-text"><h4>Email</h4><p>mellowtech@email.com</p></div></div>
           <div class="contact-method"><div class="cm-icon">📱</div><div class="cm-text"><h4>WhatsApp / Phone</h4><p>+27 720 465 993</p></div></div>
           <div class="contact-method"><div class="cm-icon">🕐</div><div class="cm-text"><h4>Hours</h4><p>Monday – Saturday: 8am – 7pm</p></div></div>
           <div style="margin-top:40px;background:var(--ink);border-radius:16px;padding:28px;color:white">
@@ -1116,16 +1061,11 @@ footer{background:#080a0f;color:white;padding:80px 0 40px}
 </div>
 
 <!-- ═══════════════════════════════════════════════════
-     MT-CHATBOT HTML  (all IDs and classes prefixed mt-)
+     MT-CHATBOT HTML
 ════════════════════════════════════════════════════ -->
-
-<!-- Open button (shown when panel is closed) -->
 <button class="mt-open-btn" id="mtOpenBtn" onclick="mtOpenPanel()" title="Chat with us" aria-label="Open chat">⚡</button>
 
-<!-- Chat panel -->
 <div class="mt-panel" id="mtPanel">
-
-  <!-- Header -->
   <div class="mt-header">
     <div class="mt-logo">⚡</div>
     <div class="mt-hinfo">
@@ -1134,8 +1074,6 @@ footer{background:#080a0f;color:white;padding:80px 0 40px}
     </div>
     <button class="mt-close-btn" onclick="mtClosePanel()" aria-label="Close chat">✕</button>
   </div>
-
-  <!-- Quick chips -->
   <div class="mt-chips" id="mtChips">
     <button class="mt-chip" onclick="mtSendChip('CV services')">📄 CV</button>
     <button class="mt-chip" onclick="mtSendChip('Website development')">🌐 Website</button>
@@ -1144,36 +1082,23 @@ footer{background:#080a0f;color:white;padding:80px 0 40px}
     <button class="mt-chip" onclick="mtSendChip('Pricing')">💰 Pricing</button>
     <button class="mt-chip" onclick="mtSendChip('How long does it take?')">⏱ Turnaround</button>
   </div>
-
-  <!-- Messages -->
   <div class="mt-body" id="mtBody"></div>
-
-  <!-- Typing indicator -->
   <div class="mt-typing" id="mtTyping">
     <div class="mt-avatar" style="background:linear-gradient(135deg,var(--mt-accent),var(--mt-accent2));width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0">⚡</div>
     <div class="mt-typing-dots"><span></span><span></span><span></span></div>
   </div>
-
-  <!-- Input footer -->
   <div class="mt-footer">
     <div class="mt-input-wrap">
-      <textarea
-        class="mt-input"
-        id="mtInput"
-        placeholder="Ask about CVs, websites, assignments, tech support…"
-        rows="1"
-        onkeydown="mtHandleKey(event)"
-        oninput="mtResize(this)"
-      ></textarea>
+      <textarea class="mt-input" id="mtInput" placeholder="Ask about CVs, websites, assignments, tech support…" rows="1" onkeydown="mtHandleKey(event)" oninput="mtResize(this)"></textarea>
     </div>
     <button class="mt-send" onclick="mtHandleSend()" aria-label="Send">↑</button>
   </div>
 </div>
 
 <!-- ═══════════════════════════════════════════════════
-     SITE JAVASCRIPT (unchanged from original)
+     SITE JAVASCRIPT
 ════════════════════════════════════════════════════ -->
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 const services = {
   windows:{title:"Windows Installation & Activation",breadcrumb:"Windows Installation",icon:"🪟",price:"Affordable pricing",intro:"We provide clean, professional Windows installation with full driver setup, system updates, and genuine activation.",problems:[{icon:"⚠️",text:"Your PC is running slow due to a corrupted Windows installation"},{icon:"🔴",text:"Windows keeps crashing or showing Blue Screen errors"},{icon:"🔑",text:"Your Windows license is expired or unactivated"},{icon:"💾",text:"You got a new PC and need a fresh OS installation"}],benefits:[{h:"Fast Performance",p:"A clean install removes bloatware and corruption for a noticeably faster system."},{h:"Genuine Activation",p:"Properly activated Windows means full security updates and no annoying popups."},{h:"All Drivers Installed",p:"Every device set up and working correctly."},{h:"Personal Data Protected",p:"We back up your files before any installation work begins."}],process:[{title:"Backup Your Data",body:"We secure your important files before beginning."},{title:"Format & Install",body:"Clean Windows installation with the latest version."},{title:"Driver Setup",body:"All hardware drivers installed and configured."},{title:"Activation & Updates",body:"Genuine Windows activation and all critical updates applied."},{title:"Handover & Testing",body:"Full system test before we hand your PC back."}],who:["Home PC and laptop users","Students setting up a new machine","Remote workers","Businesses upgrading computers"],scenarios:[{h:"Scenario 1",p:"James bought a second-hand laptop with no OS. We installed Windows 11, all drivers, and activated it — ready in 2 hours."},{h:"Scenario 2",p:"Sarah's PC kept crashing due to a corrupted Windows install. We did a clean reinstall and it now runs perfectly."}]},
   office:{title:"Microsoft Office Installation",breadcrumb:"Microsoft Office",icon:"📊",price:"Affordable pricing",intro:"Get the full Microsoft Office suite — Word, Excel, PowerPoint, Outlook, and more — properly installed and activated.",problems:[{icon:"❌",text:"You don't have Office installed and can't open .docx or .xlsx files"},{icon:"⚠️",text:"Your Office license has expired"},{icon:"🐌",text:"Office apps keep crashing or running slowly"},{icon:"🔄",text:"You got a new PC and need Office set up again"}],benefits:[{h:"Full Suite Access",p:"Word, Excel, PowerPoint, Outlook — everything you need."},{h:"Properly Activated",p:"Genuine Office license — no trial popups, no expiry warnings."},{h:"Quick Setup",p:"Installed and running in under an hour."},{h:"Configured for You",p:"Outlook set up with your email accounts."}],process:[{title:"Check Your System",body:"Verify your PC meets requirements."},{title:"Download & Install",body:"Latest version downloaded and installed correctly."},{title:"Activate License",body:"Your Office license activated — genuine and permanent."},{title:"Email Setup",body:"Outlook configured with your email accounts if needed."},{title:"Confirm & Test",body:"Open Word, Excel, PowerPoint — everything working perfectly."}],who:["Students who need Word and Excel","Professionals working with documents","Small business owners","Home users with a new PC"],scenarios:[{h:"Scenario 1",p:"Lerato got a new laptop for university but had no Office. We installed Microsoft 365 — she was working within an hour."},{h:"Scenario 2",p:"A small business needed Office on 3 computers. We installed and activated all three in a single visit."}]},
@@ -1299,14 +1224,9 @@ if(!window.__contactBound){
 }
 </script>
 
-<!-- ═══════════════════════════════════════════════════
-     MT-CHATBOT JAVASCRIPT  (all vars/fns prefixed mt-)
-════════════════════════════════════════════════════ -->
+<!-- MT-CHATBOT JAVASCRIPT -->
 <script>
-/* ── Constants ──────────────────────────────────────── */
 const MT_WA = '27720465993';
-
-/* ── Intent detection ───────────────────────────────── */
 const MT_INTENTS = {
   cv:         { kw:['cv','resume','curriculum','vitae','cover letter'],       fn: mtHandleCV },
   website:    { kw:['website','web','site','online store','ecommerce','landing page'], fn: mtHandleWebsite },
@@ -1317,15 +1237,12 @@ const MT_INTENTS = {
   payment:    { kw:['payment','pay','deposit','eft','cash','bank','transfer','yoco'],       fn: mtFaqPayment },
   greeting:   { kw:['hello','hi','hey','howzit','sup','good morning','good afternoon','good evening'], fn: mtGreeting }
 };
-
 function mtDetect(text){
   const low=text.toLowerCase();
   for(const[k,v] of Object.entries(MT_INTENTS))
     if(v.kw.some(w=>low.includes(w))) return v.fn;
   return mtUnknown;
 }
-
-/* ── Service handlers ───────────────────────────────── */
 function mtHandleCV(text){
   const low=text.toLowerCase();
   let type='Standard CV',price=100;
@@ -1339,7 +1256,6 @@ function mtHandleCV(text){
     {k:'CV Type',v:type},{k:'Price',v:'R'+price,hi:true},{k:'Deposit',v:'R'+dep+' (25%)'},{k:'Turnaround',v:'24–48 hours'}
   ],note:'🔔 A 25% deposit is required before work begins.',wa,waLabel:'Order on WhatsApp'});
 }
-
 function mtHandleWebsite(text){
   const low=text.toLowerCase();
   let type='Basic Website',price=1500;
@@ -1352,7 +1268,6 @@ function mtHandleWebsite(text){
     {k:'Website Type',v:type},{k:'Price',v:'R'+price,hi:true},{k:'Deposit',v:'R'+dep+' (25%)'},{k:'Turnaround',v:'5–14 business days'}
   ],note:'✅ Includes mobile-responsive design, hosting guidance &amp; 1 revision round.',wa,waLabel:'Start My Project'});
 }
-
 function mtHandleAssignment(text){
   const low=text.toLowerCase();
   let base=200,urgLabel='Standard',urgFee=0;
@@ -1373,7 +1288,6 @@ function mtHandleAssignment(text){
   const wa=encodeURIComponent('Hi MellowTech! I need assignment help.\n\nType: '+subj+'\nUrgency: '+urgLabel+(dueDate?'\nDue Date: '+dueDate:'')+'\nPrice: R'+total+'\nDeposit: R'+dep);
   return mtCard({icon:'📝',title:'Assignment Help',intro:'Here\'s your quote for <strong>'+subj+'</strong>:',rows,note:'🔒 A 25% deposit is required before work starts. Confidentiality guaranteed.',wa,waLabel:'Submit Assignment Brief'});
 }
-
 function mtHandleLaptop(text){
   const low=text.toLowerCase();
   let issue='General Diagnosis',min=50,max=200;
@@ -1390,7 +1304,6 @@ function mtHandleLaptop(text){
     {k:'Issue',v:issue},{k:'Diagnosis Fee',v:'R50'},{k:'Repair Estimate',v:'R'+min+'–R'+max,hi:true},{k:'Note',v:'Final quote after diagnosis'}
   ],note:'🔧 Diagnosis fee applies toward the repair if you proceed.',wa,waLabel:'Book a Diagnosis'});
 }
-
 function mtFaqPrice(){
   return 'Here\'s a quick overview of our pricing:<div class="mt-card"><div class="mt-card-label">💰 Service Pricing</div>'
     +'<div class="mt-row"><span class="mt-rkey">📄 CV Standard</span><span class="mt-rval">R100</span></div>'
@@ -1404,7 +1317,6 @@ function mtFaqPrice(){
     +'<div class="mt-row"><span class="mt-rkey">💻 Repairs</span><span class="mt-rval mt-hi">R150–R500</span></div>'
     +'</div><br>All prices require a <strong style="color:var(--mt-accent)">25% deposit</strong> upfront.';
 }
-
 function mtFaqTime(){
   return 'Typical turnaround times:<div class="mt-card"><div class="mt-card-label">⏱ Turnaround</div>'
     +'<div class="mt-row"><span class="mt-rkey">📄 CV Writing</span><span class="mt-rval">24–48 hrs</span></div>'
@@ -1415,7 +1327,6 @@ function mtFaqTime(){
     +'<div class="mt-row"><span class="mt-rkey">💻 Tech Repair</span><span class="mt-rval">Same-day – 3 days</span></div>'
     +'</div>';
 }
-
 function mtFaqPayment(){
   return 'We make paying easy! 💳<div class="mt-card"><div class="mt-card-label">💰 Payment Methods</div>'
     +'<div class="mt-row"><span class="mt-rkey">🏦 EFT / Bank Transfer</span><span class="mt-rval mt-hi">✓</span></div>'
@@ -1424,7 +1335,6 @@ function mtFaqPayment(){
     +'<div class="mt-row"><span class="mt-rkey">📲 SnapScan / Zapper</span><span class="mt-rval mt-hi">✓</span></div>'
     +'</div><br>A <strong style="color:var(--mt-accent)">25% deposit</strong> is required before work begins.';
 }
-
 function mtGreeting(){
   return 'Hey there! 👋 Welcome to <strong>MellowTech</strong>!<br><br>I\'m your smart assistant — I can help you with quotes and info on all our services.<br><br>What can I help you with today?'
     +'<div class="mt-suggest">'
@@ -1434,7 +1344,6 @@ function mtGreeting(){
     +'<div class="mt-sitem" onclick="mtSendChip(\'My laptop is slow\')"><div class="mt-sitem-icon">💻</div>Tech Support</div>'
     +'</div>';
 }
-
 function mtUnknown(){
   return 'I didn\'t quite catch that — no worries! 🙂<br><br>Here\'s what I can help you with:'
     +'<div class="mt-suggest">'
@@ -1444,20 +1353,15 @@ function mtUnknown(){
     +'<div class="mt-sitem" onclick="mtSendChip(\'Laptop repair\')"><div class="mt-sitem-icon">💻</div>Tech Support</div>'
     +'</div><br>Or <a href="https://wa.me/27720465993" target="_blank" style="color:var(--mt-accent)">WhatsApp us</a> directly!';
 }
-
-/* ── Card builder ───────────────────────────────────── */
 function mtCard({icon,title,intro,rows,note,wa,waLabel}){
   const rowsHtml=rows.map(r=>'<div class="mt-row"><span class="mt-rkey">'+r.k+'</span><span class="mt-rval'+(r.hi?' mt-hi':'')+'">'+r.v+'</span></div>').join('');
   return intro+'<div class="mt-card"><div class="mt-card-label">'+icon+' '+title+'</div>'+rowsHtml+'</div>'
     +'<div style="font-size:11px;color:var(--mt-muted);margin-top:8px;line-height:1.6">'+note+'</div>'
     +'<a href="https://wa.me/27720465993?text='+wa+'" target="_blank" class="mt-wa-btn">'
-    +'<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.117.549 4.107 1.51 5.84L.057 24l6.305-1.654A11.882 11.882 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>'
+    +'<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z M12 0C5.373 0 0 5.373 0 12c0 2.117.549 4.107 1.51 5.84L.057 24l6.305-1.654A11.882 11.882 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>'
     +waLabel+'</a>';
 }
-
-/* ── UI helpers ─────────────────────────────────────── */
 let mtBusy=false;
-
 function mtAppendMsg(role,html){
   const body=document.getElementById('mtBody');
   const wrap=document.createElement('div');
@@ -1473,13 +1377,11 @@ function mtAppendMsg(role,html){
   bub.querySelectorAll('.mt-sitem').forEach(el=>el.addEventListener('click',()=>mtSendChip(el.textContent.trim())));
   body.scrollTop=body.scrollHeight;
 }
-
 function mtShowTyping(){ document.getElementById('mtTyping').classList.add('mt-show'); document.getElementById('mtBody').scrollTop=9999; }
 function mtHideTyping(){ document.getElementById('mtTyping').classList.remove('mt-show'); }
 function mtHandleKey(e){ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();mtHandleSend();} }
 function mtResize(el){ el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,90)+'px'; }
 function mtEsc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
 function mtHandleSend(){
   if(mtBusy)return;
   const inp=document.getElementById('mtInput');
@@ -1488,13 +1390,11 @@ function mtHandleSend(){
   mtAppendMsg('user',mtEsc(txt));
   mtProcess(txt);
 }
-
 function mtSendChip(txt){
   if(mtBusy)return;
   mtAppendMsg('user',mtEsc(txt));
   mtProcess(txt);
 }
-
 function mtProcess(txt){
   mtBusy=true; mtShowTyping();
   const fn=mtDetect(txt);
@@ -1504,31 +1404,15 @@ function mtProcess(txt){
     mtBusy=false;
   }, 550+Math.random()*350);
 }
-
-/* ── Panel open/close ───────────────────────────────── */
 function mtOpenPanel(){
   document.getElementById('mtOpenBtn').style.display='none';
-  const p=document.getElementById('mtPanel');
-  p.classList.add('mt-visible');
+  document.getElementById('mtPanel').classList.add('mt-visible');
 }
 function mtClosePanel(){
   document.getElementById('mtPanel').classList.remove('mt-visible');
   document.getElementById('mtOpenBtn').style.display='flex';
 }
-
-/* ── Init on DOM ready ──────────────────────────────── */
 document.addEventListener('DOMContentLoaded',function(){
-  const openBtn=document.getElementById('mtOpenBtn');
-  const closeBtn=document.getElementById('mtCloseBtn');
-  const sendBtn=document.getElementById('mtSendBtn');
-  const input=document.getElementById('mtInput');
-  if(openBtn) openBtn.addEventListener('click',mtOpenPanel);
-  if(closeBtn) closeBtn.addEventListener('click',mtClosePanel);
-  if(sendBtn) sendBtn.addEventListener('click',mtHandleSend);
-  if(input){
-    input.addEventListener('keydown',mtHandleKey);
-    input.addEventListener('input',function(){ mtResize(this); });
-  }
   setTimeout(function(){
     if(document.getElementById('mtBody')){
       mtAppendMsg('bot',mtGreeting());
@@ -1538,203 +1422,208 @@ document.addEventListener('DOMContentLoaded',function(){
 </script>
 
 <!-- ═══════════════════════════════════════════════════
-     MELLOW TECH LOADER — JAVASCRIPT
+     PAGE LOADER — JAVASCRIPT
 ════════════════════════════════════════════════════ -->
 <script>
-(function(){
-  if(window._mtLdr) return;
-  window._mtLdr = true;
+(function() {
+  const DURATION = 7000;
+  const CX = 260, CY = 260, R = 170;
 
-  /* ── Refs ── */
-  var ldr      = document.getElementById('mtLoader');
-  var canvas   = document.getElementById('mtCanvas');
-  var barFill  = document.getElementById('mtBarFill');
-  var barPct   = document.getElementById('mtBarPct');
-  var logoBase = document.getElementById('mtLogoBase');
-  var fillClip = document.getElementById('mtFillClip');
-  if(!ldr) return;
+  const services = [
+    { label: 'CV Writing',           icon: '📄', angle: -90  },
+    { label: 'Web Dev',              icon: '🌐', angle: -30  },
+    { label: 'Assignments',          icon: '📝', angle:  30  },
+    { label: 'Tech Support',         icon: '💻', angle:  90  },
+    { label: 'Graphic Design',       icon: '🎨', angle:  150 },
+    { label: 'Google Digital Setup', icon: '📈', angle:  210 },
+  ];
 
-  /* ── Hide site ── */
-  document.body.classList.add('mt-hidden');
+  const svg = document.getElementById('scene');
+  const NS = 'http://www.w3.org/2000/svg';
 
-  /* ── Duration from network ── */
-  var dur = 4000;
-  try {
-    var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-    if(conn && conn.effectiveType){
-      if(conn.effectiveType === '2g' || conn.effectiveType === 'slow-2g') dur = 3000;
-      else if(conn.effectiveType === '3g') dur = 3500;
-    }
-  } catch(e){}
+  function deg2rad(d) { return d * Math.PI / 180; }
 
-  /* ── Canvas particle system ── */
-  var ctx = canvas.getContext('2d');
-  var W, H;
+  const nodeGroup = document.getElementById('nodes');
+  const connGroup = document.getElementById('connections');
+  const partGroup = document.getElementById('particles');
+  const nodeEls = [];
+  const lineEls = [];
 
-  function resize(){
-    W = canvas.width  = window.innerWidth;
-    H = canvas.height = window.innerHeight;
+  services.forEach((svc, i) => {
+    const rad = deg2rad(svc.angle);
+    const nx = CX + R * Math.cos(rad);
+    const ny = CY + R * Math.sin(rad);
+    svc.x = nx; svc.y = ny;
+
+    const line = document.createElementNS(NS, 'line');
+    line.setAttribute('x1', CX); line.setAttribute('y1', CY);
+    line.setAttribute('x2', nx); line.setAttribute('y2', ny);
+    line.setAttribute('stroke', 'url(#line-grad)');
+    line.setAttribute('stroke-width', '1.2');
+    line.setAttribute('opacity', '0.55');
+    const totalLen = Math.hypot(nx-CX, ny-CY);
+    line.setAttribute('stroke-dasharray', totalLen);
+    line.setAttribute('stroke-dashoffset', totalLen);
+    connGroup.appendChild(line);
+    lineEls.push({ el: line, len: totalLen });
+
+    const g = document.createElementNS(NS, 'g');
+    g.setAttribute('opacity', '0');
+    g.setAttribute('transform', `translate(${nx},${ny})`);
+
+    const glowC = document.createElementNS(NS, 'circle');
+    glowC.setAttribute('r', '28');
+    glowC.setAttribute('fill', 'rgba(75,207,250,0.06)');
+    glowC.setAttribute('filter', 'url(#glow-node)');
+    g.appendChild(glowC);
+
+    const bgC = document.createElementNS(NS, 'circle');
+    bgC.setAttribute('r', '24');
+    bgC.setAttribute('fill', '#0E1B2E');
+    bgC.setAttribute('stroke', 'rgba(75,207,250,0.25)');
+    bgC.setAttribute('stroke-width', '1');
+    g.appendChild(bgC);
+
+    const fo = document.createElementNS(NS, 'foreignObject');
+    fo.setAttribute('x', '-16'); fo.setAttribute('y', '-20');
+    fo.setAttribute('width', '32'); fo.setAttribute('height', '30');
+    const div = document.createElement('div');
+    div.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:18px;line-height:1;';
+    div.textContent = svc.icon;
+    fo.appendChild(div);
+    g.appendChild(fo);
+
+    const txt = document.createElementNS(NS, 'text');
+    txt.setAttribute('y', '38');
+    txt.setAttribute('text-anchor', 'middle');
+    txt.setAttribute('font-family', "'DM Sans', sans-serif");
+    txt.setAttribute('font-size', '9');
+    txt.setAttribute('font-weight', '500');
+    txt.setAttribute('fill', '#cde8f8');
+    txt.setAttribute('letter-spacing', '0.5');
+    txt.setAttribute('opacity', '0.8');
+    txt.textContent = svc.label.toUpperCase();
+    g.appendChild(txt);
+
+    nodeGroup.appendChild(g);
+    nodeEls.push({ g, nx, ny, baseX: nx, baseY: ny, floatOffset: Math.random() * Math.PI * 2 });
+  });
+
+  const MAX_PARTICLES = 70;
+  const particles = [];
+
+  function spawnParticle(svcIdx) {
+    const svc = services[svcIdx];
+    const p = {
+      svcIdx, t: 0,
+      speed: 0.004 + Math.random() * 0.004,
+      radius: 2 + Math.random() * 1.5,
+      opacity: 0.7 + Math.random() * 0.3,
+      toCenter: Math.random() > 0.5,
+      el: null
+    };
+    const el = document.createElementNS(NS, 'circle');
+    el.setAttribute('r', p.radius);
+    el.setAttribute('fill', p.svcIdx % 2 === 0 ? '#4BCFFA' : '#E8B84B');
+    el.setAttribute('opacity', '0');
+    partGroup.appendChild(el);
+    p.el = el;
+    particles.push(p);
+    return p;
   }
-  resize();
-  window.addEventListener('resize', resize, {passive:true});
 
-  var isMob = window.innerWidth < 600;
-  var NODE_COUNT = isMob ? 28 : 55;
-  var PART_COUNT = isMob ? 18 : 38;
-  var MAX_D      = isMob ? 110 : 155;
+  function updateParticle(p) {
+    p.t += p.speed;
+    if (p.t >= 1) { p.t = 0; p.toCenter = !p.toCenter; p.opacity = 0.7 + Math.random() * 0.3; }
+    const svc = services[p.svcIdx];
+    let t = p.toCenter ? p.t : 1 - p.t;
+    const px = CX + (svc.x - CX) * (1 - t);
+    const py = CY + (svc.y - CY) * (1 - t);
+    p.el.setAttribute('cx', px);
+    p.el.setAttribute('cy', py);
+    p.el.setAttribute('opacity', Math.sin(p.t * Math.PI) * p.opacity);
+  }
 
-  /* Build nodes */
-  var nodes = [];
-  for(var i=0; i<NODE_COUNT; i++){
-    nodes.push({
-      x:  Math.random() * (window.innerWidth  || 800),
-      y:  Math.random() * (window.innerHeight || 600),
-      vx: (Math.random() - 0.5) * 0.32,
-      vy: (Math.random() - 0.5) * 0.32,
-      r:  1.5 + Math.random() * 1.8,
-      ph: Math.random() * Math.PI * 2
+  const rings = document.querySelectorAll('.ring');
+  let lastRingTime = 0;
+
+  function pulseRings(now) {
+    if (now - lastRingTime > 1500) lastRingTime = now;
+    const elapsed = now - lastRingTime;
+    rings.forEach((ring, i) => {
+      const delay = i * 400;
+      const t = Math.max(0, (elapsed - delay) / 1800);
+      const op = t < 0.3 ? t/0.3 * 0.35 : (1-t) * 0.35;
+      ring.setAttribute('opacity', op > 0 ? op : 0);
     });
   }
 
-  /* Build particles */
-  var parts = [];
-  for(var j=0; j<PART_COUNT; j++){
-    parts.push({
-      x:  Math.random() * (window.innerWidth  || 800),
-      y:  Math.random() * (window.innerHeight || 600),
-      vx: (Math.random() - 0.5) * 0.55,
-      vy: -0.3 - Math.random() * 0.55,
-      r:  0.7 + Math.random() * 1.2,
-      lf: Math.random()
+  const logoGroup = document.getElementById('logo-group');
+  function pulseLogo(now) {
+    const scale = 1 + 0.025 * Math.sin(now / 900);
+    logoGroup.setAttribute('transform', `translate(${CX},${CY}) scale(${scale}) translate(${-CX},${-CY})`);
+  }
+
+  const bar = document.getElementById('progress-bar');
+  const pctEl = document.getElementById('pct');
+  let startTime = null;
+  let particleSpawnCount = 0;
+  const LINE_STARTS = [0.02, 0.08, 0.14, 0.20, 0.26, 0.32];
+
+  function ease(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
+
+  function frame(now) {
+    if (!startTime) startTime = now;
+    const elapsed = now - startTime;
+    const rawProgress = Math.min(elapsed / DURATION, 1);
+
+    bar.style.width = (rawProgress * 100) + '%';
+    pctEl.textContent = Math.floor(rawProgress * 100) + '%';
+
+    lineEls.forEach((ln, i) => {
+      const lineStart = LINE_STARTS[i];
+      const lineP = Math.max(0, Math.min(1, (rawProgress - lineStart) / (0.9 - lineStart)));
+      ln.el.setAttribute('stroke-dashoffset', ln.len * (1 - lineP));
     });
-  }
 
-  var rafId = null;
-  function drawFrame(){
-    ctx.clearRect(0, 0, W, H);
+    nodeEls.forEach((n, i) => {
+      const revealAt = LINE_STARTS[i] + 0.20;
+      const revealP = Math.max(0, Math.min(1, (rawProgress - revealAt) / 0.08));
+      n.g.setAttribute('opacity', revealP);
+      const floatAmp = 4 * revealP;
+      const fx = n.baseX + floatAmp * Math.cos(now / 1800 + n.floatOffset);
+      const fy = n.baseY + floatAmp * Math.sin(now / 1400 + n.floatOffset);
+      n.g.setAttribute('transform', `translate(${fx},${fy})`);
+    });
 
-    /* nodes */
-    for(var a=0; a<nodes.length; a++){
-      var n = nodes[a];
-      n.x += n.vx; n.y += n.vy; n.ph += 0.022;
-      if(n.x < 0) n.x = W; if(n.x > W) n.x = 0;
-      if(n.y < 0) n.y = H; if(n.y > H) n.y = 0;
-
-      var alpha = 0.35 + 0.3 * Math.sin(n.ph);
-      ctx.beginPath();
-      ctx.arc(n.x, n.y, n.r, 0, 6.2832);
-      ctx.fillStyle = 'rgba(75,207,250,' + alpha + ')';
-      ctx.fill();
-
-      /* edges */
-      for(var b=a+1; b<nodes.length; b++){
-        var m  = nodes[b];
-        var dx = n.x - m.x;
-        var dy = n.y - m.y;
-        var d  = Math.sqrt(dx*dx + dy*dy);
-        if(d < MAX_D){
-          var la = (1 - d/MAX_D) * 0.2;
-          ctx.beginPath();
-          ctx.moveTo(n.x, n.y);
-          ctx.lineTo(m.x, m.y);
-          ctx.strokeStyle = 'rgba(75,207,250,' + la + ')';
-          ctx.lineWidth = 0.7;
-          ctx.stroke();
-
-          /* travelling pulse dot */
-          if(Math.random() < 0.002){
-            var t  = Math.random();
-            var px = n.x + (m.x - n.x) * t;
-            var py = n.y + (m.y - n.y) * t;
-            ctx.beginPath();
-            ctx.arc(px, py, 1.4, 0, 6.2832);
-            ctx.fillStyle = 'rgba(255,107,0,0.75)';
-            ctx.fill();
-          }
-        }
+    if (rawProgress > 0.2 && particles.length < MAX_PARTICLES && particleSpawnCount < 3000) {
+      const svcIdx = Math.floor(Math.random() * 6);
+      if (rawProgress > LINE_STARTS[svcIdx] + 0.2) {
+        spawnParticle(svcIdx);
+        particleSpawnCount++;
       }
     }
+    particles.forEach(p => updateParticle(p));
 
-    /* floating particles */
-    for(var k=0; k<parts.length; k++){
-      var p = parts[k];
-      p.x += p.vx; p.y += p.vy; p.lf += 0.005;
-      if(p.lf > 1 || p.y < -10){
-        p.x  = Math.random() * W;
-        p.y  = H + 5;
-        p.lf = 0;
-        p.vy = -0.3 - Math.random() * 0.55;
-        p.vx = (Math.random() - 0.5) * 0.55;
-      }
-      var fade = Math.sin(p.lf * 3.1416);
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, 6.2832);
-      ctx.fillStyle = 'rgba(27,20,100,' + (p.r * 0.12 * fade) + ')';
-      ctx.fill();
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r * 0.4, 0, 6.2832);
-      ctx.fillStyle = 'rgba(200,244,90,' + (0.35 * fade) + ')';
-      ctx.fill();
-    }
+    pulseRings(now);
+    pulseLogo(now);
 
-    rafId = requestAnimationFrame(drawFrame);
-  }
-  rafId = requestAnimationFrame(drawFrame);
-
-  /* ── Progress ticker (rAF) ── */
-  var prog  = 0;
-  var t0    = null;
-  var done  = false;
-
-  function easeOut(t){ return 1 - Math.pow(1 - t, 2.5); }
-
-  function tick(ts){
-    if(!t0) t0 = ts;
-    var elapsed = ts - t0;
-    var raw = Math.min(elapsed / dur, 1);
-    prog = easeOut(raw) * 100;
-
-    var pctStr = Math.round(prog) + '%';
-    barFill.style.width = pctStr;
-    barPct.textContent  = pctStr;
-
-    /* logo fill reveal */
-    fillClip.style.width = Math.round(prog) + '%';
-
-    /* brighten base logo as it fills */
-    var br = 0.08 + (prog / 100) * 0.92;
-    var st = prog / 100;
-    logoBase.style.filter = 'brightness(' + br + ') saturate(' + st + ')';
-
-    if(raw < 1){
-      requestAnimationFrame(tick);
-    } else if(!done){
-      done = true;
-      exit();
+    if (rawProgress < 1) {
+      requestAnimationFrame(frame);
+    } else {
+      setTimeout(() => {
+        document.getElementById('loader').classList.add('done');
+        // Reveal site content
+        document.body.classList.remove('mt-loader-active');
+        setTimeout(() => {
+          const ldr = document.getElementById('loader');
+          if (ldr && ldr.parentNode) ldr.parentNode.removeChild(ldr);
+        }, 900);
+      }, 400);
     }
   }
-  requestAnimationFrame(tick);
 
-  /* ── Exit ── */
-  function exit(){
-    ldr.classList.add('mt-burst');
-    setTimeout(function(){
-      ldr.classList.add('mt-out');
-      document.body.classList.remove('mt-hidden');
-      document.body.classList.add('mt-reveal');
-      setTimeout(function(){
-        cancelAnimationFrame(rafId);
-        if(ldr.parentNode) ldr.parentNode.removeChild(ldr);
-        document.body.classList.remove('mt-reveal');
-        var css = document.getElementById('mt-loader-css');
-        if(css && css.parentNode) css.parentNode.removeChild(css);
-      }, 900);
-    }, 350);
-  }
-
-  /* Safety exit */
-  setTimeout(function(){ if(!done){ done=true; exit(); } }, dur + 2500);
-
+  requestAnimationFrame(frame);
 })();
 </script>
 
