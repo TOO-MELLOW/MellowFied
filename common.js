@@ -624,13 +624,20 @@ const LINE_STARTS = [0.02, 0.08, 0.14, 0.20, 0.26, 0.32];
   requestAnimationFrame(frame);
 } else {
   setTimeout(() => {
-    // Use the correct ID
-    document.getElementById('page-loader').classList.add('done');
-    document.body.classList.remove('mt-loader-active');
-    setTimeout(function(){
-      var ldr = document.getElementById('page-loader');
-      if(ldr && ldr.parentNode) ldr.parentNode.removeChild(ldr);
-    }, 900);
+    // 1) Hide & remove the loader overlay
+    const loaderEl = document.getElementById('page-loader');
+    if (loaderEl) {
+      loaderEl.classList.add('done');
+      // 2) Unlock scrolling – remove any loading class
+      document.body.classList.remove('mt-loader-active', 'loading', 'no-scroll');
+      // 3) Reset overflow directly (belt and braces)
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+
+      setTimeout(() => {
+        if (loaderEl.parentNode) loaderEl.parentNode.removeChild(loaderEl);
+      }, 900);
+    }
   }, 400);
 }
   }
