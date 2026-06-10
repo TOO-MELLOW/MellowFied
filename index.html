@@ -563,5 +563,80 @@
 </div>
 
 <script src="common.js"></script>
+<script>
+(function() {
+  // ── Animate a single number from start to end ──
+  function animateValue(el, start, end, duration, suffix) {
+    var startTime = null;
+    function step(timestamp) {
+      if (!startTime) startTime = timestamp;
+      var progress = Math.min((timestamp - startTime) / duration, 1);
+      var current = progress >= 1 ? end : Math.floor(progress * (end - start) + start);
+      // Keep decimal for the 4.9 star rating
+      if (end % 1 !== 0) current = (progress * (end - start) + start).toFixed(1);
+      el.textContent = current + suffix;
+      if (progress < 1) {
+        window.requestAnimationFrame(step);
+      }
+    }
+    window.requestAnimationFrame(step);
+  }
+
+  // ── Start all three counters ──
+  function startCounters() {
+    var stats = document.querySelectorAll('.hero-stat-num');
+    if (!stats.length) return;
+    // Avoid double‑triggering
+    if (stats[0].dataset.counted === 'true') return;
+    stats[0].dataset.counted = 'true';
+
+    animateValue(stats[0], 0, 100, 1500, '+');   // 100+ clients
+    animateValue(stats[1], 0, 9, 1500, '');      // 9 services
+    animateValue(stats[2], 0, 4.9, 1500, '★');   // 4.9 rating
+  }
+
+  // ── Wait for the loader to disappear, then start ──
+  function init() {
+    var loaderEl = document.getElementById('page-loader');
+
+    // 1. If the loader doesn't exist at all (other pages), start immediately
+    if (!loaderEl) {
+      startCounters();
+      return;
+    }
+
+    // 2. If the loader is already done (e.g., session‑storage skipped it), start now
+    if (sessionStorage.getItem('mellowLoaderDone') === 'true') {
+      startCounters();
+      return;
+    }
+
+    // 3. Otherwise, wait until the loader is removed from the DOM
+    var observer = new MutationObserver(function(mutations) {
+      mutations.forEach(function(mutation) {
+        if (mutation.removedNodes) {
+          mutation.removedNodes.forEach(function(node) {
+            if (node.id === 'page-loader') {
+              observer.disconnect();
+              startCounters();
+            }
+          });
+        }
+      });
+    });
+    observer.observe(document.body, { childList: true, subtree: false });
+  }
+
+  // Kick off when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  // Expose for manual trigger (optional)
+  window.startHeroCounter = startCounters;
+})();
+</script>  
 </body>
 </html>
