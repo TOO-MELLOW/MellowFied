@@ -399,11 +399,22 @@ window.UI=(function(){
   });
 })();
 
-
 /* ═══════════════════════════════════════════════════
    PAGE LOADER — JAVASCRIPT
 ════════════════════════════════════════════════════ */
 (function() {
+  // ── Guard: only run if the loader exists on this page ──────────────────────
+  const loaderEl = document.getElementById('page-loader');
+  if (!loaderEl) {
+    // No loader → ensure scrolling is never locked
+    document.documentElement.classList.remove('loading');
+    document.body.classList.remove('loading');
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+    return;
+  }
+
+  // ── Config ─────────────────────────────────────────────────────────────────
   const DURATION = 7000;
   const CX = 260, CY = 260, R = 170;
 
@@ -605,7 +616,6 @@ window.UI=(function(){
     if (rawProgress < 1) {
       requestAnimationFrame(frame);
     } else {
-      const loaderEl = document.getElementById('page-loader');
       if (loaderEl) {
         loaderEl.classList.add('done');
       }
