@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MellowTech Services</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #4BCFFA;
+    --blue-dim: rgba(75,207,250,0.18);
+    --blue-glow: rgba(75,207,250,0.55);
+    --gold: #C8992E;
+    --gold-light: #E8B84B;
+    --gold-dim: rgba(200,153,46,0.22);
+    --navy: #080C10;
+    --navy-mid: #0E1B2E;
+    --navy-card: #111E32;
+    --text: #cde8f8;
+    --text-dim: rgba(205,232,248,0.45);
+  }
+
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+  html, body {
+    width:100%; height:100%;
+    background: var(--navy);
+    font-family: 'DM Sans', sans-serif;
+    overflow: hidden;
+  }
+
+  /* ─── LOADER OVERLAY ─── */
+  #loader {
+    position: fixed; inset: 0; z-index: 9999;
+    background: radial-gradient(ellipse 80% 60% at 50% 40%, #0E1B2E 0%, #080C10 100%);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+  }
+  #loader.done { opacity:0; visibility:hidden; pointer-events:none; }
+
+  /* subtle grid overlay */
+  #loader::before {
+    content:''; position:absolute; inset:0;
+    background-image:
+      linear-gradient(rgba(75,207,250,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(75,207,250,0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events:none;
+  }
+
+  /* corner decorations */
+  .corner { position:absolute; width:80px; height:80px; opacity:.35; }
+  .corner svg { width:100%; height:100%; }
+  .corner.tl { top:24px; left:24px; }
+  .corner.tr { top:24px; right:24px; transform:scaleX(-1); }
+  .corner.bl { bottom:24px; left:24px; transform:scaleY(-1); }
+  .corner.br { bottom:24px; right:24px; transform:scale(-1); }
+
+  /* ─── CANVAS WRAPPER ─── */
+  #canvas-wrap {
+    position: relative;
+    width: 520px; height: 520px;
+    flex-shrink: 0;
+  }
+  #scene { width:100%; height:100%; }
+
+  /* ─── BOTTOM STATUS ─── */
+  #status-zone {
+    position: absolute;
+    bottom: 48px; left: 0; right: 0;
+    display: flex; flex-direction: column; align-items: center; gap: 14px;
+  }
+
+  #status-text {
+    font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-dim); font-weight: 500;
+  }
+  #status-text span { color: var(--blue); }
+
+  #progress-bar-wrap {
+    width: min(380px, 80vw);
+    height: 3px;
+    background: rgba(75,207,250,0.1);
+    border-radius: 99px; overflow: hidden;
+    position: relative;
+  }
+  #progress-bar {
+    height: 100%; width: 0%;
+    background: linear-gradient(90deg, var(--blue) 0%, var(--gold-light) 100%);
+    border-radius: 99px;
+    transition: width 0.15s linear;
+    box-shadow: 0 0 10px var(--blue-glow);
+    position: relative;
+  }
+  #progress-bar::after {
+    content:'';
+    position:absolute; right:0; top:-2px;
+    width:8px; height:7px; border-radius:50%;
+    background: var(--gold-light);
+    box-shadow: 0 0 8px 2px var(--gold-light);
+  }
+  #pct {
+    font-size: 12px; color: var(--gold-light);
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: 0.08em; font-weight: 500;
+  }
+
+  /* ─── MAIN CONTENT (post-loader) ─── */
+  #main {
+    position: fixed; inset: 0;
+    background: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 24px;
+    opacity: 0; visibility: hidden;
+    transition: opacity 1s ease 0.2s, visibility 1s ease 0.2s;
+    overflow-y: auto;
+    padding: 40px 20px;
+  }
+  #main.visible { opacity:1; visibility:visible; }
+
+  .hero-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(28px,5vw,52px);
+    color: var(--text);
+    text-align: center;
+    line-height: 1.15;
+    font-weight: 700;
+  }
+  .hero-title em { color: var(--gold-light); font-style: normal; }
+  .hero-sub {
+    font-size: 16px; color: var(--text-dim); text-align: center; max-width:480px;
+  }
+  .hero-cta {
+    display:inline-flex; align-items:center; gap:8px;
+    padding: 14px 32px; border-radius: 8px;
+    background: linear-gradient(135deg, var(--blue), #2288cc);
+    color: #fff; font-size: 15px; font-weight: 600;
+    text-decoration: none; letter-spacing:.04em;
+    box-shadow: 0 0 24px rgba(75,207,250,0.3);
+    transition: box-shadow .3s;
+    cursor: pointer; border:none;
+  }
+  .hero-cta:hover { box-shadow: 0 0 36px rgba(75,207,250,0.55); }
+
+  @keyframes dots {
+    0%,20%   { content:'.' }
+    40%,60%  { content:'..' }
+    80%,100% { content:'...' }
+  }
+  .dots::after {
+    content:'.';
+    animation: dots 1.4s steps(1) infinite;
+  }
+
+  @media (max-width: 560px) {
+    #canvas-wrap { width: 340px; height: 340px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── LOADER ─── -->
+<div id="loader">
+
+  <!-- Corner decorations -->
+  <div class="corner tl"><svg viewBox="0 0 80 80" fill="none"><path d="M4 76 L4 4 L76 4" stroke="#4BCFFA" stroke-width="1.5" stroke-linecap="round"/><circle cx="4" cy="4" r="3" fill="#C8992E"/></svg></div>
+  <div class="corner tr"><svg viewBox="0 0 80 80" fill="none"><path d="M4 76 L4 4 L76 4" stroke="#4BCFFA" stroke-width="1.5" stroke-linecap="round"/><circle cx="4" cy="4" r="3" fill="#C8992E"/></svg></div>
+  <div class="corner bl"><svg viewBox="0 0 80 80" fill="none"><path d="M4 76 L4 4 L76 4" stroke="#4BCFFA" stroke-width="1.5" stroke-linecap="round"/><circle cx="4" cy="4" r="3" fill="#C8992E"/></svg></div>
+  <div class="corner br"><svg viewBox="0 0 80 80" fill="none"><path d="M4 76 L4 4 L76 4" stroke="#4BCFFA" stroke-width="1.5" stroke-linecap="round"/><circle cx="4" cy="4" r="3" fill="#C8992E"/></svg></div>
+
+  <!-- Main canvas -->
+  <div id="canvas-wrap">
+    <svg id="scene" viewBox="0 0 520 520" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- Central glow filter -->
+        <filter id="glow-blue" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur"/>
+          <feColorMatrix in="blur" type="matrix"
+            values="0 0 0 0 0.3
+                    0 0 0 0 0.8
+                    0 0 0 0 1
+                    0 0 0 0.9 0"/>
+          <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="glow-gold" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur"/>
+          <feColorMatrix in="blur" type="matrix"
+            values="0 0 0 0 0.8
+                    0 0 0 0 0.55
+                    0 0 0 0 0.1
+                    0 0 0 0.9 0"/>
+          <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="glow-node" x="-80%" y="-80%" width="260%" height="260%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="soft-glow" x="-100%" y="-100%" width="300%" height="300%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="18"/>
+        </filter>
+
+        <!-- Gradients -->
+        <radialGradient id="bg-radial" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#1a3050" stop-opacity=".6"/>
+          <stop offset="100%" stop-color="#080C10" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="logo-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#e8f8ff"/>
+          <stop offset="100%" stop-color="#4BCFFA"/>
+        </linearGradient>
+        <linearGradient id="line-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#4BCFFA" stop-opacity=".9"/>
+          <stop offset="100%" stop-color="#C8992E" stop-opacity=".7"/>
+        </linearGradient>
+        <!-- Clip for progress line drawing -->
+        <clipPath id="line-clip-0"><rect id="lc0" x="260" y="0" width="0" height="520"/></clipPath>
+        <clipPath id="line-clip-1"><rect id="lc1" x="260" y="0" width="0" height="520"/></clipPath>
+        <clipPath id="line-clip-2"><rect id="lc2" x="260" y="0" width="0" height="520"/></clipPath>
+        <clipPath id="line-clip-3"><rect id="lc3" x="260" y="0" width="0" height="520"/></clipPath>
+        <clipPath id="line-clip-4"><rect id="lc4" x="260" y="0" width="0" height="520"/></clipPath>
+        <clipPath id="line-clip-5"><rect id="lc5" x="260" y="0" width="0" height="520"/></clipPath>
+      </defs>
+
+      <!-- Background radial halo -->
+      <circle cx="260" cy="260" r="240" fill="url(#bg-radial)"/>
+
+      <!-- Pulse rings (animated via JS) -->
+      <g id="rings">
+        <circle class="ring" cx="260" cy="260" r="70"  fill="none" stroke="#4BCFFA" stroke-width="1" opacity="0"/>
+        <circle class="ring" cx="260" cy="260" r="100" fill="none" stroke="#4BCFFA" stroke-width=".7" opacity="0"/>
+        <circle class="ring" cx="260" cy="260" r="140" fill="none" stroke="#4BCFFA" stroke-width=".5" opacity="0"/>
+      </g>
+
+      <!-- Orbit track -->
+      <circle cx="260" cy="260" r="170" fill="none" stroke="rgba(75,207,250,0.08)" stroke-width="1" stroke-dasharray="4 6"/>
+
+      <!-- Connection lines (drawn progressively) -->
+      <g id="connections"></g>
+
+      <!-- Particles layer -->
+      <g id="particles"></g>
+
+      <!-- Service nodes -->
+      <g id="nodes"></g>
+      
+      <!-- Central logo plate -->
+<g id="logo-group">
+  <!-- Outer soft glow -->
+  <circle cx="260" cy="260" r="62" fill="#4BCFFA" opacity=".08" filter="url(#soft-glow)"/>
+  
+  <!-- Logo hex background -->
+  <circle cx="260" cy="260" r="56" fill="#0E1B2E" stroke="rgba(75,207,250,0.3)" stroke-width="1.5"/>
+  <circle cx="260" cy="260" r="56" fill="none" stroke="#4BCFFA" stroke-width=".5" opacity=".5" filter="url(#glow-blue)"/>
+  
+  <!-- Gear icon (small, decorative) -->
+  <g transform="translate(225, 248) scale(0.6)" opacity="0.4">
+    <circle cx="0" cy="0" r="8" fill="none" stroke="#C8992E" stroke-width="2"/>
+    <circle cx="0" cy="0" r="4" fill="none" stroke="#C8992E" stroke-width="1.5"/>
+    <line x1="0" y1="-12" x2="0" y2="-8" stroke="#C8992E" stroke-width="2"/>
+    <line x1="0" y1="8" x2="0" y2="12" stroke="#C8992E" stroke-width="2"/>
+    <line x1="-12" y1="0" x2="-8" y2="0" stroke="#C8992E" stroke-width="2"/>
+    <line x1="8" y1="0" x2="12" y2="0" stroke="#C8992E" stroke-width="2"/>
+  </g>
+  
+  <!-- Computer Monitor -->
+  <rect x="240" y="242" width="40" height="28" rx="3" fill="#0E1B2E" stroke="#4BCFFA" stroke-width="1.5" filter="url(#glow-blue)"/>
+  
+  <!-- Screen content -->
+  <rect x="243" y="245" width="34" height="22" rx="2" fill="#080C10" opacity="0.4"/>
+  
+  <!-- Checkmark on screen (success/support) -->
+  <path d="M250 256 L255 261 L270 248" stroke="#E8B84B" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow-gold)"/>
+  
+  <!-- Cursor blink -->
+  <line x1="268" y1="254" x2="268" y2="260" stroke="#4BCFFA" stroke-width="1.5" opacity="0.6"/>
+  
+  <!-- Monitor stand -->
+  <path d="M258 270 L260 276 L262 270" stroke="#4BCFFA" stroke-width="1.5" fill="none" opacity="0.6"/>
+  <line x1="252" y1="276" x2="268" y2="276" stroke="#4BCFFA" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+  
+
+</g>
+      <!-- Company name below -->
+      <text x="260" y="330" text-anchor="middle"
+        font-family="'Space Grotesk',sans-serif" font-size="14" font-weight="700"
+        fill="#cde8f8" letter-spacing="2" opacity=".9"></text>
+      <text x="260" y="346" text-anchor="middle"
+        font-family="'DM Sans',sans-serif" font-size="9.5" font-weight="400"
+        fill="#4BCFFA" letter-spacing="4" opacity=".7"></text>
+    </svg>
+  </div>
+
+  <!-- Status zone -->
+  <div id="status-zone">
+    <div id="status-text">Connecting you to <span>Mellow Tech Services</span><span class="dots"></span></div>
+    <div id="progress-bar-wrap">
+      <div id="progress-bar"></div>
+    </div>
+    <div id="pct">0%</div>
+  </div>
+
+</div>
+
+<script>
+(function() {
+  // ── Config ─────────────────────────────────────────────────────────────────
+  const DURATION = 7000; //  7seconds
+  const CX = 260, CY = 260, R = 170; // orbit centre & radius
+
+  const services = [
+    { label: 'CV Writing',        icon: '📄', angle: -90  },
+    { label: 'Web Dev',           icon: '🌐', angle: -30  },
+    { label: 'Assignments',       icon: '📝', angle:  30  },
+    { label: 'Tech Support',      icon: '💻', angle:  90  },
+    { label: 'Graphic Design',    icon: '🎨', angle:  150 },
+    { label: 'Google Digital Setup', icon: '📈', angle:  210 },
+  ];
+
+  const svg = document.getElementById('scene');
+  const NS = 'http://www.w3.org/2000/svg';
+
+  function deg2rad(d) { return d * Math.PI / 180; }
+
+  // ── Build nodes ────────────────────────────────────────────────────────────
+  const nodeGroup = document.getElementById('nodes');
+  const connGroup = document.getElementById('connections');
+  const partGroup = document.getElementById('particles');
+  const nodeEls = [];
+  const lineEls = [];
+
+  services.forEach((svc, i) => {
+    const rad = deg2rad(svc.angle);
+    const nx = CX + R * Math.cos(rad);
+    const ny = CY + R * Math.sin(rad);
+    svc.x = nx; svc.y = ny;
+
+    // Connection line
+    const line = document.createElementNS(NS, 'line');
+    line.setAttribute('x1', CX); line.setAttribute('y1', CY);
+    line.setAttribute('x2', nx); line.setAttribute('y2', ny);
+    line.setAttribute('stroke', 'url(#line-grad)');
+    line.setAttribute('stroke-width', '1.2');
+    line.setAttribute('opacity', '0.55');
+    const totalLen = Math.hypot(nx-CX, ny-CY);
+    line.setAttribute('stroke-dasharray', totalLen);
+    line.setAttribute('stroke-dashoffset', totalLen); // hidden initially
+    connGroup.appendChild(line);
+    lineEls.push({ el: line, len: totalLen });
+
+    // Node group
+    const g = document.createElementNS(NS, 'g');
+    g.setAttribute('opacity', '0');
+    g.setAttribute('transform', `translate(${nx},${ny})`);
+
+    // Glow circle
+    const glowC = document.createElementNS(NS, 'circle');
+    glowC.setAttribute('r', '28');
+    glowC.setAttribute('fill', 'rgba(75,207,250,0.06)');
+    glowC.setAttribute('filter', 'url(#glow-node)');
+    g.appendChild(glowC);
+
+    // Node background
+    const bgC = document.createElementNS(NS, 'circle');
+    bgC.setAttribute('r', '24');
+    bgC.setAttribute('fill', '#0E1B2E');
+    bgC.setAttribute('stroke', 'rgba(75,207,250,0.25)');
+    bgC.setAttribute('stroke-width', '1');
+    g.appendChild(bgC);
+
+    // Icon (foreignObject for emoji)
+    const fo = document.createElementNS(NS, 'foreignObject');
+    fo.setAttribute('x', '-16'); fo.setAttribute('y', '-20');
+    fo.setAttribute('width', '32'); fo.setAttribute('height', '30');
+    const div = document.createElement('div');
+    div.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:18px;line-height:1;';
+    div.textContent = svc.icon;
+    fo.appendChild(div);
+    g.appendChild(fo);
+
+    // Label
+    const txt = document.createElementNS(NS, 'text');
+    txt.setAttribute('y', '38');
+    txt.setAttribute('text-anchor', 'middle');
+    txt.setAttribute('font-family', "'DM Sans', sans-serif");
+    txt.setAttribute('font-size', '9');
+    txt.setAttribute('font-weight', '500');
+    txt.setAttribute('fill', '#cde8f8');
+    txt.setAttribute('letter-spacing', '0.5');
+    txt.setAttribute('opacity', '0.8');
+    txt.textContent = svc.label.toUpperCase();
+    g.appendChild(txt);
+
+    nodeGroup.appendChild(g);
+    nodeEls.push({ g, nx, ny, baseX: nx, baseY: ny, floatOffset: Math.random() * Math.PI * 2 });
+  });
+
+  // ── Particle pool ──────────────────────────────────────────────────────────
+  const MAX_PARTICLES = 70;
+  const particles = [];
+
+  function spawnParticle(svcIdx) {
+    const svc = services[svcIdx];
+    const p = {
+      svcIdx,
+      t: 0,
+      speed: 0.004 + Math.random() * 0.004,
+      radius: 2 + Math.random() * 1.5,
+      opacity: 0.7 + Math.random() * 0.3,
+      toCenter: Math.random() > 0.5,
+      el: null
+    };
+    const el = document.createElementNS(NS, 'circle');
+    el.setAttribute('r', p.radius);
+    el.setAttribute('fill', p.svcIdx % 2 === 0 ? '#4BCFFA' : '#E8B84B');
+    el.setAttribute('opacity', '0');
+    partGroup.appendChild(el);
+    p.el = el;
+    particles.push(p);
+    return p;
+  }
+
+  function updateParticle(p, now) {
+    p.t += p.speed;
+    if (p.t >= 1) {
+      p.t = 0;
+      p.toCenter = !p.toCenter;
+      p.opacity = 0.7 + Math.random() * 0.3;
+    }
+    const svc = services[p.svcIdx];
+    let t = p.toCenter ? p.t : 1 - p.t;
+    const px = CX + (svc.x - CX) * (1 - t);
+    const py = CY + (svc.y - CY) * (1 - t);
+    p.el.setAttribute('cx', px);
+    p.el.setAttribute('cy', py);
+    p.el.setAttribute('opacity', Math.sin(p.t * Math.PI) * p.opacity);
+  }
+
+  // ── Pulse rings ────────────────────────────────────────────────────────────
+  const rings = document.querySelectorAll('.ring');
+  let lastRingTime = 0;
+  const RING_INTERVAL = 1500;
+  let ringPhase = 0;
+
+  function pulseRings(now) {
+    if (now - lastRingTime > RING_INTERVAL) {
+      lastRingTime = now;
+      ringPhase = 0;
+    }
+    const elapsed = now - lastRingTime;
+    rings.forEach((ring, i) => {
+      const delay = i * 400;
+      const t = Math.max(0, (elapsed - delay) / 1800);
+      const op = t < 0.3 ? t/0.3 * 0.35 : (1-t) * 0.35;
+      ring.setAttribute('opacity', op > 0 ? op : 0);
+    });
+  }
+
+  // ── Logo pulse ─────────────────────────────────────────────────────────────
+  const logoGroup = document.getElementById('logo-group');
+  function pulseLogo(now) {
+    const scale = 1 + 0.025 * Math.sin(now / 900);
+    logoGroup.setAttribute('transform', `translate(${CX},${CY}) scale(${scale}) translate(${-CX},${-CY})`);
+  }
+
+  // ── Progress & line draw ───────────────────────────────────────────────────
+  const bar = document.getElementById('progress-bar');
+  const pctEl = document.getElementById('pct');
+  let startTime = null;
+  let particleSpawnCount = 0;
+
+  // Faster version (starts drawing sooner):
+const LINE_STARTS = [0.02, 0.08, 0.14, 0.20, 0.26, 0.32];
+
+  function ease(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
+
+  // ── Main RAF loop ──────────────────────────────────────────────────────────
+  function frame(now) {
+    if (!startTime) startTime = now;
+    const elapsed = now - startTime;
+    const rawProgress = Math.min(elapsed / DURATION, 1);
+    const progress = ease(rawProgress);
+
+    // Progress bar
+    bar.style.width = (rawProgress * 100) + '%';
+    pctEl.textContent = Math.floor(rawProgress * 100) + '%';
+
+    // Draw lines
+    lineEls.forEach((ln, i) => {
+      const lineStart = LINE_STARTS[i];
+      const lineP = Math.max(0, Math.min(1, (rawProgress - lineStart) / (0.9 - lineStart)));
+      const offset = ln.len * (1 - lineP);
+      ln.el.setAttribute('stroke-dashoffset', offset);
+    });
+
+    // Reveal nodes
+    nodeEls.forEach((n, i) => {
+      const revealAt = LINE_STARTS[i] + 0.20;
+      const revealP = Math.max(0, Math.min(1, (rawProgress - revealAt) / 0.08));
+      n.g.setAttribute('opacity', revealP);
+
+      // Float animation
+      const floatAmp = 4 * revealP;
+      const fx = n.baseX + floatAmp * Math.cos(now / 1800 + n.floatOffset);
+      const fy = n.baseY + floatAmp * Math.sin(now / 1400 + n.floatOffset);
+      n.g.setAttribute('transform', `translate(${fx},${fy})`);
+    });
+
+    // Spawn particles (only after 20% and when lines are being drawn)
+    if (rawProgress > 0.2 && particles.length < MAX_PARTICLES && particleSpawnCount < 3000) {
+      const svcIdx = Math.floor(Math.random() * 6);
+      if (rawProgress > LINE_STARTS[svcIdx] + 0.2) {
+        spawnParticle(svcIdx);
+        particleSpawnCount++;
+      }
+    }
+    particles.forEach(p => updateParticle(p, now));
+
+    // Pulse rings & logo
+    pulseRings(now);
+    pulseLogo(now);
+
+    if (rawProgress < 1) {
+      requestAnimationFrame(frame);
+    } else {
+      // Done
+      setTimeout(() => {
+        document.getElementById('loader').classList.add('done');
+        document.getElementById('main').classList.add('visible');
+      }, 400);
+    }
+  }
+
+  requestAnimationFrame(frame);
+
+})();
+</script>
+</body>
+</html>
