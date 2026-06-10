@@ -479,11 +479,18 @@
         if (rawProgress < 1) {
           requestAnimationFrame(frame);
         } else {
-          setTimeout(() => {
-            loaderEl.classList.add('done');
-            document.getElementById('main-content')?.classList.add('visible');
-            sessionStorage.setItem('mellowLoaderDone', 'true');
-          }, 400);
+          
+setTimeout(() => {
+  loaderEl.classList.add('done');
+  document.getElementById('main-content')?.classList.add('visible');
+  sessionStorage.setItem('mellowLoaderDone', 'true');
+
+  // ✅ UNLOCK SCROLLING
+  document.documentElement.style.overflow = '';
+  document.body.style.overflow = '';
+  document.documentElement.classList.remove('loading');
+  document.body.classList.remove('loading');
+}, 400);
         }
       }
 
