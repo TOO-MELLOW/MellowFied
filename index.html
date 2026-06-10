@@ -3,95 +3,51 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mellow Tech Services - Smart Tech Solutions</title>
+<title>Mellow Tech Services | Smart Tech Solutions</title>
 <meta name="description" content="Mellow Tech Services offers Windows installation, PC troubleshooting, graphic design, web development, CV design, and business digital setup.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@300;400;500&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
 <style>
-/* ========== GLOBAL STYLES ========== */
-:root {
-  --ink: #0d0f14;
-  --ink-soft: #1e2230;
-  --surface: #f5f4f0;
-  --surface-2: #eceae4;
-  --white: #ffffff;
-  --lime: #c8f45a;
-  --lime-dark: #a8d43a;
-  --teal: #00c2a8;
-  --teal-soft: rgba(0,194,168,0.12);
-  --ink-40: rgba(13,15,20,0.4);
-  --ink-10: rgba(13,15,20,0.08);
-  --radius: 16px;
-  --nav-h: 72px;
-  --transition: 0.4s cubic-bezier(0.16,1,0.3,1);
+  /* VIDEO BACKGROUND */
+.hero-bg-video {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 55%;
+  overflow: hidden;
+  z-index: 0;
+  background: #0a0b10;
+  isolation: isolate;
 }
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--ink);overflow-x:hidden;font-size:16px;line-height:1.6}
-img{max-width:100%;display:block}
-a{text-decoration:none;color:inherit}
-button{cursor:pointer;border:none;background:none;font:inherit}
-ul{list-style:none}
-h1,h2,h3,h4,h5{font-family:'Syne',sans-serif;line-height:1.1;letter-spacing:-0.02em}
-.display{font-size:clamp(2.8rem,7vw,6rem);font-weight:800}
-.headline{font-size:clamp(2rem,4vw,3.5rem);font-weight:700}
-.label{font-family:'Syne',sans-serif;font-size:0.75rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase}
-.container{max-width:1260px;margin:0 auto;padding:0 24px}
-.pill{display:inline-flex;align-items:center;gap:6px;background:var(--ink-10);border-radius:100px;padding:6px 14px;font-size:0.8rem;font-weight:500}
-.pill-lime{background:var(--lime);color:var(--ink)}
-.pill-teal{background:var(--teal-soft);color:var(--teal)}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:100px;font-family:'Syne',sans-serif;font-weight:600;font-size:0.95rem;transition:var(--transition);position:relative;overflow:hidden}
-.btn::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,0.15);opacity:0;transition:opacity 0.2s}
-.btn:hover::after{opacity:1}
-.btn-primary{background:var(--ink);color:var(--lime)}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(13,15,20,0.25)}
-.btn-outline{background:transparent;color:var(--ink);border:2px solid var(--ink);padding:12px 26px}
-.btn-outline:hover{background:var(--ink);color:var(--lime);transform:translateY(-2px)}
-.btn-lime{background:var(--lime);color:var(--ink)}
-.btn-lime:hover{background:var(--lime-dark);transform:translateY(-2px);box-shadow:0 16px 40px rgba(200,244,90,0.4)}
+  
+.hero-bg-video video {
+  width: 100%;
+  height: 100%;
+  background-color: #0a0b10;
+  object-fit: cover;
+  object-position: top center;
+}
+.hero-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, #0a0b10 0%, rgba(10,11,16,0.5) 25%, rgba(10,11,16,0.03) 60%, transparent 100%);
+  z-index: 1;
+}
 
-/* ── NAV ── */
-nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);z-index:1000;transition:var(--transition),transform 0.3s ease}
-.nav-inner{height:100%;max-width:1260px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between}
-nav.scrolled{background:rgba(13,15,20,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.08)}
-.nav-logo{display:flex;align-items:center;gap:10px;font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:white}
-.nav-links{display:flex;align-items:center;gap:32px}
-.nav-links a{font-family:'Syne',sans-serif;font-weight:500;font-size:0.9rem;color:rgba(255,255,255,0.7);transition:color 0.2s;position:relative}
-.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:2px;background:var(--lime);transform:scaleX(0);transition:transform 0.3s cubic-bezier(0.16,1,0.3,1)}
-.nav-links a:hover{color:white}
-.nav-links a:hover::after{transform:scaleX(1)}
-.nav-cta{display:flex;align-items:center;gap:12px}
-.hamburger{display:none;flex-direction:column;gap:5px;padding:8px}
-.hamburger span{width:24px;height:2px;background:white;transition:var(--transition);display:block}
-.mobile-menu{position:fixed;top:var(--nav-h);left:0;right:0;bottom:0;background:var(--ink);z-index:999;padding:40px 24px;flex-direction:column;gap:12px;display:none;overflow-y:auto}
-.mobile-menu.open{display:flex}
-.mobile-menu a{font-family:'Syne',sans-serif;font-weight:600;font-size:1.5rem;padding:16px 0;border-bottom:1px solid rgba(255,255,255,0.1);color:white}
-.mobile-menu .mobile-cta{margin-top:32px}
-
-/* ── REVEAL ── */
-.reveal{opacity:0;transform:translateY(32px);transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1),transform 0.7s cubic-bezier(0.16,1,0.3,1)}
-.reveal.visible{opacity:1;transform:none}
-
-/* ── SECTION TAGS ── */
-.section-tag{display:flex;align-items:center;gap:10px;margin-bottom:20px}
-.tag-line{width:30px;height:2px;background:var(--teal)}
-
-/* ── MARQUEE ── */
-.marquee-section{background:var(--lime);padding:14px 0;overflow:hidden}
-.marquee-track{display:flex;gap:48px;width:max-content;animation:marquee 30s linear infinite;will-change:transform}
-@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-.marquee-item{display:flex;align-items:center;gap:12px;font-family:'Syne',sans-serif;font-weight:600;font-size:0.85rem;white-space:nowrap}
-.marquee-sep{width:4px;height:4px;background:var(--ink);border-radius:50%;opacity:0.4}
-
-/* ── HERO ── */
-.hero{position:relative;min-height:100vh;display:flex;align-items:center;padding-top:var(--nav-h);background:#0a0b10;overflow:hidden}
-.hero-bg-img{position:absolute;right:0;top:0;bottom:0;width:55%;background-image:url('images/herobg.png');background-size:164%;background-position:top center;background-repeat:no-repeat;z-index:0}
-.hero-bg-img::before{content:'';position:absolute;inset:0;background:linear-gradient(to right,#0a0b10 0%,rgba(10,11,16,0.5) 25%,rgba(10,11,16,0.03) 60%,transparent 100%)}
-.hero-bg-img::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,#0a0b10 0%,transparent 30%)}
+ .hero {
+  background: #1a1d2e;
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+}
+ 
 .hero-grid-overlay{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(200,244,90,0.05) 1px,transparent 1px);background-size:44px 44px;z-index:1;pointer-events:none}
 .hero-inner{width:100%;max-width:1260px;margin:0 auto;padding:80px 24px;position:relative;z-index:2}
 .hero-text{max-width:560px}
+.hero-eyebrow{margin-bottom:24px;display:flex;align-items:center;gap:12px}
+.hero-eyebrow .pill{background:rgba(200,244,90,0.15);color:var(--lime);border:1px solid rgba(200,244,90,0.3)}
 .hero-title{color:white;margin-bottom:24px}
 .hero-title em{color:var(--lime);font-style:normal;display:block}
 .hero-sub{color:rgba(255,255,255,0.65);font-size:1.1rem;font-weight:300;margin-bottom:40px;line-height:1.7}
@@ -99,152 +55,7 @@ nav.scrolled{background:rgba(13,15,20,0.95);backdrop-filter:blur(20px);-webkit-b
 .hero-stats{display:flex;gap:48px;border-top:1px solid rgba(255,255,255,0.1);padding-top:32px}
 .hero-stat-num{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:var(--lime)}
 .hero-stat-label{font-size:0.85rem;color:rgba(255,255,255,0.5);margin-top:2px}
-
-/* ── SOLUTIONS ── */
-.solutions{padding:100px 0;background:var(--surface)}
-.solutions-header{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:end;margin-bottom:80px}
-.solutions-right p{font-size:1.05rem;color:rgba(13,15,20,0.65);line-height:1.8}
-.solutions-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
-.sol-block{background:var(--white);padding:48px 36px;position:relative;overflow:hidden;transition:var(--transition);cursor:default}
-.sol-block:first-child{border-radius:var(--radius) 0 0 var(--radius)}
-.sol-block:last-child{border-radius:0 var(--radius) var(--radius) 0}
-.sol-block::before{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--lime);transform:scaleX(0);transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);transform-origin:left}
-.sol-block:hover::before{transform:scaleX(1)}
-.sol-block:hover{transform:translateY(-4px);box-shadow:0 20px 60px rgba(13,15,20,0.1)}
-.sol-num{font-family:'Syne',sans-serif;font-size:0.7rem;font-weight:700;color:var(--teal);letter-spacing:0.1em;margin-bottom:16px}
-.sol-icon{font-size:2.2rem;margin-bottom:20px}
-.sol-block h3{font-size:1.2rem;margin-bottom:12px}
-.sol-block p{font-size:0.9rem;color:rgba(13,15,20,0.6);line-height:1.7}
-
-/* ── SERVICES HIGHLIGHT ── */
-.services-highlight{padding:100px 0;background:var(--ink)}
-.sh-header{text-align:center;max-width:640px;margin:0 auto 72px;color:white}
-.sh-header .headline{color:white}
-.sh-header p{color:rgba(255,255,255,0.55);font-size:1.05rem;margin-top:16px}
-.sh-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.sh-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius);padding:36px 28px;transition:var(--transition);cursor:pointer;position:relative;overflow:hidden}
-.sh-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(200,244,90,0.08),transparent);opacity:0;transition:opacity 0.3s}
-.sh-card:hover{border-color:rgba(200,244,90,0.3);transform:translateY(-6px);box-shadow:0 24px 60px rgba(0,0,0,0.3)}
-.sh-card:hover::after{opacity:1}
-.sh-card-icon{width:52px;height:52px;border-radius:14px;background:rgba(200,244,90,0.1);display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:20px;transition:background 0.3s}
-.sh-card:hover .sh-card-icon{background:var(--lime)}
-.sh-card h3{font-size:1.05rem;color:white;margin-bottom:10px}
-.sh-card p{font-size:0.875rem;color:rgba(255,255,255,0.5);line-height:1.7}
-.sh-card-arrow{display:flex;align-items:center;gap:6px;color:var(--lime);font-size:0.8rem;font-weight:600;margin-top:20px;opacity:0;transform:translateX(-8px);transition:var(--transition);font-family:'Syne',sans-serif}
-.sh-card:hover .sh-card-arrow{opacity:1;transform:none}
-.sh-view-all{text-align:center;margin-top:48px}
-
-/* ── WHY ── */
-.why{padding:100px 0;background:var(--surface-2)}
-.why-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:80px;align-items:center}
-.why-left .headline{margin-bottom:24px}
-.why-left p{font-size:1.05rem;color:rgba(13,15,20,0.65);line-height:1.8;margin-bottom:36px}
-.why-pills{display:flex;flex-wrap:wrap;gap:10px}
-.why-features{display:flex;flex-direction:column;gap:20px}
-.why-feat{background:var(--white);border-radius:var(--radius);padding:28px 28px 28px 24px;display:flex;gap:20px;align-items:flex-start;border-left:3px solid transparent;transition:var(--transition)}
-.why-feat:hover{border-left-color:var(--lime);transform:translateX(6px)}
-.why-feat-icon{width:44px;height:44px;background:var(--lime);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
-.why-feat-text h4{font-size:1rem;margin-bottom:6px}
-.why-feat-text p{font-size:0.875rem;color:rgba(13,15,20,0.6)}
-
-/* ── AUDIENCE ── */
-.audience{padding:100px 0;background:var(--surface)}
-.audience-header{text-align:center;max-width:560px;margin:0 auto 60px}
-.audience-tabs{display:flex;justify-content:center;gap:8px;margin-bottom:56px}
-.audience-tab{padding:10px 24px;border-radius:100px;font-family:'Syne',sans-serif;font-weight:600;font-size:0.9rem;border:2px solid var(--ink-10);color:var(--ink-40);transition:var(--transition);cursor:pointer}
-.audience-tab.active{background:var(--ink);color:var(--lime);border-color:var(--ink)}
-.audience-content{display:none}
-.audience-content.active{display:grid;grid-template-columns:1.2fr 1fr;gap:80px;align-items:center}
-.audience-text h3{font-size:1.8rem;margin-bottom:20px}
-.audience-text p{color:rgba(13,15,20,0.65);line-height:1.8;margin-bottom:28px}
-.audience-list{display:flex;flex-direction:column;gap:12px}
-.audience-li{display:flex;align-items:flex-start;gap:12px;font-size:0.95rem}
-.aud-check{width:22px;height:22px;background:var(--lime);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.65rem;margin-top:2px}
-.audience-visual{background:var(--ink);border-radius:24px;padding:40px;min-height:320px;display:flex;flex-direction:column;gap:16px}
-.aud-vis-title{font-family:'Syne',sans-serif;font-weight:700;color:white;margin-bottom:8px}
-.aud-item{background:rgba(255,255,255,0.07);border-radius:12px;padding:16px 20px}
-.aud-item-label{font-size:0.75rem;color:rgba(255,255,255,0.4);margin-bottom:6px}
-.aud-item-val{font-family:'Syne',sans-serif;font-weight:600;color:var(--lime)}
-
-/* ── TESTIMONIALS ── */
-.testimonials{padding:100px 0;background:var(--ink)}
-.test-header{text-align:center;margin-bottom:72px}
-.test-header .headline{color:white}
-.test-header p{color:rgba(255,255,255,0.5);margin-top:12px}
-.test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.test-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius);padding:36px 28px;transition:var(--transition)}
-.test-card:hover{border-color:rgba(200,244,90,0.2);transform:translateY(-4px)}
-.test-stars{display:flex;gap:4px;color:var(--lime);font-size:0.85rem;margin-bottom:20px}
-.test-quote{font-size:0.95rem;color:rgba(255,255,255,0.75);line-height:1.8;margin-bottom:24px;font-style:italic}
-.test-author{display:flex;align-items:center;gap:12px}
-.test-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--lime),var(--teal));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;color:var(--ink)}
-.test-name{font-family:'Syne',sans-serif;font-weight:600;font-size:0.9rem;color:white}
-.test-role{font-size:0.8rem;color:rgba(255,255,255,0.4)}
-
-/* ── CTA SECTION ── */
-.cta-section{padding:100px 0;background:linear-gradient(135deg,var(--lime) 0%,#a0e840 100%);position:relative;overflow:hidden}
-.cta-section::before{content:'';position:absolute;top:-50%;right:-10%;width:500px;height:500px;border-radius:50%;background:rgba(255,255,255,0.15);pointer-events:none}
-.cta-inner{text-align:center;position:relative;z-index:1}
-.cta-inner .headline{font-size:clamp(2.2rem,5vw,4rem)}
-.cta-inner p{font-size:1.1rem;color:rgba(13,15,20,0.7);margin:20px auto 40px;max-width:520px}
-.cta-btns{display:flex;justify-content:center;flex-wrap:wrap;gap:14px}
-
-/* ── FOOTER ── */
-footer{background:#080a0f;color:white;padding:80px 0 40px}
-.footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:60px;margin-bottom:60px}
-.footer-brand p{font-size:0.9rem;color:rgba(255,255,255,0.45);line-height:1.8;margin-top:16px;max-width:260px}
-.footer-col h4{font-family:'Syne',sans-serif;font-weight:600;font-size:0.85rem;color:rgba(255,255,255,0.5);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:20px}
-.footer-col li{margin-bottom:12px}
-.footer-col a{font-size:0.9rem;color:rgba(255,255,255,0.6);transition:color 0.2s}
-.footer-col a:hover{color:var(--lime)}
-.footer-bottom{border-top:1px solid rgba(255,255,255,0.08);padding-top:32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
-.footer-bottom p{font-size:0.85rem;color:rgba(255,255,255,0.3)}
-.footer-social a{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.85rem;transition:var(--transition)}
-.footer-social a[title="Facebook"]{background:#1877F2;color:white}
-.footer-social a[title="Facebook"]:hover{background:#0d65d9;transform:translateY(-3px)}
-.footer-social a[title="TikTok"]{background:#010101;color:white;border:1px solid #333}
-.footer-social a[title="TikTok"]:hover{background:#ff0050;transform:translateY(-3px)}
-.footer-social a[title="WhatsApp"]{background:#25D366;color:white}
-.footer-social a[title="WhatsApp"]:hover{background:#1da851;transform:translateY(-3px)}
-.footer-social{display:flex;flex-direction:row;gap:12px;align-items:center}
-.footer-contact{font-size:0.85rem;color:rgba(255,255,255,0.45)}
-.footer-contact span{color:var(--lime)}
-
-/* ── RESPONSIVE ── */
-@media(max-width:1024px){
-  .solutions-grid{grid-template-columns:1fr 1fr}
-  .sh-grid{grid-template-columns:1fr 1fr}
-  .why-grid{grid-template-columns:1fr}
-  .audience-content.active{grid-template-columns:1fr}
-  .test-grid{grid-template-columns:1fr 1fr}
-  .footer-grid{grid-template-columns:1fr 1fr;gap:40px}
-  .solutions-header{grid-template-columns:1fr}
-}
-@media(max-width:768px){
-  .nav-links,.nav-cta{display:none}
-  .hamburger{display:flex}
-  .solutions-grid{grid-template-columns:1fr}
-  .sol-block{border-radius:0!important}
-  .sol-block:first-child{border-radius:var(--radius) var(--radius) 0 0!important}
-  .sol-block:last-child{border-radius:0 0 var(--radius) var(--radius)!important}
-  .sh-grid{grid-template-columns:1fr}
-  .test-grid{grid-template-columns:1fr}
-  .footer-grid{grid-template-columns:1fr}
-  .why-grid{grid-template-columns:1fr}
-  .audience-content.active{grid-template-columns:1fr}
-  .footer-bottom{flex-direction:column;text-align:center}
-}
-@media(max-width:480px){
-  .hero-btns{flex-direction:column}
-  .btn{width:100%;justify-content:center}
-}
-@media(prefers-reduced-motion:reduce){
-  .marquee-track{animation:none}
-  .reveal{transition:none}
-}
-
-/* ========== LOADER STYLES ========== */
-:root {
+  :root {
   --blue: #4BCFFA;
   --blue-dim: rgba(75,207,250,0.18);
   --blue-glow: rgba(75,207,250,0.55);
@@ -257,65 +68,144 @@ footer{background:#080a0f;color:white;padding:80px 0 40px}
   --text: #cde8f8;
   --text-dim: rgba(205,232,248,0.45);
 }
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-html, body { width:100%; height:100%; background: var(--navy); font-family: 'DM Sans', sans-serif; overflow: hidden; }
-#loader {
+
+/* LOADER OVERLAY */
+#page-loader {
   position: fixed; inset: 0; z-index: 9999;
   background: radial-gradient(ellipse 80% 60% at 50% 40%, #0E1B2E 0%, #080C10 100%);
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   transition: opacity 0.8s ease, visibility 0.8s ease;
 }
-#loader.done { opacity:0; visibility:hidden; pointer-events:none; }
-#loader::before {
-  content:''; position:absolute; inset:0;
-  background-image: linear-gradient(rgba(75,207,250,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(75,207,250,0.03) 1px, transparent 1px);
-  background-size: 48px 48px;
-  pointer-events:none;
-}
-.corner { position:absolute; width:80px; height:80px; opacity:.35; }
-.corner svg { width:100%; height:100%; }
-.corner.tl { top:24px; left:24px; }
-.corner.tr { top:24px; right:24px; transform:scaleX(-1); }
-.corner.bl { bottom:24px; left:24px; transform:scaleY(-1); }
-.corner.br { bottom:24px; right:24px; transform:scale(-1); }
-#canvas-wrap { position: relative; width: 520px; height: 520px; flex-shrink: 0; }
-#scene { width:100%; height:100%; }
-#status-zone { position: absolute; bottom: 48px; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; gap: 14px; }
-#status-text { font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); font-weight: 500; }
-#status-text span { color: var(--blue); }
-#progress-bar-wrap { width: min(380px, 80vw); height: 3px; background: rgba(75,207,250,0.1); border-radius: 99px; overflow: hidden; position: relative; }
-#progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--blue) 0%, var(--gold-light) 100%); border-radius: 99px; transition: width 0.15s linear; box-shadow: 0 0 10px var(--blue-glow); position: relative; }
-#progress-bar::after { content:''; position:absolute; right:0; top:-2px; width:8px; height:7px; border-radius:50%; background: var(--gold-light); box-shadow: 0 0 8px 2px var(--gold-light); }
-#pct { font-size: 12px; color: var(--gold-light); font-family: 'Space Grotesk', sans-serif; letter-spacing: 0.08em; font-weight: 500; }
-@keyframes dots { 0%,20% { content:'.' } 40%,60% { content:'..' } 80%,100% { content:'...' } }
-.dots::after { content:'.'; animation: dots 1.4s steps(1) infinite; }
-body.mt-loader-active > *:not(#loader) { visibility: hidden; }
-@media (max-width: 560px) { #canvas-wrap { width: 340px; height: 340px; } }
+#page-loader.done { opacity: 0; visibility: hidden; pointer-events: none; }
 
-/* ========== CHATBOT STYLES (minimal, kept for compatibility) ========== */
-#mtPanel, .mt-open-btn { display: none !important; }
+/* subtle grid overlay */
+#page-loader::before {
+  content: ''; position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(75,207,250,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(75,207,250,0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+}
+
+.corner { position: absolute; width: 80px; height: 80px; opacity: 0.35; }
+.corner svg { width: 100%; height: 100%; }
+.corner.tl { top: 24px; left: 24px; }
+.corner.tr { top: 24px; right: 24px; transform: scaleX(-1); }
+.corner.bl { bottom: 24px; left: 24px; transform: scaleY(-1); }
+.corner.br { bottom: 24px; right: 24px; transform: scale(-1); }
+
+#canvas-wrap {
+  position: relative;
+  width: 520px; height: 520px;
+  flex-shrink: 0;
+}
+#loader-scene { width: 100%; height: 100%; }
+
+#status-zone {
+  position: absolute;
+  bottom: 48px; left: 0; right: 0;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+}
+#status-text {
+  font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--text-dim); font-weight: 500;
+  font-family: 'DM Sans', sans-serif;
+}
+#status-text span { color: var(--blue); }
+
+#progress-bar-wrap {
+  width: min(380px, 80vw);
+  height: 3px;
+  background: rgba(75,207,250,0.1);
+  border-radius: 99px; overflow: hidden;
+}
+#progress-bar {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--blue) 0%, var(--gold-light) 100%);
+  border-radius: 99px;
+  transition: width 0.15s linear;
+  box-shadow: 0 0 10px var(--blue-glow);
+  position: relative;
+}
+#progress-bar::after {
+  content: '';
+  position: absolute; right: 0; top: -2px;
+  width: 8px; height: 7px; border-radius: 50%;
+  background: var(--gold-light);
+  box-shadow: 0 0 8px 2px var(--gold-light);
+}
+#pct {
+  font-size: 12px; color: var(--gold-light);
+  font-family: 'Space Grotesk', sans-serif;
+  letter-spacing: 0.08em; font-weight: 500;
+}
+
+@keyframes dots {
+  0%,20%   { content: '.' }
+  40%,60%  { content: '..' }
+  80%,100% { content: '...' }
+}
+.dots::after {
+  content: '.';
+  animation: dots 1.4s steps(1) infinite;
+}
+
+/* Hide main content until loader finishes */
+#main-content {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+#main-content.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+@media (max-width: 560px) {
+  #canvas-wrap { width: 340px; height: 340px; }
+}
+@media(max-width:1024px){.hero-bg-video{width:100%;opacity:0.35}}
+@media(max-width:768px){.hero-bg-video{width:100%;opacity:0.25}.hero-stats{gap:24px}}
+@media(max-width:480px){.hero-btns{flex-direction:column}}
+  /* Eliminate any white edge / gap around the video */
+.hero-bg-video {
+  background: #0a0b10;  /* dark fallback behind video */
+}
+
+.hero-bg-video video {
+  display: block;
+  border: none;
+  outline: none;
+  margin: 0;
+  padding: 0;
+  background-color: black; /* prevents white flash from video itself */
+}
 </style>
 </head>
-<body class="mt-loader-active">
+<body>
+  <!-- LOADER  -->
+<div id="page-loader">
 
-<!-- LOADER -->
-<div id="loader">
+  <!-- Corner decorations -->
   <div class="corner tl"><svg viewBox="0 0 80 80" fill="none"><path d="M4 76 L4 4 L76 4" stroke="#4BCFFA" stroke-width="1.5" stroke-linecap="round"/><circle cx="4" cy="4" r="3" fill="#C8992E"/></svg></div>
   <div class="corner tr"><svg viewBox="0 0 80 80" fill="none"><path d="M4 76 L4 4 L76 4" stroke="#4BCFFA" stroke-width="1.5" stroke-linecap="round"/><circle cx="4" cy="4" r="3" fill="#C8992E"/></svg></div>
   <div class="corner bl"><svg viewBox="0 0 80 80" fill="none"><path d="M4 76 L4 4 L76 4" stroke="#4BCFFA" stroke-width="1.5" stroke-linecap="round"/><circle cx="4" cy="4" r="3" fill="#C8992E"/></svg></div>
   <div class="corner br"><svg viewBox="0 0 80 80" fill="none"><path d="M4 76 L4 4 L76 4" stroke="#4BCFFA" stroke-width="1.5" stroke-linecap="round"/><circle cx="4" cy="4" r="3" fill="#C8992E"/></svg></div>
+
+  <!-- Canvas / SVG Animation -->
   <div id="canvas-wrap">
-    <svg id="scene" viewBox="0 0 520 520" xmlns="http://www.w3.org/2000/svg">
+    <svg id="loader-scene" viewBox="0 0 520 520" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <filter id="glow-blue" x="-60%" y="-60%" width="220%" height="220%">
           <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur"/>
-          <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.3 0 0 0 0 0.8 0 0 0 0 1 0 0 0 0.9 0"/>
+          <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.3   0 0 0 0 0.8   0 0 0 0 1   0 0 0 0.9 0"/>
           <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
         </filter>
         <filter id="glow-gold" x="-60%" y="-60%" width="220%" height="220%">
           <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur"/>
-          <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.8 0 0 0 0 0.55 0 0 0 0 0.1 0 0 0 0.9 0"/>
+          <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.8   0 0 0 0 0.55   0 0 0 0 0.1   0 0 0 0.9 0"/>
           <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
         </filter>
         <filter id="glow-node" x="-80%" y="-80%" width="260%" height="260%">
@@ -334,20 +224,26 @@ body.mt-loader-active > *:not(#loader) { visibility: hidden; }
           <stop offset="100%" stop-color="#C8992E" stop-opacity=".7"/>
         </linearGradient>
       </defs>
+
       <circle cx="260" cy="260" r="240" fill="url(#bg-radial)"/>
+
       <g id="rings">
-        <circle class="ring" cx="260" cy="260" r="70" fill="none" stroke="#4BCFFA" stroke-width="1" opacity="0"/>
+        <circle class="ring" cx="260" cy="260" r="70"  fill="none" stroke="#4BCFFA" stroke-width="1" opacity="0"/>
         <circle class="ring" cx="260" cy="260" r="100" fill="none" stroke="#4BCFFA" stroke-width=".7" opacity="0"/>
         <circle class="ring" cx="260" cy="260" r="140" fill="none" stroke="#4BCFFA" stroke-width=".5" opacity="0"/>
       </g>
+
       <circle cx="260" cy="260" r="170" fill="none" stroke="rgba(75,207,250,0.08)" stroke-width="1" stroke-dasharray="4 6"/>
+
       <g id="connections"></g>
       <g id="particles"></g>
       <g id="nodes"></g>
+      
       <g id="logo-group">
         <circle cx="260" cy="260" r="62" fill="#4BCFFA" opacity=".08" filter="url(#soft-glow)"/>
         <circle cx="260" cy="260" r="56" fill="#0E1B2E" stroke="rgba(75,207,250,0.3)" stroke-width="1.5"/>
         <circle cx="260" cy="260" r="56" fill="none" stroke="#4BCFFA" stroke-width=".5" opacity=".5" filter="url(#glow-blue)"/>
+        
         <g transform="translate(225, 248) scale(0.6)" opacity="0.4">
           <circle cx="0" cy="0" r="8" fill="none" stroke="#C8992E" stroke-width="2"/>
           <circle cx="0" cy="0" r="4" fill="none" stroke="#C8992E" stroke-width="1.5"/>
@@ -356,6 +252,7 @@ body.mt-loader-active > *:not(#loader) { visibility: hidden; }
           <line x1="-12" y1="0" x2="-8" y2="0" stroke="#C8992E" stroke-width="2"/>
           <line x1="8" y1="0" x2="12" y2="0" stroke="#C8992E" stroke-width="2"/>
         </g>
+        
         <rect x="240" y="242" width="40" height="28" rx="3" fill="#0E1B2E" stroke="#4BCFFA" stroke-width="1.5" filter="url(#glow-blue)"/>
         <rect x="243" y="245" width="34" height="22" rx="2" fill="#080C10" opacity="0.4"/>
         <path d="M250 256 L255 261 L270 248" stroke="#E8B84B" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow-gold)"/>
@@ -365,24 +262,28 @@ body.mt-loader-active > *:not(#loader) { visibility: hidden; }
       </g>
     </svg>
   </div>
+
   <div id="status-zone">
-    <div id="status-text">Connecting you to <span>Mellow Tech Services</span><span class="dots"></span></div>
-    <div id="progress-bar-wrap"><div id="progress-bar"></div></div>
+    <div id="status-text">Loading <span>Mellow Tech Services</span><span class="dots"></span></div>
+    <div id="progress-bar-wrap">
+      <div id="progress-bar"></div>
+    </div>
     <div id="pct">0%</div>
   </div>
 </div>
+<!-- END LOADER -->
 
-<!-- SITE CONTENT -->
+<!-- NAV -->
 <nav id="navbar">
   <div class="nav-inner">
     <a class="nav-logo" href="index.html">
       <img src="images/logo.png" style="height:50px;width:auto;" alt="logo">
     </a>
     <div class="nav-links">
-      <a href="index.html" id="nav-home" class="active">Home</a>
-      <a href="services.html" id="nav-services">Services</a>
-      <a href="about.html" id="nav-about">About</a>
-      <a href="contact.html" id="nav-contact">Contact</a>
+      <a href="index.html" class="active">Home</a>
+      <a href="services.html">Services</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
     </div>
     <div class="nav-cta">
       <a class="btn btn-primary" href="contact.html">Get Support ↗</a>
@@ -393,6 +294,7 @@ body.mt-loader-active > *:not(#loader) { visibility: hidden; }
   </div>
 </nav>
 
+<!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobileMenu">
   <a href="index.html">Home</a>
   <a href="services.html">Services</a>
@@ -403,13 +305,24 @@ body.mt-loader-active > *:not(#loader) { visibility: hidden; }
   </div>
 </div>
 
-<!-- HERO SECTION -->
+<!-- HERO -->
 <section class="hero">
-  <div class="hero-bg-img"></div>
-  <div class="hero-grid-overlay"></div>
+  <div class="hero-bg-video">
+  <!-- Corrected paths: lowercase folder + root fallback -->
+  <video autoplay muted loop playsinline poster="images/herobg.jpg">
+    <source src="video/backvid.mp4" type="video/mp4">
+    <source src="backvid.mp4" type="video/mp4">
+  </video>
+  <div class="hero-bg-overlay"></div>
+</div>
+<div class="hero-grid-overlay"></div>
   <div class="hero-inner">
     <div class="hero-text">
-      <h1 class="display hero-title">Simple Tech Solutions for <em>Work, School &amp; Business</em></h1>
+      <div class="hero-eyebrow"></div>
+      <h1 class="display hero-title">
+        Simple Tech Solutions for
+        <em>Work, School &amp; Business</em>
+      </h1>
       <p class="hero-sub">Tech Support for Polokwane and Remote Areas (Online Services Available).</p>
       <div class="hero-btns">
         <a class="btn btn-lime" href="contact.html">Get Tech Support →</a>
@@ -437,7 +350,6 @@ body.mt-loader-active > *:not(#loader) { visibility: hidden; }
     <span class="marquee-item">Assignment Help <span class="marquee-sep"></span></span>
     <span class="marquee-item">CV Design &amp; Revamp <span class="marquee-sep"></span></span>
     <span class="marquee-item">Business Digital Setup <span class="marquee-sep"></span></span>
-    <!-- duplicate for seamless loop -->
     <span class="marquee-item">Windows Installation <span class="marquee-sep"></span></span>
     <span class="marquee-item">Microsoft Office Setup <span class="marquee-sep"></span></span>
     <span class="marquee-item">PC Troubleshooting <span class="marquee-sep"></span></span>
@@ -455,13 +367,18 @@ body.mt-loader-active > *:not(#loader) { visibility: hidden; }
 <section class="solutions">
   <div class="container">
     <div class="solutions-header reveal">
-      <div><div class="section-tag"><div class="tag-line"></div><span class="label">What We Do</span></div><h2 class="headline">Technology solutions that actually work</h2></div>
-      <div class="solutions-right"><p>Whether you're a student struggling with an assignment, a professional who needs a polished CV, or a business ready to go digital, we've got you covered with fast, reliable, and affordable tech support.</p></div>
+      <div>
+        <div class="section-tag"><div class="tag-line"></div><span class="label">What We Do</span></div>
+        <h2 class="headline">Technology solutions that actually work</h2>
+      </div>
+      <div class="solutions-right">
+        <p>Whether you're a student struggling with an assignment, a professional who needs a polished CV, or a business ready to go digital, we've got you covered with fast, reliable, and affordable tech support.</p>
+      </div>
     </div>
     <div class="solutions-grid reveal">
-      <div class="sol-block"><div class="sol-num">01</div><div class="sol-icon">🖥️</div><h3>PC Support &amp; Repair</h3><p>Windows installation, virus removal, driver updates, and troubleshooting — we keep your machine running at peak performance.</p></div>
+      <div class="sol-block"><div class="sol-num">01</div><div class="sol-icon">🖥️</div><h3>PC Support &amp; Repair</h3><p>Windows installation, virus removal, driver updates, and troubleshooting, we keep your machine running at peak performance.</p></div>
       <div class="sol-block"><div class="sol-num">02</div><div class="sol-icon">🎨</div><h3>Creative Services</h3><p>Professional graphic design, CV revamps, and web development that make you look great and stand out from the crowd.</p></div>
-      <div class="sol-block"><div class="sol-num">03</div><div class="sol-icon">🚀</div><h3>Business Digitization</h3><p>Get your business fully set up online — from digital presence and email to software tools and professional branding.</p></div>
+      <div class="sol-block"><div class="sol-num">03</div><div class="sol-icon">🚀</div><h3>Business Digitization</h3><p>Get your business fully set up online , from digital presence and email to software tools and professional branding.</p></div>
     </div>
   </div>
 </section>
@@ -475,40 +392,55 @@ body.mt-loader-active > *:not(#loader) { visibility: hidden; }
       <p>From fixing your PC to designing your dream website — our team handles it all with care and expertise.</p>
     </div>
     <div class="sh-grid reveal">
-      <a href="services.html#windows" class="sh-card"><div class="sh-card-icon">💻</div><h3>Windows Installation</h3><p>Clean OS installation with full driver setup and activation.</p><div class="sh-card-arrow">Learn more →</div></a>
-      <a href="services.html#office" class="sh-card"><div class="sh-card-icon">📊</div><h3>Microsoft Office</h3><p>Full Office suite installation and activation — Word, Excel, PowerPoint.</p><div class="sh-card-arrow">Learn more →</div></a>
-      <a href="services.html#troubleshoot" class="sh-card"><div class="sh-card-icon">🔧</div><h3>PC Troubleshooting</h3><p>Diagnose and fix slow PCs, crashes, viruses, and errors.</p><div class="sh-card-arrow">Learn more →</div></a>
-      <a href="services.html#software" class="sh-card"><div class="sh-card-icon">⚙️</div><h3>Software &amp; Drivers</h3><p>Installation of any software, apps, and device drivers.</p><div class="sh-card-arrow">Learn more →</div></a>
-      <a href="services.html#design" class="sh-card"><div class="sh-card-icon">🎨</div><h3>Graphic Design</h3><p>Logos, flyers, social media graphics, and more.</p><div class="sh-card-arrow">Learn more →</div></a>
-      <a href="services.html#web" class="sh-card"><div class="sh-card-icon">🌐</div><h3>Web Development</h3><p>Modern, responsive websites for businesses and portfolios.</p><div class="sh-card-arrow">Learn more →</div></a>
+      <a class="sh-card" href="service-windows.html"><div class="sh-card-icon">💻</div><h3>Windows Installation</h3><p>Clean OS installation with full driver setup and activation. Get a fresh, fast system in no time.</p><div class="sh-card-arrow">Learn more →</div></a>
+      <a class="sh-card" href="service-office.html"><div class="sh-card-icon">📊</div><h3>Microsoft Office</h3><p>Full Office suite installation and activation , Word, Excel, PowerPoint, and more, ready to use.</p><div class="sh-card-arrow">Learn more →</div></a>
+      <a class="sh-card" href="service-troubleshoot.html"><div class="sh-card-icon">🔧</div><h3>PC Troubleshooting</h3><p>Diagnose and fix slow PCs, crashes, viruses, and errors , comprehensive repair service.</p><div class="sh-card-arrow">Learn more →</div></a>
+      <a class="sh-card" href="service-software.html"><div class="sh-card-icon">⚙️</div><h3>Software &amp; Drivers</h3><p>Installation of any software, apps, and device drivers to keep your system fully functional.</p><div class="sh-card-arrow">Learn more →</div></a>
+      <a class="sh-card" href="service-design.html"><div class="sh-card-icon">🎨</div><h3>Graphic Design</h3><p>Logos, flyers, social media graphics, and more , creative designs that capture your brand.</p><div class="sh-card-arrow">Learn more →</div></a>
+      <a class="sh-card" href="service-web.html"><div class="sh-card-icon">🌐</div><h3>Web Development</h3><p>Modern, responsive websites built for businesses, portfolios, and personal brands.</p><div class="sh-card-arrow">Learn more →</div></a>
     </div>
-    <div class="sh-view-all reveal"><a class="btn btn-outline" style="color:white;border-color:rgba(255,255,255,0.25)" href="services.html">View All 9 Services →</a></div>
+    <div class="sh-view-all reveal">
+      <a class="btn btn-outline" style="color:white;border-color:rgba(255,255,255,0.25)" href="services.html">View All 9 Services →</a>
+    </div>
   </div>
 </section>
 
-<!-- WHY US -->
+<!-- WHY -->
 <section class="why">
   <div class="container">
     <div class="why-grid">
-      <div class="why-left reveal"><div class="section-tag"><div class="tag-line"></div><span class="label">Why Mellow Tech</span></div><h2 class="headline">Tech support that's actually stress-free</h2><p>We believe technology should be simple, not scary. Our friendly team speaks plain English, works fast, and makes sure you understand exactly what's happening every step of the way.</p><div class="why-pills"><span class="pill pill-lime">✓ Fast Turnaround</span><span class="pill pill-teal">✓ Affordable Pricing</span><span class="pill">✓ Expert Team</span><span class="pill">✓ Ongoing Support</span></div></div>
+      <div class="why-left reveal">
+        <div class="section-tag"><div class="tag-line"></div><span class="label">Why Mellow Tech</span></div>
+        <h2 class="headline">Tech support that's actually stress-free</h2>
+        <p>We believe technology should be simple, not scary. Our friendly team speaks plain English, works fast, and makes sure you understand exactly what's happening every step of the way.</p>
+        <div class="why-pills">
+          <span class="pill pill-lime">✓ Fast Turnaround</span>
+          <span class="pill pill-teal">✓ Affordable Pricing</span>
+          <span class="pill">✓ Expert Team</span>
+          <span class="pill">✓ Ongoing Support</span>
+        </div>
+      </div>
       <div class="why-features reveal">
-        <div class="why-feat"><div class="why-feat-icon">⚡</div><div class="why-feat-text"><h4>Fast Turnaround Times</h4><p>Most jobs completed same-day or within 24 hours.</p></div></div>
-        <div class="why-feat"><div class="why-feat-icon">💬</div><div class="why-feat-text"><h4>Clear Communication</h4><p>No tech jargon. We explain everything in plain language.</p></div></div>
-        <div class="why-feat"><div class="why-feat-icon">💰</div><div class="why-feat-text"><h4>Affordable &amp; Transparent</h4><p>Fair, upfront pricing with no hidden fees.</p></div></div>
-        <div class="why-feat"><div class="why-feat-icon">🛡️</div><div class="why-feat-text"><h4>Satisfaction Guaranteed</h4><p>We don't stop until you're happy.</p></div></div>
+        <div class="why-feat"><div class="why-feat-icon">⚡</div><div class="why-feat-text"><h4>Fast Turnaround Times</h4><p>Most jobs completed same-day or within 24 hours. We respect your time and work efficiently.</p></div></div>
+        <div class="why-feat"><div class="why-feat-icon">💬</div><div class="why-feat-text"><h4>Clear Communication</h4><p>No tech jargon. We explain everything in plain language so you know exactly what's going on.</p></div></div>
+        <div class="why-feat"><div class="why-feat-icon">💰</div><div class="why-feat-text"><h4>Affordable &amp; Transparent</h4><p>Fair, upfront pricing with no hidden fees. You'll always know the cost before we start.</p></div></div>
+        <div class="why-feat"><div class="why-feat-icon">🛡️</div><div class="why-feat-text"><h4>Satisfaction Guaranteed</h4><p>We don't stop until you're happy. If there's an issue after the job, we'll sort it out for free.</p></div></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- AUDIENCE TABS (JavaScript handled inline) -->
+<!-- AUDIENCE -->
 <section class="audience">
   <div class="container">
-    <div class="audience-header reveal"><div class="section-tag" style="justify-content:center"><div class="tag-line"></div><span class="label">Who We Help</span></div><h2 class="headline">Built for students, professionals &amp; businesses</h2></div>
+    <div class="audience-header reveal">
+      <div class="section-tag" style="justify-content:center"><div class="tag-line"></div><span class="label">Who We Help</span></div>
+      <h2 class="headline">Built for students, professionals &amp; businesses</h2>
+    </div>
     <div class="audience-tabs reveal">
-      <button class="audience-tab active" data-tab="students">Students</button>
-      <button class="audience-tab" data-tab="professionals">Professionals</button>
-      <button class="audience-tab" data-tab="businesses">Businesses</button>
+      <button class="audience-tab active" onclick="switchTab('students',event)">Students</button>
+      <button class="audience-tab" onclick="switchTab('professionals',event)">Professionals</button>
+      <button class="audience-tab" onclick="switchTab('businesses',event)">Businesses</button>
     </div>
     <div class="audience-content active" id="tab-students">
       <div class="audience-text"><h3>Making student life easier</h3><p>Deadlines are stressful enough without tech problems slowing you down. We help students stay productive with fast, affordable tech support that fits a student budget.</p><div class="audience-list"><div class="audience-li"><div class="aud-check">✓</div><span>Assignment assistance and formatting help</span></div><div class="audience-li"><div class="aud-check">✓</div><span>Windows &amp; Office installation for laptops</span></div><div class="audience-li"><div class="aud-check">✓</div><span>Virus removal and speed optimization</span></div><div class="audience-li"><div class="aud-check">✓</div><span>CV design for internships and job applications</span></div></div><div style="margin-top:32px"><a class="btn btn-primary" href="contact.html">Get Student Support →</a></div></div>
@@ -528,7 +460,11 @@ body.mt-loader-active > *:not(#loader) { visibility: hidden; }
 <!-- TESTIMONIALS -->
 <section class="testimonials">
   <div class="container">
-    <div class="test-header reveal"><div class="section-tag" style="justify-content:center"><div class="tag-line"></div><span class="label" style="color:rgba(255,255,255,0.4)">Reviews</span></div><h2 class="headline">What our clients say</h2><p>Real feedback from real people we've helped.</p></div>
+    <div class="test-header reveal">
+      <div class="section-tag" style="justify-content:center"><div class="tag-line"></div><span class="label" style="color:rgba(255,255,255,0.4)">Reviews</span></div>
+      <h2 class="headline">What our clients say</h2>
+      <p>Real feedback from real people we've helped.</p>
+    </div>
     <div class="test-grid reveal">
       <div class="test-card"><div class="test-stars">★★★★★</div><p class="test-quote">"My laptop was so slow it was practically useless. Mellow Tech fixed everything in a few hours — it now runs like it's brand new. Honestly amazing service."</p><div class="test-author"><div class="test-avatar">TM</div><div><div class="test-name">Thabo M.</div><div class="test-role">University Student</div></div></div></div>
       <div class="test-card"><div class="test-stars">★★★★★</div><p class="test-quote">"They redesigned my CV and I got called for three interviews within a week. Professional, fast, and the design looked absolutely incredible."</p><div class="test-author"><div class="test-avatar">PN</div><div><div class="test-name">Precious N.</div><div class="test-role">Job Seeker</div></div></div></div>
@@ -543,7 +479,15 @@ body.mt-loader-active > *:not(#loader) { visibility: hidden; }
 <!-- CTA -->
 <section class="cta-section">
   <div class="container">
-    <div class="cta-inner reveal"><div class="section-tag" style="justify-content:center;margin-bottom:16px"><div class="tag-line" style="background:rgba(13,15,20,0.3)"></div><span class="label">Get Started Today</span></div><h2 class="headline">Ready to sort out your tech?</h2><p>Tell us what you need and we'll take it from there. Fast, friendly, and affordable tech solutions — one message away.</p><div class="cta-btns"><a class="btn btn-primary" href="contact.html">Contact Us Now →</a><a class="btn btn-outline" href="services.html">Browse Services</a></div></div>
+    <div class="cta-inner reveal">
+      <div class="section-tag" style="justify-content:center;margin-bottom:16px"><div class="tag-line" style="background:rgba(13,15,20,0.3)"></div><span class="label">Get Started Today</span></div>
+      <h2 class="headline">Ready to sort out your tech?</h2>
+      <p>Tell us what you need and we'll take it from there. Fast, friendly, and affordable tech solutions — one message away.</p>
+      <div class="cta-btns">
+        <a class="btn btn-primary" href="contact.html">Contact Us Now →</a>
+        <a class="btn btn-outline" href="services.html">Browse Services</a>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -551,271 +495,73 @@ body.mt-loader-active > *:not(#loader) { visibility: hidden; }
 <footer>
   <div class="container">
     <div class="footer-grid">
-      <div class="footer-brand"><div class="nav-logo" style="margin-bottom:16px"><span>Mellow Tech Services</span></div><p>Simple, affordable technology solutions for students, professionals, and businesses. We make tech easy for everyone.</p><div class="footer-contact" style="margin-top:20px">📧 <span>mellowtech@email.com</span><br><span style="display:block;margin-top:6px">📱 <span>+27 720 465 993</span></span></div></div>
-      <div class="footer-col"><h4>Services</h4><ul><li><a href="services.html#windows">Windows Installation</a></li><li><a href="services.html#office">Microsoft Office</a></li><li><a href="services.html#troubleshoot">PC Troubleshooting</a></li><li><a href="services.html#software">Software &amp; Drivers</a></li><li><a href="services.html#design">Graphic Design</a></li></ul></div>
-      <div class="footer-col"><h4>More Services</h4><ul><li><a href="services.html#web">Web Development</a></li><li><a href="services.html#assignment">Assignment Help</a></li><li><a href="services.html#cv">CV Design</a></li><li><a href="services.html#business">Business Digital Setup</a></li></ul></div>
-      <div class="footer-col"><h4>Company</h4><ul><li><a href="about.html">About Us</a></li><li><a href="contact.html">Contact</a></li><li><a href="services.html">All Services</a></li></ul></div>
+      <div class="footer-brand">
+        <div class="nav-logo" style="margin-bottom:16px"><span>Mellow Tech Services</span></div>
+        <p>Simple, affordable technology solutions for students, professionals, and businesses. We make tech easy for everyone.</p>
+        <div class="footer-contact" style="margin-top:20px">📧 <span>info@mellowtech.co.za</span></span><br><span style="display:block;margin-top:6px">📱 <span>+27 720 465 993</span></span></div>
+      </div>
+      <div class="footer-col"><h4>Services</h4><ul>
+        <li><a href="service-windows.html">Windows Installation</a></li>
+        <li><a href="service-office.html">Microsoft Office</a></li>
+        <li><a href="service-troubleshoot.html">PC Troubleshooting</a></li>
+        <li><a href="service-software.html">Software &amp; Drivers</a></li>
+        <li><a href="service-design.html">Graphic Design</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>More Services</h4><ul>
+        <li><a href="service-web.html">Web Development</a></li>
+        <li><a href="service-assignment.html">Assignment Help</a></li>
+        <li><a href="service-cv.html">CV Design</a></li>
+        <li><a href="service-business.html">Business Digital Setup</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Company</h4><ul>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="services.html">All Services</a></li>
+      </ul></div>
     </div>
-    <div class="footer-bottom"><p>© 2026 Mellow Tech Services. All rights reserved.</p><div class="footer-social"><a href="https://www.facebook.com/TUMELLOWTECH" target="_blank" title="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a><a href="https://www.tiktok.com/@mellowtechservices" target="_blank" title="TikTok"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.74a4.85 4.85 0 01-1.01-.05z"/></svg></a><a href="https://wa.me/27720465993" target="_blank" title="WhatsApp"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z M12 0C5.373 0 0 5.373 0 12c0 2.117.549 4.107 1.51 5.84L.057 24l6.305-1.654A11.882 11.882 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg></a></div></div>
+    <div class="footer-bottom">
+      <p>© 2026 Mellow Tech Services. All rights reserved.</p>
+      <div class="footer-social">
+        <a href="https://www.facebook.com/TUMELLOWTECH" target="_blank" title="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+        <a href="https://www.tiktok.com/@mellowtechservices" target="_blank" title="TikTok"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.74a4.85 4.85 0 01-1.01-.05z"/></svg></a>
+        <a href="https://wa.me/27720465993" target="_blank" title="WhatsApp"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.117.549 4.107 1.51 5.84L.057 24l6.305-1.654A11.882 11.882 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg></a>
+      </div>
+    </div>
   </div>
 </footer>
 
-<!-- CHATBOT (hidden but functional) -->
-<button class="mt-open-btn" id="mtOpenBtn" onclick="mtOpenPanel()" title="Chat with us">⚡</button>
+<!-- CHATBOT -->
+<button class="mt-open-btn" id="mtOpenBtn" title="Chat with us" aria-label="Open chat">⚡</button>
 <div class="mt-panel" id="mtPanel">
-  <div class="mt-header"><div class="mt-logo">⚡</div><div class="mt-hinfo"><div class="mt-hname">MellowTech Assistant</div><div class="mt-hstatus"><span class="mt-dot"></span>Online · Smart Engine Active</div></div><button class="mt-close-btn" onclick="mtClosePanel()">✕</button></div>
-  <div class="mt-chips" id="mtChips"><button class="mt-chip" onclick="mtSendChip('CV services')">📄 CV</button><button class="mt-chip" onclick="mtSendChip('Website development')">🌐 Website</button><button class="mt-chip" onclick="mtSendChip('Assignment help')">📝 Assignment</button><button class="mt-chip" onclick="mtSendChip('Laptop repair')">💻 Tech Support</button><button class="mt-chip" onclick="mtSendChip('Pricing')">💰 Pricing</button><button class="mt-chip" onclick="mtSendChip('How long does it take?')">⏱ Turnaround</button></div>
-  <div class="mt-body" id="mtBody"></div><div class="mt-typing" id="mtTyping"><div class="mt-avatar">⚡</div><div class="mt-typing-dots"><span></span><span></span><span></span></div></div>
-  <div class="mt-footer"><div class="mt-input-wrap"><textarea class="mt-input" id="mtInput" placeholder="Ask about CVs, websites, assignments, tech support…" rows="1" onkeydown="mtHandleKey(event)" oninput="mtResize(this)"></textarea></div><button class="mt-send" onclick="mtHandleSend()">↑</button></div>
+  <div class="mt-header">
+    <div class="mt-logo">⚡</div>
+    <div class="mt-hinfo">
+      <div class="mt-hname">MellowTech Assistant</div>
+      <div class="mt-hstatus"><span class="mt-dot"></span>Online · Smart Engine Active</div>
+    </div>
+    <button class="mt-close-btn" aria-label="Close chat">✕</button>
+  </div>
+  <div class="mt-chips" id="mtChips">
+    <button class="mt-chip" data-chip="CV services">📄 CV</button>
+    <button class="mt-chip" data-chip="Website development">🌐 Website</button>
+    <button class="mt-chip" data-chip="Assignment help">📝 Assignment</button>
+    <button class="mt-chip" data-chip="Laptop repair">💻 Tech Support</button>
+    <button class="mt-chip" data-chip="Pricing">💰 Pricing</button>
+    <button class="mt-chip" data-chip="How long does it take?">⏱ Turnaround</button>
+  </div>
+  <div class="mt-body" id="mtBody"></div>
+  <div class="mt-typing" id="mtTyping">
+    <div class="mt-avatar" style="background:linear-gradient(135deg,var(--mt-accent),var(--mt-accent2));width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0">⚡</div>
+    <div class="mt-typing-dots"><span></span><span></span><span></span></div>
+  </div>
+  <div class="mt-footer">
+    <div class="mt-input-wrap">
+      <textarea class="mt-input" id="mtInput" placeholder="Ask about CVs, websites, assignments, tech support…" rows="1"></textarea>
+    </div>
+    <button class="mt-send" aria-label="Send">↑</button>
+  </div>
 </div>
 
-<!-- JAVASCRIPT FOR REVEAL, MOBILE MENU, AUDIENCE TABS, CHATBOT, AND LOADER -->
-<script>
-// ========== REVEAL ANIMATIONS ==========
-function triggerReveals(){
-  document.querySelectorAll('.reveal').forEach((el,i)=>{
-    if(el.getBoundingClientRect().top < window.innerHeight - 80)
-      setTimeout(()=>el.classList.add('visible'), i*80);
-  });
-}
-window.addEventListener('scroll', triggerReveals, {passive:true});
-window.addEventListener('load', ()=>setTimeout(triggerReveals, 100));
-triggerReveals();
-
-// ========== MOBILE MENU ==========
-const hamburger = document.getElementById('hamburger');
-const mobileMenu = document.getElementById('mobileMenu');
-let menuOpen = false;
-hamburger.addEventListener('click', ()=>{
-  menuOpen = !menuOpen;
-  mobileMenu.classList.toggle('open', menuOpen);
-  const spans = hamburger.querySelectorAll('span');
-  if(menuOpen){
-    spans[0].style.transform = 'rotate(45deg) translate(5px,5px)';
-    spans[1].style.opacity = '0';
-    spans[2].style.transform = 'rotate(-45deg) translate(5px,-5px)';
-  } else {
-    spans[0].style.transform = '';
-    spans[1].style.opacity = '';
-    spans[2].style.transform = '';
-  }
-});
-function closeMobile(){
-  menuOpen = false;
-  mobileMenu.classList.remove('open');
-  const spans = hamburger.querySelectorAll('span');
-  spans[0].style.transform = '';
-  spans[1].style.opacity = '';
-  spans[2].style.transform = '';
-}
-mobileMenu.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMobile));
-
-// ========== AUDIENCE TABS ==========
-document.querySelectorAll('.audience-tab').forEach(btn=>{
-  btn.addEventListener('click', function(e){
-    const id = this.getAttribute('data-tab');
-    document.querySelectorAll('.audience-tab').forEach(t=>t.classList.remove('active'));
-    this.classList.add('active');
-    document.querySelectorAll('.audience-content').forEach(c=>c.classList.remove('active'));
-    const target = document.getElementById('tab-'+id);
-    if(target) target.classList.add('active');
-  });
-});
-
-// ========== NAVBAR SCROLL HIDE ==========
-let lastScroll = 0;
-window.addEventListener('scroll', ()=>{
-  const cur = window.scrollY;
-  const navbar = document.getElementById('navbar');
-  navbar.classList.toggle('scrolled', cur > 40);
-  navbar.style.transform = (cur > lastScroll && cur > 100) ? 'translateY(-100%)' : 'translateY(0)';
-  lastScroll = cur;
-});
-
-// ========== CHATBOT SIMPLE (kept from original) ==========
-const MT_WA = '27720465993';
-function mtGreeting(){ return 'Hey there! 👋 Welcome to <strong>MellowTech</strong>!<br><br>I\'m your smart assistant — I can help you with quotes and info on all our services.<br><br>What can I help you with today?'; }
-function mtUnknown(){ return 'I didn\'t quite catch that — no worries! 🙂<br><br>Here\'s what I can help you with:<div class="mt-suggest"><div class="mt-sitem" onclick="mtSendChip(\'CV services and pricing\')">📄 CV Writing</div><div class="mt-sitem" onclick="mtSendChip(\'I need a website\')">🌐 Web Development</div><div class="mt-sitem" onclick="mtSendChip(\'Help with my assignment\')">📝 Assignments</div><div class="mt-sitem" onclick="mtSendChip(\'Laptop repair\')">💻 Tech Support</div></div><br>Or <a href="https://wa.me/27720465993" target="_blank" style="color:var(--mt-accent)">WhatsApp us</a> directly!'; }
-let mtBusy=false;
-function mtAppendMsg(role,html){ const body=document.getElementById('mtBody'); const wrap=document.createElement('div'); wrap.className='mt-msg mt-'+role; const av=document.createElement('div'); av.className='mt-avatar'; av.textContent=role==='bot'?'⚡':'👤'; const bub=document.createElement('div'); bub.className='mt-bubble'; bub.innerHTML=html; wrap.appendChild(av);wrap.appendChild(bub); body.appendChild(wrap); body.scrollTop=body.scrollHeight; }
-function mtShowTyping(){ document.getElementById('mtTyping').classList.add('mt-show'); }
-function mtHideTyping(){ document.getElementById('mtTyping').classList.remove('mt-show'); }
-function mtHandleSend(){ if(mtBusy)return; const inp=document.getElementById('mtInput'); const txt=inp.value.trim(); if(!txt)return; inp.value=''; inp.style.height='auto'; mtAppendMsg('user',txt.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')); mtProcess(txt); }
-function mtSendChip(txt){ if(mtBusy)return; mtAppendMsg('user',txt); mtProcess(txt); }
-function mtProcess(txt){ mtBusy=true; mtShowTyping(); setTimeout(()=>{ mtHideTyping(); mtAppendMsg('bot',mtUnknown()); mtBusy=false; }, 550); }
-function mtOpenPanel(){ document.getElementById('mtOpenBtn').style.display='none'; document.getElementById('mtPanel').classList.add('mt-visible'); }
-function mtClosePanel(){ document.getElementById('mtPanel').classList.remove('mt-visible'); document.getElementById('mtOpenBtn').style.display='flex'; }
-function mtHandleKey(e){ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();mtHandleSend();} }
-function mtResize(el){ el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,90)+'px'; }
-document.addEventListener('DOMContentLoaded',function(){ setTimeout(()=>{ if(document.getElementById('mtBody')) mtAppendMsg('bot',mtGreeting()); },800); });
-</script>
-
-<!-- LOADER JAVASCRIPT -->
-<script>
-(function() {
-  const DURATION = 7000;
-  const CX = 260, CY = 260, R = 170;
-  const services = [
-    { label: 'CV Writing',           icon: '📄', angle: -90  },
-    { label: 'Web Dev',              icon: '🌐', angle: -30  },
-    { label: 'Assignments',          icon: '📝', angle:  30  },
-    { label: 'Tech Support',         icon: '💻', angle:  90  },
-    { label: 'Graphic Design',       icon: '🎨', angle:  150 },
-    { label: 'Google Digital Setup', icon: '📈', angle:  210 },
-  ];
-  const svg = document.getElementById('scene');
-  const NS = 'http://www.w3.org/2000/svg';
-  function deg2rad(d) { return d * Math.PI / 180; }
-  const nodeGroup = document.getElementById('nodes');
-  const connGroup = document.getElementById('connections');
-  const partGroup = document.getElementById('particles');
-  const nodeEls = [];
-  const lineEls = [];
-  services.forEach((svc, i) => {
-    const rad = deg2rad(svc.angle);
-    const nx = CX + R * Math.cos(rad);
-    const ny = CY + R * Math.sin(rad);
-    svc.x = nx; svc.y = ny;
-    const line = document.createElementNS(NS, 'line');
-    line.setAttribute('x1', CX); line.setAttribute('y1', CY);
-    line.setAttribute('x2', nx); line.setAttribute('y2', ny);
-    line.setAttribute('stroke', 'url(#line-grad)');
-    line.setAttribute('stroke-width', '1.2');
-    line.setAttribute('opacity', '0.55');
-    const totalLen = Math.hypot(nx-CX, ny-CY);
-    line.setAttribute('stroke-dasharray', totalLen);
-    line.setAttribute('stroke-dashoffset', totalLen);
-    connGroup.appendChild(line);
-    lineEls.push({ el: line, len: totalLen });
-    const g = document.createElementNS(NS, 'g');
-    g.setAttribute('opacity', '0');
-    g.setAttribute('transform', `translate(${nx},${ny})`);
-    const glowC = document.createElementNS(NS, 'circle');
-    glowC.setAttribute('r', '28');
-    glowC.setAttribute('fill', 'rgba(75,207,250,0.06)');
-    glowC.setAttribute('filter', 'url(#glow-node)');
-    g.appendChild(glowC);
-    const bgC = document.createElementNS(NS, 'circle');
-    bgC.setAttribute('r', '24');
-    bgC.setAttribute('fill', '#0E1B2E');
-    bgC.setAttribute('stroke', 'rgba(75,207,250,0.25)');
-    bgC.setAttribute('stroke-width', '1');
-    g.appendChild(bgC);
-    const fo = document.createElementNS(NS, 'foreignObject');
-    fo.setAttribute('x', '-16'); fo.setAttribute('y', '-20');
-    fo.setAttribute('width', '32'); fo.setAttribute('height', '30');
-    const div = document.createElement('div');
-    div.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:18px;line-height:1;';
-    div.textContent = svc.icon;
-    fo.appendChild(div);
-    g.appendChild(fo);
-    const txt = document.createElementNS(NS, 'text');
-    txt.setAttribute('y', '38');
-    txt.setAttribute('text-anchor', 'middle');
-    txt.setAttribute('font-family', "'DM Sans', sans-serif");
-    txt.setAttribute('font-size', '9');
-    txt.setAttribute('font-weight', '500');
-    txt.setAttribute('fill', '#cde8f8');
-    txt.setAttribute('letter-spacing', '0.5');
-    txt.setAttribute('opacity', '0.8');
-    txt.textContent = svc.label.toUpperCase();
-    g.appendChild(txt);
-    nodeGroup.appendChild(g);
-    nodeEls.push({ g, nx, ny, baseX: nx, baseY: ny, floatOffset: Math.random() * Math.PI * 2 });
-  });
-  const MAX_PARTICLES = 70;
-  const particles = [];
-  function spawnParticle(svcIdx) {
-    const svc = services[svcIdx];
-    const p = { svcIdx, t: 0, speed: 0.004 + Math.random() * 0.004, radius: 2 + Math.random() * 1.5, opacity: 0.7 + Math.random() * 0.3, toCenter: Math.random() > 0.5, el: null };
-    const el = document.createElementNS(NS, 'circle');
-    el.setAttribute('r', p.radius);
-    el.setAttribute('fill', p.svcIdx % 2 === 0 ? '#4BCFFA' : '#E8B84B');
-    el.setAttribute('opacity', '0');
-    partGroup.appendChild(el);
-    p.el = el;
-    particles.push(p);
-    return p;
-  }
-  function updateParticle(p) {
-    p.t += p.speed;
-    if (p.t >= 1) { p.t = 0; p.toCenter = !p.toCenter; p.opacity = 0.7 + Math.random() * 0.3; }
-    const svc = services[p.svcIdx];
-    let t = p.toCenter ? p.t : 1 - p.t;
-    const px = CX + (svc.x - CX) * (1 - t);
-    const py = CY + (svc.y - CY) * (1 - t);
-    p.el.setAttribute('cx', px);
-    p.el.setAttribute('cy', py);
-    p.el.setAttribute('opacity', Math.sin(p.t * Math.PI) * p.opacity);
-  }
-  const rings = document.querySelectorAll('.ring');
-  let lastRingTime = 0;
-  function pulseRings(now) {
-    if (now - lastRingTime > 1500) lastRingTime = now;
-    const elapsed = now - lastRingTime;
-    rings.forEach((ring, i) => {
-      const delay = i * 400;
-      const t = Math.max(0, (elapsed - delay) / 1800);
-      const op = t < 0.3 ? t/0.3 * 0.35 : (1-t) * 0.35;
-      ring.setAttribute('opacity', op > 0 ? op : 0);
-    });
-  }
-  const logoGroup = document.getElementById('logo-group');
-  function pulseLogo(now) {
-    const scale = 1 + 0.025 * Math.sin(now / 900);
-    logoGroup.setAttribute('transform', `translate(${CX},${CY}) scale(${scale}) translate(${-CX},${-CY})`);
-  }
-  const bar = document.getElementById('progress-bar');
-  const pctEl = document.getElementById('pct');
-  let startTime = null;
-  let particleSpawnCount = 0;
-  const LINE_STARTS = [0.02, 0.08, 0.14, 0.20, 0.26, 0.32];
-  function frame(now) {
-    if (!startTime) startTime = now;
-    const elapsed = now - startTime;
-    const rawProgress = Math.min(elapsed / DURATION, 1);
-    bar.style.width = (rawProgress * 100) + '%';
-    pctEl.textContent = Math.floor(rawProgress * 100) + '%';
-    lineEls.forEach((ln, i) => {
-      const lineStart = LINE_STARTS[i];
-      const lineP = Math.max(0, Math.min(1, (rawProgress - lineStart) / (0.9 - lineStart)));
-      ln.el.setAttribute('stroke-dashoffset', ln.len * (1 - lineP));
-    });
-    nodeEls.forEach((n, i) => {
-      const revealAt = LINE_STARTS[i] + 0.20;
-      const revealP = Math.max(0, Math.min(1, (rawProgress - revealAt) / 0.08));
-      n.g.setAttribute('opacity', revealP);
-      const floatAmp = 4 * revealP;
-      const fx = n.baseX + floatAmp * Math.cos(now / 1800 + n.floatOffset);
-      const fy = n.baseY + floatAmp * Math.sin(now / 1400 + n.floatOffset);
-      n.g.setAttribute('transform', `translate(${fx},${fy})`);
-    });
-    if (rawProgress > 0.2 && particles.length < MAX_PARTICLES && particleSpawnCount < 3000) {
-      const svcIdx = Math.floor(Math.random() * 6);
-      if (rawProgress > LINE_STARTS[svcIdx] + 0.2) {
-        spawnParticle(svcIdx);
-        particleSpawnCount++;
-      }
-    }
-    particles.forEach(p => updateParticle(p));
-    pulseRings(now);
-    pulseLogo(now);
-    if (rawProgress < 1) {
-      requestAnimationFrame(frame);
-    } else {
-      setTimeout(() => {
-        document.getElementById('loader').classList.add('done');
-        document.body.classList.remove('mt-loader-active');
-        setTimeout(() => {
-          const ldr = document.getElementById('loader');
-          if (ldr && ldr.parentNode) ldr.parentNode.removeChild(ldr);
-        }, 900);
-      }, 400);
-    }
-  }
-  requestAnimationFrame(frame);
-})();
-</script>
-
+<script src="common.js"></script>
 </body>
 </html>
