@@ -1,5 +1,6 @@
 /* ═══════════════════════════════════════════════════
    MELLOW TECH SERVICES — MAIN JAVASCRIPT
+   (Fixed loader, scroll lock, session‑aware)
 ════════════════════════════════════════════════════ */
 
 /* ── Nav scroll / hide ── */
@@ -73,7 +74,7 @@ window.switchTab = function(id, e){
 
 /* ═══════════════════════════════════════════════════════════════════════════
    MELLOW TECH SERVICES — INTELLIGENT SALES BOT v4.0
-═══════════════════════════════════════════════════════════════════════════ */
+═══════════════════════════════════════════════════════ */
 
 ;(function (root) {
   "use strict";
@@ -167,7 +168,7 @@ window.switchTab = function(id, e){
   const Memory=(()=>{
     const MAX_TURNS=20;
     let state={userName:null,serviceBasket:[],lastIntent:null,conversationStage:"greeting",askedName:false,pendingState:null,turns:[]};
-    function push(role,text,intent=null){state.turns.push({role,text,intent,ts:Date.now()});if(state.turns.length>MAX_TURNS)state.turns=state.turns.slice(-MAX_TURNS);if(intent&&intent!=="greeting"&&intent!=="pricing"&&intent!=="contact")state.lastIntent=intent;}
+    function push(role,text,intent=null){state.turns.push({role,text,intent,ts:Date.now()});if(state.turns.length>MAX_TURNS)state.turns=state.turns.slice(-MAX_TURNS);if(intent&&intent!="greeting"&&intent!="pricing"&&intent!="contact")state.lastIntent=intent;}
     function addToBasket(intentKey){const svc=KB[intentKey];if(!svc||!svc.name)return;const already=state.serviceBasket.find(s=>s.intent===intentKey);if(!already)state.serviceBasket.push({intent:intentKey,name:svc.name,emoji:svc.emoji});}
     function getBasket(){return state.serviceBasket;}
     function clearBasket(){state.serviceBasket=[];}
@@ -399,18 +400,35 @@ window.UI=(function(){
   });
 })();
 
+
 /* ═══════════════════════════════════════════════════
-   PAGE LOADER — JAVASCRIPT
+   PAGE LOADER — JAVASCRIPT (FIXED + SESSION AWARE)
 ════════════════════════════════════════════════════ */
 (function() {
-  // ── Guard: only run if the loader exists on this page ──────────────────────
   const loaderEl = document.getElementById('page-loader');
+
+  // If no loader on this page, just ensure scrolling is never locked
   if (!loaderEl) {
-    // No loader → ensure scrolling is never locked
     document.documentElement.classList.remove('loading');
     document.body.classList.remove('loading');
     document.documentElement.style.overflow = '';
     document.body.style.overflow = '';
+    return;
+  }
+
+  // ── Session storage: show only once per tab session ──────────────────────
+  const LOADER_FLAG = 'mellowLoaderDone';
+  if (sessionStorage.getItem(LOADER_FLAG) === 'true') {
+    // Already shown this session → hide instantly
+    loaderEl.classList.add('done');
+    document.documentElement.classList.remove('loading');
+    document.body.classList.remove('loading');
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+    document.body.classList.remove('mt-loader-active');
+    setTimeout(() => {
+      if (loaderEl.parentNode) loaderEl.parentNode.removeChild(loaderEl);
+    }, 900);
     return;
   }
 
@@ -616,9 +634,13 @@ window.UI=(function(){
     if (rawProgress < 1) {
       requestAnimationFrame(frame);
     } else {
+      // ── Animation complete ──
       if (loaderEl) {
         loaderEl.classList.add('done');
       }
+
+      // Mark as shown for this session
+      sessionStorage.setItem(LOADER_FLAG, 'true');
 
       // Unlock scrolling
       document.documentElement.classList.remove('loading');
