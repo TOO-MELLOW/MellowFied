@@ -621,18 +621,18 @@ const LINE_STARTS = [0.02, 0.08, 0.14, 0.20, 0.26, 0.32];
     pulseLogo(now);
 
     if (rawProgress < 1) {
-      requestAnimationFrame(frame);
-    } else {
-      // Done
-      setTimeout(() => {
-        document.getElementById('loader').classList.add('done');
-        document.body.classList.remove('mt-loader-active');
-        setTimeout(function(){
-          var ldr = document.getElementById('loader');
-          if(ldr && ldr.parentNode) ldr.parentNode.removeChild(ldr);
-        }, 900);
-      }, 400);
-    }
+  requestAnimationFrame(frame);
+} else {
+  setTimeout(() => {
+    // Use the correct ID
+    document.getElementById('page-loader').classList.add('done');
+    document.body.classList.remove('mt-loader-active');
+    setTimeout(function(){
+      var ldr = document.getElementById('page-loader');
+      if(ldr && ldr.parentNode) ldr.parentNode.removeChild(ldr);
+    }, 900);
+  }, 400);
+}
   }
 
   requestAnimationFrame(frame);
