@@ -431,9 +431,8 @@ window.UI=(function(){
    PAGE LOADER — JAVASCRIPT (FIXED + SESSION AWARE)
 ════════════════════════════════════════════════════ */
 (function() {
-  const loaderEl = document.getElementById('page-loader');
+  const loaderEl = document.getElementById('loader');   // ← changed from 'page-loader'
 
-  // If no loader on this page, just ensure scrolling is never locked
   if (!loaderEl) {
     document.documentElement.classList.remove('loading');
     document.body.classList.remove('loading');
@@ -442,10 +441,8 @@ window.UI=(function(){
     return;
   }
 
-  // ── Session storage: show only once per tab session ──────────────────────
   const LOADER_FLAG = 'mellowLoaderDone';
   if (sessionStorage.getItem(LOADER_FLAG) === 'true') {
-    // Already shown this session → hide instantly
     loaderEl.classList.add('done');
     document.documentElement.classList.remove('loading');
     document.body.classList.remove('loading');
@@ -457,6 +454,7 @@ window.UI=(function(){
     }, 900);
     return;
   }
+
 
   // ── Config ─────────────────────────────────────────────────────────────────
 (function() {
