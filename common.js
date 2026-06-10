@@ -404,9 +404,8 @@ window.UI=(function(){
    PAGE LOADER — JAVASCRIPT
 ════════════════════════════════════════════════════ */
 (function() {
-  // ── Config ─────────────────────────────────────────────────────────────────
-  const DURATION = 7000; //  7seconds
-  const CX = 260, CY = 260, R = 170; // orbit centre & radius
+  const DURATION = 7000;
+  const CX = 260, CY = 260, R = 170;
 
   const services = [
     { label: 'CV Writing',        icon: '📄', angle: -90  },
@@ -417,12 +416,15 @@ window.UI=(function(){
     { label: 'Google Digital Setup', icon: '📈', angle:  210 },
   ];
 
+  // Lock scrolling while loader is visible
+  document.documentElement.classList.add('loading');
+  document.body.classList.add('loading');
+
   const svg = document.getElementById('scene');
   const NS = 'http://www.w3.org/2000/svg';
 
   function deg2rad(d) { return d * Math.PI / 180; }
 
-  // ── Build nodes ────────────────────────────────────────────────────────────
   const nodeGroup = document.getElementById('nodes');
   const connGroup = document.getElementById('connections');
   const partGroup = document.getElementById('particles');
@@ -435,7 +437,6 @@ window.UI=(function(){
     const ny = CY + R * Math.sin(rad);
     svc.x = nx; svc.y = ny;
 
-    // Connection line
     const line = document.createElementNS(NS, 'line');
     line.setAttribute('x1', CX); line.setAttribute('y1', CY);
     line.setAttribute('x2', nx); line.setAttribute('y2', ny);
@@ -444,23 +445,20 @@ window.UI=(function(){
     line.setAttribute('opacity', '0.55');
     const totalLen = Math.hypot(nx-CX, ny-CY);
     line.setAttribute('stroke-dasharray', totalLen);
-    line.setAttribute('stroke-dashoffset', totalLen); // hidden initially
+    line.setAttribute('stroke-dashoffset', totalLen);
     connGroup.appendChild(line);
     lineEls.push({ el: line, len: totalLen });
 
-    // Node group
     const g = document.createElementNS(NS, 'g');
     g.setAttribute('opacity', '0');
     g.setAttribute('transform', `translate(${nx},${ny})`);
 
-    // Glow circle
     const glowC = document.createElementNS(NS, 'circle');
     glowC.setAttribute('r', '28');
     glowC.setAttribute('fill', 'rgba(75,207,250,0.06)');
     glowC.setAttribute('filter', 'url(#glow-node)');
     g.appendChild(glowC);
 
-    // Node background
     const bgC = document.createElementNS(NS, 'circle');
     bgC.setAttribute('r', '24');
     bgC.setAttribute('fill', '#0E1B2E');
@@ -468,7 +466,6 @@ window.UI=(function(){
     bgC.setAttribute('stroke-width', '1');
     g.appendChild(bgC);
 
-    // Icon (foreignObject for emoji)
     const fo = document.createElementNS(NS, 'foreignObject');
     fo.setAttribute('x', '-16'); fo.setAttribute('y', '-20');
     fo.setAttribute('width', '32'); fo.setAttribute('height', '30');
@@ -478,7 +475,6 @@ window.UI=(function(){
     fo.appendChild(div);
     g.appendChild(fo);
 
-    // Label
     const txt = document.createElementNS(NS, 'text');
     txt.setAttribute('y', '38');
     txt.setAttribute('text-anchor', 'middle');
@@ -495,7 +491,6 @@ window.UI=(function(){
     nodeEls.push({ g, nx, ny, baseX: nx, baseY: ny, floatOffset: Math.random() * Math.PI * 2 });
   });
 
-  // ── Particle pool ──────────────────────────────────────────────────────────
   const MAX_PARTICLES = 70;
   const particles = [];
 
@@ -536,7 +531,6 @@ window.UI=(function(){
     p.el.setAttribute('opacity', Math.sin(p.t * Math.PI) * p.opacity);
   }
 
-  // ── Pulse rings ────────────────────────────────────────────────────────────
   const rings = document.querySelectorAll('.ring');
   let lastRingTime = 0;
   const RING_INTERVAL = 1500;
@@ -556,36 +550,29 @@ window.UI=(function(){
     });
   }
 
-  // ── Logo pulse ─────────────────────────────────────────────────────────────
   const logoGroup = document.getElementById('logo-group');
   function pulseLogo(now) {
     const scale = 1 + 0.025 * Math.sin(now / 900);
     logoGroup.setAttribute('transform', `translate(${CX},${CY}) scale(${scale}) translate(${-CX},${-CY})`);
   }
 
-  // ── Progress & line draw ───────────────────────────────────────────────────
   const bar = document.getElementById('progress-bar');
   const pctEl = document.getElementById('pct');
   let startTime = null;
   let particleSpawnCount = 0;
-
-  // Faster version (starts drawing sooner):
-const LINE_STARTS = [0.02, 0.08, 0.14, 0.20, 0.26, 0.32];
+  const LINE_STARTS = [0.02, 0.08, 0.14, 0.20, 0.26, 0.32];
 
   function ease(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
 
-  // ── Main RAF loop ──────────────────────────────────────────────────────────
   function frame(now) {
     if (!startTime) startTime = now;
     const elapsed = now - startTime;
     const rawProgress = Math.min(elapsed / DURATION, 1);
     const progress = ease(rawProgress);
 
-    // Progress bar
     bar.style.width = (rawProgress * 100) + '%';
     pctEl.textContent = Math.floor(rawProgress * 100) + '%';
 
-    // Draw lines
     lineEls.forEach((ln, i) => {
       const lineStart = LINE_STARTS[i];
       const lineP = Math.max(0, Math.min(1, (rawProgress - lineStart) / (0.9 - lineStart)));
@@ -593,20 +580,16 @@ const LINE_STARTS = [0.02, 0.08, 0.14, 0.20, 0.26, 0.32];
       ln.el.setAttribute('stroke-dashoffset', offset);
     });
 
-    // Reveal nodes
     nodeEls.forEach((n, i) => {
       const revealAt = LINE_STARTS[i] + 0.20;
       const revealP = Math.max(0, Math.min(1, (rawProgress - revealAt) / 0.08));
       n.g.setAttribute('opacity', revealP);
-
-      // Float animation
       const floatAmp = 4 * revealP;
       const fx = n.baseX + floatAmp * Math.cos(now / 1800 + n.floatOffset);
       const fy = n.baseY + floatAmp * Math.sin(now / 1400 + n.floatOffset);
       n.g.setAttribute('transform', `translate(${fx},${fy})`);
     });
 
-    // Spawn particles (only after 20% and when lines are being drawn)
     if (rawProgress > 0.2 && particles.length < MAX_PARTICLES && particleSpawnCount < 3000) {
       const svcIdx = Math.floor(Math.random() * 6);
       if (rawProgress > LINE_STARTS[svcIdx] + 0.2) {
@@ -616,32 +599,31 @@ const LINE_STARTS = [0.02, 0.08, 0.14, 0.20, 0.26, 0.32];
     }
     particles.forEach(p => updateParticle(p, now));
 
-    // Pulse rings & logo
     pulseRings(now);
     pulseLogo(now);
 
     if (rawProgress < 1) {
-  requestAnimationFrame(frame);
-} else {
-  setTimeout(() => {
-    // 1) Hide & remove the loader overlay
-    const loaderEl = document.getElementById('page-loader');
-    if (loaderEl) {
-      loaderEl.classList.add('done');
-      // 2) Unlock scrolling – remove any loading class
-      document.body.classList.remove('mt-loader-active', 'loading', 'no-scroll');
-      // 3) Reset overflow directly (belt and braces)
-      document.body.style.overflow = '';
+      requestAnimationFrame(frame);
+    } else {
+      const loaderEl = document.getElementById('page-loader');
+      if (loaderEl) {
+        loaderEl.classList.add('done');
+      }
+
+      // Unlock scrolling
+      document.documentElement.classList.remove('loading');
+      document.body.classList.remove('loading');
       document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+      document.body.classList.remove('mt-loader-active');
 
       setTimeout(() => {
-        if (loaderEl.parentNode) loaderEl.parentNode.removeChild(loaderEl);
+        if (loaderEl && loaderEl.parentNode) {
+          loaderEl.parentNode.removeChild(loaderEl);
+        }
       }, 900);
     }
-  }, 400);
-}
   }
 
   requestAnimationFrame(frame);
-
 })();
