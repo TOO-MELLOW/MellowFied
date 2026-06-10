@@ -361,9 +361,22 @@ window.UI=(function(){
   return{init};
 })();
 
-(function(){
-  function bootUI(){if(window.UI&&typeof window.UI.init==="function")window.UI.init();else console.warn("MellowTech: UI not ready at boot time.");}
-  try{if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",bootUI);else bootUI();}catch(e){console.error("MellowTech UI bootstrap failed:",e);}
+(function () {
+  function bootUI() {
+    if (window.UI && typeof window.UI.init === 'function') {
+      window.UI.init();
+      console.log('✅ MellowTech UI initialised');
+    } else {
+      console.warn('⏳ UI not ready – retrying in 100ms');
+      setTimeout(bootUI, 100);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bootUI);
+  } else {
+    bootUI();
+  }
 })();
 
 
