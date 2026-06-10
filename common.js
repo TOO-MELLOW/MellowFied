@@ -1,6 +1,5 @@
 /* ═══════════════════════════════════════════════════
-   MELLOW TECH SERVICES — MAIN JAVASCRIPT
-   (Fixed loader, scroll lock, session‑aware)
+MAIN JAVASCRIPT
 ════════════════════════════════════════════════════ */
 window.addEventListener('error', function(e) {
   alert('JS ERROR: ' + e.message + ' (file: ' + e.filename + ', line: ' + e.lineno + ')');
@@ -460,6 +459,7 @@ window.UI=(function(){
   }
 
   // ── Config ─────────────────────────────────────────────────────────────────
+(function() {
   const DURATION = 7000;
   const CX = 260, CY = 260, R = 170;
 
@@ -471,10 +471,6 @@ window.UI=(function(){
     { label: 'Graphic Design',    icon: '🎨', angle:  150 },
     { label: 'Google Digital Setup', icon: '📈', angle:  210 },
   ];
-
-  // Lock scrolling while loader is visible
-  document.documentElement.classList.add('loading');
-  document.body.classList.add('loading');
 
   const svg = document.getElementById('scene');
   const NS = 'http://www.w3.org/2000/svg';
@@ -547,6 +543,7 @@ window.UI=(function(){
     nodeEls.push({ g, nx, ny, baseX: nx, baseY: ny, floatOffset: Math.random() * Math.PI * 2 });
   });
 
+  // ── Particle pool ────────────────────────────────────────────
   const MAX_PARTICLES = 70;
   const particles = [];
 
@@ -554,7 +551,7 @@ window.UI=(function(){
     const svc = services[svcIdx];
     const p = {
       svcIdx,
-      t: 0,
+      t: Math.random(),          // start at a random position
       speed: 0.004 + Math.random() * 0.004,
       radius: 2 + Math.random() * 1.5,
       opacity: 0.7 + Math.random() * 0.3,
@@ -587,15 +584,14 @@ window.UI=(function(){
     p.el.setAttribute('opacity', Math.sin(p.t * Math.PI) * p.opacity);
   }
 
+  // ── Pulse rings – start immediately ────────────────────────
   const rings = document.querySelectorAll('.ring');
-  let lastRingTime = 0;
+  let lastRingTime = -1500;        // force first pulse on frame 0
   const RING_INTERVAL = 1500;
-  let ringPhase = 0;
 
   function pulseRings(now) {
     if (now - lastRingTime > RING_INTERVAL) {
       lastRingTime = now;
-      ringPhase = 0;
     }
     const elapsed = now - lastRingTime;
     rings.forEach((ring, i) => {
@@ -606,20 +602,25 @@ window.UI=(function(){
     });
   }
 
+  // ── Logo pulse ─────────────────────────────────────────────
   const logoGroup = document.getElementById('logo-group');
   function pulseLogo(now) {
     const scale = 1 + 0.025 * Math.sin(now / 900);
-    logoGroup.setAttribute('transform', `translate(${CX},${CY}) scale(${scale}) translate(${-CX},${-CY})`);
+    logoGroup.setAttribute('transform',
+      `translate(${CX},${CY}) scale(${scale}) translate(${-CX},${-CY})`);
   }
 
+  // ── Progress & line draw ───────────────────────────────────
   const bar = document.getElementById('progress-bar');
   const pctEl = document.getElementById('pct');
   let startTime = null;
   let particleSpawnCount = 0;
+
   const LINE_STARTS = [0.02, 0.08, 0.14, 0.20, 0.26, 0.32];
 
   function ease(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
 
+  // ── Main loop ──────────────────────────────────────────────
   function frame(now) {
     if (!startTime) startTime = now;
     const elapsed = now - startTime;
@@ -629,6 +630,7 @@ window.UI=(function(){
     bar.style.width = (rawProgress * 100) + '%';
     pctEl.textContent = Math.floor(rawProgress * 100) + '%';
 
+    // Draw connection lines
     lineEls.forEach((ln, i) => {
       const lineStart = LINE_STARTS[i];
       const lineP = Math.max(0, Math.min(1, (rawProgress - lineStart) / (0.9 - lineStart)));
@@ -636,6 +638,7 @@ window.UI=(function(){
       ln.el.setAttribute('stroke-dashoffset', offset);
     });
 
+    // Reveal & float nodes
     nodeEls.forEach((n, i) => {
       const revealAt = LINE_STARTS[i] + 0.20;
       const revealP = Math.max(0, Math.min(1, (rawProgress - revealAt) / 0.08));
@@ -646,41 +649,28 @@ window.UI=(function(){
       n.g.setAttribute('transform', `translate(${fx},${fy})`);
     });
 
-    if (rawProgress > 0.2 && particles.length < MAX_PARTICLES && particleSpawnCount < 3000) {
+    // Spawn particles early – start when the corresponding line has begun drawing
+    if (particles.length < MAX_PARTICLES && particleSpawnCount < 3000) {
       const svcIdx = Math.floor(Math.random() * 6);
-      if (rawProgress > LINE_STARTS[svcIdx] + 0.2) {
+      // spawn only if that service line has started drawing
+      if (rawProgress >= LINE_STARTS[svcIdx]) {
         spawnParticle(svcIdx);
         particleSpawnCount++;
       }
     }
     particles.forEach(p => updateParticle(p, now));
 
+    // Continuously pulse rings and logo
     pulseRings(now);
     pulseLogo(now);
 
     if (rawProgress < 1) {
       requestAnimationFrame(frame);
     } else {
-      // ── Animation complete ──
-      if (loaderEl) {
-        loaderEl.classList.add('done');
-      }
-
-      // Mark as shown for this session
-      sessionStorage.setItem(LOADER_FLAG, 'true');
-
-      // Unlock scrolling
-      document.documentElement.classList.remove('loading');
-      document.body.classList.remove('loading');
-      document.documentElement.style.overflow = '';
-      document.body.style.overflow = '';
-      document.body.classList.remove('mt-loader-active');
-
       setTimeout(() => {
-        if (loaderEl && loaderEl.parentNode) {
-          loaderEl.parentNode.removeChild(loaderEl);
-        }
-      }, 900);
+        document.getElementById('loader').classList.add('done');
+        document.getElementById('main').classList.add('visible');
+      }, 400);
     }
   }
 
