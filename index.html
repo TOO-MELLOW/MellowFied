@@ -273,13 +273,12 @@
 </div>
 <!-- END LOADER -->
 
-  <!-- ===== LOADER ANIMATION SCRIPT (correct IDs) ===== -->
+  <!-- ===== LOADER ANIMATION SCRIPT ===== -->
   <script>
     (function () {
-      const loaderEl = document.getElementById('page-loader');   // ✅ matches HTML id
+      const loaderEl = document.getElementById('page-loader');
       if (!loaderEl) return;
 
-      // session flag – skip if already played this tab session
       if (sessionStorage.getItem('mellowLoaderDone') === 'true') {
         loaderEl.classList.add('done');
         setTimeout(() => loaderEl.remove(), 900);
@@ -297,7 +296,7 @@
         { label: 'Google Digital Setup', icon: '📈', angle: 210 }
       ];
 
-      const svg = document.getElementById('loader-scene');   // ✅ matches <svg id="loader-scene">
+      const svg = document.getElementById('loader-scene');
       const NS = 'http://www.w3.org/2000/svg';
 
       function deg2rad(d) { return d * Math.PI / 180; }
@@ -314,7 +313,6 @@
         const ny = CY + R * Math.sin(rad);
         svc.x = nx; svc.y = ny;
 
-        // connection line
         const line = document.createElementNS(NS, 'line');
         line.setAttribute('x1', CX); line.setAttribute('y1', CY);
         line.setAttribute('x2', nx); line.setAttribute('y2', ny);
@@ -327,7 +325,6 @@
         connGroup.appendChild(line);
         lineEls.push({ el: line, len: totalLen });
 
-        // node
         const g = document.createElementNS(NS, 'g');
         g.setAttribute('opacity', '0');
         g.setAttribute('transform', `translate(${nx},${ny})`);
@@ -443,7 +440,6 @@
         if (!startTime) startTime = now;
         const elapsed = now - startTime;
         const rawProgress = Math.min(elapsed / DURATION, 1);
-        const progress = ease(rawProgress);
 
         bar.style.width = (rawProgress * 100) + '%';
         pctEl.textContent = Math.floor(rawProgress * 100) + '%';
@@ -479,18 +475,18 @@
         if (rawProgress < 1) {
           requestAnimationFrame(frame);
         } else {
-          
-setTimeout(() => {
-  loaderEl.classList.add('done');
-  document.getElementById('main-content')?.classList.add('visible');
-  sessionStorage.setItem('mellowLoaderDone', 'true');
+          // Animation finished – fade out and remove loader
+          loaderEl.classList.add('done');
+          sessionStorage.setItem('mellowLoaderDone', 'true');
 
-  // ✅ UNLOCK SCROLLING
-  document.documentElement.style.overflow = '';
-  document.body.style.overflow = '';
-  document.documentElement.classList.remove('loading');
-  document.body.classList.remove('loading');
-}, 400);
+          // Restore scrolling
+          document.documentElement.style.overflow = '';
+          document.body.style.overflow = '';
+
+          // Remove loader from DOM after CSS transition (800ms + buffer)
+          setTimeout(() => {
+            if (loaderEl.parentNode) loaderEl.remove();
+          }, 900);
         }
       }
 
@@ -500,26 +496,24 @@ setTimeout(() => {
 
   <!-- NAV -->
   <nav id="navbar">
-<!-- NAV -->
-<nav id="navbar">
-  <div class="nav-inner">
-    <a class="nav-logo" href="index.html">
-      <img src="images/logo.png" style="height:50px;width:auto;" alt="logo">
-    </a>
-    <div class="nav-links">
-      <a href="index.html" class="active">Home</a>
-      <a href="services.html">Services</a>
-      <a href="about.html">About</a>
-      <a href="contact.html">Contact</a>
+    <div class="nav-inner">
+      <a class="nav-logo" href="index.html">
+        <img src="images/logo.png" style="height:50px;width:auto;" alt="logo">
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="active">Home</a>
+        <a href="services.html">Services</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="nav-cta">
+        <a class="btn btn-primary" href="contact.html">Get Support ↗</a>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
     </div>
-    <div class="nav-cta">
-      <a class="btn btn-primary" href="contact.html">Get Support ↗</a>
-    </div>
-    <button class="hamburger" id="hamburger" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-</nav>
+  </nav>
 
 <!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobileMenu">
@@ -535,14 +529,13 @@ setTimeout(() => {
 <!-- HERO -->
 <section class="hero">
   <div class="hero-bg-video">
-  <!-- Corrected paths: lowercase folder + root fallback -->
-  <video autoplay muted loop playsinline poster="images/herobg.jpg">
-    <source src="video/backvid.mp4" type="video/mp4">
-    <source src="backvid.mp4" type="video/mp4">
-  </video>
-  <div class="hero-bg-overlay"></div>
-</div>
-<div class="hero-grid-overlay"></div>
+    <video autoplay muted loop playsinline poster="images/herobg.jpg">
+      <source src="video/backvid.mp4" type="video/mp4">
+      <source src="backvid.mp4" type="video/mp4">
+    </video>
+    <div class="hero-bg-overlay"></div>
+  </div>
+  <div class="hero-grid-overlay"></div>
   <div class="hero-inner">
     <div class="hero-text">
       <div class="hero-eyebrow"></div>
