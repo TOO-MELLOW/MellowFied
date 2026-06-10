@@ -2,6 +2,9 @@
    MELLOW TECH SERVICES — MAIN JAVASCRIPT
    (Fixed loader, scroll lock, session‑aware)
 ════════════════════════════════════════════════════ */
+window.addEventListener('error', function(e) {
+  alert('JS ERROR: ' + e.message + ' (file: ' + e.filename + ', line: ' + e.lineno + ')');
+});
 
 /* ── Nav scroll / hide ── */
 (function(){
