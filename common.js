@@ -354,7 +354,18 @@ window.UI=(function(){
   function botHTML(html,suggestions=[]){const box=$(SEL.messages);if(!box)return;box.insertAdjacentHTML("beforeend",`<div class="mwt-msg mwt-bot"><div class="mwt-bubble">${html}</div></div>`);if(suggestions?.length){const chips=suggestions.map(s=>`<button class="mt-chip" data-chip="${esc(s)}">${esc(s)}</button>`).join("");box.insertAdjacentHTML("beforeend",`<div class="mwt-suggestions">${chips}</div>`);}scroll();}
   function typing(show){const t=$(SEL.typing);if(t)t.style.display=show?"flex":"none";}
   function scroll(){const box=$(SEL.messages);if(box)setTimeout(()=>{box.scrollTop=box.scrollHeight;},20);}
-  function esc(s){return String(s).replace(/[&<>"']/g,m=({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));}
+  function esc(s) {
+  var replacements = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  };
+  return String(s).replace(/[&<>"']/g, function(m) {
+    return replacements[m];
+  });
+}
   function injectStyles(){
     if(document.getElementById("mwt-styles"))return;
     const s=document.createElement("style");s.id="mwt-styles";
