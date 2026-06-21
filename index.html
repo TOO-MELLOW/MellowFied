@@ -714,14 +714,16 @@
       </ul></div>
     </div>
     <div class="footer-bottom">
-      <p>© 2026 Mellow Tech Services. All rights reserved.sudo apt install build-essential cmake git
-git clone https://github.com/ggerganov/llama.cpp
-cd llama.cpp
-cmake -B build
-cmake --build build --config Release -j$(nproc)
+      <p>© 2026 Mellow Tech Services. All rights reserved.cd llama.cpp
+mkdir build
+cd build
+cmake ..
+make -j$(nproc)
 
-        ./build/bin/llama-cli \
-  -m ~/Downloads/qwen2.5-coder-3b-instruct-q4_k_m.gguf \
+        .
+        cd ~/llama.cpp/build
+./bin/llama-cli \
+  -m ~/Downloads/your-model-name.gguf \
   -t 4 \
   -n 512 \
   --ctx-size 2048 \
