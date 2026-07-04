@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Disclaimer · Mellow Tech Services</title>
+<meta name="description" content="Important limitations and disclosures regarding Mellow Tech Services and this website.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F5F7FB;
+  --surface:#FFFFFF;
+  --ink:#17203D;
+  --ink-soft:#4B5573;
+  --ink-faint:#8891A8;
+  --accent:#1B8E82;
+  --accent-ink:#0F5E56;
+  --accent-soft:#E4F3F0;
+  --line:#E2E6ED;
+  --flag:#B4610F;
+  --flag-soft:#FBEEDF;
+  --radius:10px;
+  --maxw:1160px;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink-soft);
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  font-size:16px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{
+  font-family:'Space Grotesk',system-ui,sans-serif;
+  color:var(--ink);
+  margin:0;
+  letter-spacing:-0.01em;
+}
+a{color:var(--accent-ink);text-decoration-color:var(--accent);text-underline-offset:2px;}
+a:hover{color:var(--accent);}
+.mono{font-family:'IBM Plex Mono',monospace;}
+
+/* ---------- top bar ---------- */
+.topbar{
+  position:sticky; top:0; z-index:50;
+  background:rgba(245,247,251,0.92);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+}
+.topbar-inner{
+  max-width:var(--maxw); margin:0 auto;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:16px 28px;
+  gap:20px;
+}
+.brand{display:flex; align-items:baseline; gap:10px; text-decoration:none;}
+.brand-mark{
+  font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:1.05rem;
+  color:var(--ink);
+}
+.brand-tag{
+  font-family:'IBM Plex Mono',monospace; font-size:0.68rem; letter-spacing:0.08em;
+  color:var(--accent-ink); background:var(--accent-soft);
+  padding:3px 8px; border-radius:20px; text-transform:uppercase;
+}
+.doc-tabs{display:flex; gap:4px; flex-wrap:wrap;}
+.doc-tabs a{
+  font-size:0.85rem; font-weight:500; color:var(--ink-soft);
+  text-decoration:none; padding:8px 14px; border-radius:8px;
+  transition:background .15s, color .15s;
+  white-space:nowrap;
+}
+.doc-tabs a:hover{background:var(--accent-soft); color:var(--accent-ink);}
+.doc-tabs a.active{background:var(--ink); color:#fff;}
+.progress{height:3px; background:var(--line);}
+.progress-bar{height:100%; width:0%; background:var(--accent); transition:width .1s linear;}
+
+/* ---------- layout ---------- */
+.wrap{max-width:var(--maxw); margin:0 auto; padding:0 28px;}
+.layout{
+  display:grid; grid-template-columns:230px minmax(0,720px); gap:56px;
+  padding:44px 0 90px;
+  align-items:start;
+}
+@media (max-width:860px){
+  .layout{grid-template-columns:1fr; padding:28px 0 60px;}
+  .toc-desktop{display:none;}
+}
+
+/* ---------- hero ---------- */
+.doc-hero{grid-column:1/-1; padding-bottom:8px;}
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace; font-size:0.72rem; letter-spacing:0.1em;
+  text-transform:uppercase; color:var(--accent-ink); margin-bottom:12px; display:block;
+}
+h1.doc-title{font-size:clamp(1.9rem,3.2vw,2.6rem); font-weight:700; margin-bottom:10px;}
+.doc-meta{font-size:0.85rem; color:var(--ink-faint); font-family:'IBM Plex Mono',monospace;}
+
+/* ---------- toc ---------- */
+.toc-desktop{position:sticky; top:92px;}
+.toc-label{
+  font-family:'IBM Plex Mono',monospace; font-size:0.7rem; letter-spacing:0.08em;
+  text-transform:uppercase; color:var(--ink-faint); margin-bottom:14px; display:block;
+}
+.toc-desktop ul{list-style:none; margin:0; padding:0; border-left:2px solid var(--line);}
+.toc-desktop li{margin:0;}
+.toc-desktop a{
+  display:block; padding:7px 0 7px 16px; margin-left:-2px; border-left:2px solid transparent;
+  font-size:0.86rem; color:var(--ink-soft); text-decoration:none;
+  transition:color .15s, border-color .15s;
+}
+.toc-desktop a:hover{color:var(--accent-ink);}
+.toc-desktop a.active{color:var(--accent-ink); border-left-color:var(--accent); font-weight:600;}
+
+.toc-mobile{grid-column:1/-1; margin-bottom:8px;}
+.toc-mobile summary{
+  cursor:pointer; font-family:'Space Grotesk',sans-serif; font-weight:600;
+  padding:14px 16px; background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--radius); color:var(--ink); list-style:none;
+}
+.toc-mobile summary::-webkit-details-marker{display:none;}
+.toc-mobile[open] summary{border-radius:var(--radius) var(--radius) 0 0;}
+.toc-mobile ul{
+  list-style:none; margin:0; padding:8px; background:var(--surface);
+  border:1px solid var(--line); border-top:none; border-radius:0 0 var(--radius) var(--radius);
+}
+.toc-mobile a{display:block; padding:8px 10px; font-size:0.9rem; color:var(--ink-soft); text-decoration:none; border-radius:6px;}
+.toc-mobile a:hover{background:var(--accent-soft);}
+
+/* ---------- content ---------- */
+.content{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:40px 44px;}
+@media (max-width:640px){.content{padding:26px 22px;}}
+
+.content h2{
+  display:flex; align-items:baseline; gap:14px;
+  font-size:1.28rem; font-weight:600;
+  padding-top:34px; margin-top:34px; border-top:1px solid var(--line);
+  scroll-margin-top:90px;
+}
+.content > h2:first-child{margin-top:0; padding-top:0; border-top:none;}
+.content h2 .num{
+  font-family:'IBM Plex Mono',monospace; font-size:0.78rem; font-weight:600;
+  color:var(--accent-ink); background:var(--accent-soft);
+  border-radius:6px; padding:4px 9px; flex-shrink:0;
+}
+.content p{margin:0 0 16px;}
+.content ul,.content ol{margin:0 0 16px; padding-left:22px;}
+.content li{margin-bottom:6px;}
+.content strong{color:var(--ink); font-weight:600;}
+.content table{
+  width:100%; border-collapse:collapse; margin:18px 0 22px; font-size:0.92rem;
+}
+.content th,.content td{
+  border:1px solid var(--line); padding:10px 12px; text-align:left; vertical-align:top;
+}
+.content th{background:var(--accent-soft); color:var(--accent-ink); font-family:'IBM Plex Mono',monospace; font-size:0.78rem; text-transform:uppercase; letter-spacing:0.03em;}
+
+.todo{
+  background:var(--flag-soft); color:var(--flag); font-weight:600;
+  padding:2px 7px; border-radius:5px; font-size:0.94em;
+  border-bottom:1px dashed var(--flag);
+}
+
+/* ---------- footer ---------- */
+.doc-footer{
+  margin-top:36px; padding:26px 0 50px; border-top:1px solid var(--line);
+  display:flex; flex-wrap:wrap; justify-content:space-between; gap:20px;
+  font-size:0.86rem; color:var(--ink-faint);
+}
+.doc-footer .col{max-width:360px;}
+.doc-footer strong{color:var(--ink-soft); display:block; margin-bottom:6px; font-family:'Space Grotesk',sans-serif;}
+.doc-footer nav a{margin-right:14px; color:var(--ink-soft);}
+.back-home{
+  display:inline-flex; align-items:center; gap:6px; margin-top:10px;
+  font-size:0.85rem; font-weight:600; color:var(--accent-ink); text-decoration:none;
+}
+.back-home:hover{color:var(--accent);}
+
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="https://mellowtech.co.za">
+      <span class="brand-mark">Mellow Tech</span>
+      <span class="brand-tag">Legal</span>
+    </a>
+    <nav class="doc-tabs">
+      <a class="" href="mellowtech-privacy-policy.html">Privacy Policy</a>
+      <a class="" href="mellowtech-terms-of-service.html">Terms of Service</a>
+      <a class="active" href="mellowtech-disclaimer.html">Disclaimer</a>
+    </nav>
+  </div>
+  <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+</div>
+
+<div class="wrap">
+  <div class="layout">
+
+    <div class="doc-hero">
+      <span class="eyebrow">Legal · Disclaimer</span>
+      <h1 class="doc-title">Disclaimer</h1>
+      <div class="doc-meta"> &nbsp;·&nbsp; mellowtech.co.za</div>
+    </div>
+
+    <details class="toc-mobile">
+      <summary>On this page</summary>
+      <ul>
+        <li><a href="#1-general-information" class="active" data-target="1-general-information">01. General Information</a></li>
+<li><a href="#2-no-guarantee-of-outcomes" data-target="2-no-guarantee-of-outcomes">02. No Guarantee of Outcomes</a></li>
+<li><a href="#3-data-device-disclaimer" data-target="3-data-device-disclaimer">03. Data &amp; Device Disclaimer</a></li>
+<li><a href="#4-software-licensing-disclaimer" data-target="4-software-licensing-disclaimer">04. Software Licensing Disclaimer</a></li>
+<li><a href="#5-device-ownership-disclaimer" data-target="5-device-ownership-disclaimer">05. Device Ownership Disclaimer</a></li>
+<li><a href="#6-testimonials-reviews" data-target="6-testimonials-reviews">06. Testimonials &amp; Reviews</a></li>
+<li><a href="#7-third-party-links-platforms" data-target="7-third-party-links-platforms">07. Third-Party Links &amp; Platforms</a></li>
+<li><a href="#8-website-availability" data-target="8-website-availability">08. Website Availability</a></li>
+<li><a href="#9-limitation-of-liability" data-target="9-limitation-of-liability">09. Limitation of Liability</a></li>
+<li><a href="#10-changes-to-this-disclaimer" data-target="10-changes-to-this-disclaimer">10. Changes to This Disclaimer</a></li>
+<li><a href="#11-contact-us" data-target="11-contact-us">11. Contact Us</a></li>
+      </ul>
+    </details>
+
+    <aside class="toc-desktop">
+      <span class="toc-label">On this page</span>
+      <ul>
+        <li><a href="#1-general-information" class="active" data-target="1-general-information">01. General Information</a></li>
+<li><a href="#2-no-guarantee-of-outcomes" data-target="2-no-guarantee-of-outcomes">02. No Guarantee of Outcomes</a></li>
+<li><a href="#3-data-device-disclaimer" data-target="3-data-device-disclaimer">03. Data &amp; Device Disclaimer</a></li>
+<li><a href="#4-software-licensing-disclaimer" data-target="4-software-licensing-disclaimer">04. Software Licensing Disclaimer</a></li>
+<li><a href="#5-device-ownership-disclaimer" data-target="5-device-ownership-disclaimer">05. Device Ownership Disclaimer</a></li>
+<li><a href="#6-testimonials-reviews" data-target="6-testimonials-reviews">06. Testimonials &amp; Reviews</a></li>
+<li><a href="#7-third-party-links-platforms" data-target="7-third-party-links-platforms">07. Third-Party Links &amp; Platforms</a></li>
+<li><a href="#8-website-availability" data-target="8-website-availability">08. Website Availability</a></li>
+<li><a href="#9-limitation-of-liability" data-target="9-limitation-of-liability">09. Limitation of Liability</a></li>
+<li><a href="#10-changes-to-this-disclaimer" data-target="10-changes-to-this-disclaimer">10. Changes to This Disclaimer</a></li>
+<li><a href="#11-contact-us" data-target="11-contact-us">11. Contact Us</a></li>
+      </ul>
+    </aside>
+
+    <main class="content">
+      <p>Last Updated: 4 July 2026</p>
+<p>This Disclaimer applies to the website mellowtech.co.za and to all services provided by Mellow Tech Services ("<strong>Mellow Tech</strong>," "<strong>we</strong>," "<strong>us</strong>," "<strong>our</strong>"). Please read it alongside our <span class="todo">[Terms of Service]</span> and <span class="todo">[Privacy Policy]</span>. By using our Site or services, you accept the terms of this Disclaimer.</p>
+<h2 id="1-general-information"><span class="num">01</span><span class="title">General Information</span></h2>
+<p>The content on our website — including service descriptions, pricing indications, and the on-site "MellowTech Assistant" chat — is provided for general informational purposes. It does not constitute professional, technical, academic, legal, or financial advice, and should not be relied upon as such. The automated chat assistant may occasionally provide inaccurate or incomplete information; please confirm any important details directly with our team before making decisions.</p>
+<h2 id="2-no-guarantee-of-outcomes"><span class="num">02</span><span class="title">No Guarantee of Outcomes</span></h2>
+<ul>
+<li><strong>CV Design &amp; Revamp:</strong> We design and present your CV professionally, but we cannot guarantee interviews, job offers, or employment outcomes, as these depend on factors outside our control (employer preferences, market conditions, your qualifications and experience).</li>
+<li><strong>Assignment Assistance:</strong> We assist with formatting, structure, and presentation. We do not guarantee any specific grade, mark, or academic result, and you remain solely responsible for ensuring the final submission complies with your institution's academic integrity rules.</li>
+<li><strong>Web Development, Graphic Design &amp; Business Digital Setup:</strong> We build and design according to agreed specifications, but we cannot guarantee specific business results such as sales, traffic, leads, or search engine rankings, which depend on many factors beyond the deliverable itself.</li>
+<li><strong>PC Troubleshooting &amp; Repair:</strong> We aim to fully resolve reported issues, but some faults (particularly hardware-related) may be intermittent, may recur, or may reveal further underlying issues once diagnosis begins.</li>
+</ul>
+<h2 id="3-data-device-disclaimer"><span class="num">03</span><span class="title">Data &amp; Device Disclaimer</span></h2>
+<p>Handing over a device for repair, installation, or unlocking services carries an inherent risk of data loss. <strong>You are responsible for backing up your data before any device is left in our care.</strong> Mellow Tech is not responsible for loss of data, files, or accounts, or for pre-existing damage discovered during the course of our work, except where caused by our gross negligence. Full details are set out in our Terms of Service.</p>
+<h2 id="4-software-licensing-disclaimer"><span class="num">04</span><span class="title">Software Licensing Disclaimer</span></h2>
+<p>Where our services involve installing or activating operating systems or software (e.g., Windows, Microsoft Office), you are responsible for holding a legitimate licence for that software. Mellow Tech does not provide, endorse, or facilitate pirated software or unauthorised activation methods, and reserves the right to decline any request that would require this.</p>
+<h2 id="5-device-ownership-disclaimer"><span class="num">05</span><span class="title">Device Ownership Disclaimer</span></h2>
+<p>Password removal, screen unlock, and FRP bypass services are intended solely for use by the lawful owner of a device, or someone with the lawful owner's express authorisation. We may request proof of ownership and reserve the right to decline service, retain a device, or report suspected unlawful activity to the relevant authorities where ownership cannot reasonably be established. Full terms are set out in our Terms of Service.</p>
+<h2 id="6-testimonials-reviews"><span class="num">06</span><span class="title">Testimonials &amp; Reviews</span></h2>
+<p>Testimonials and star ratings displayed on our website reflect the individual, subjective experiences of specific clients. Results vary from person to person and are not a guarantee that you will achieve the same outcome.</p>
+<h2 id="7-third-party-links-platforms"><span class="num">07</span><span class="title">Third-Party Links &amp; Platforms</span></h2>
+<p>Our website and communications may link to or reference third-party platforms, including Facebook, TikTok, and WhatsApp. We do not control these platforms and are not responsible for their content, availability, or privacy practices. Use of these platforms is subject to their own terms and privacy policies.</p>
+<h2 id="8-website-availability"><span class="num">08</span><span class="title">Website Availability</span></h2>
+<p>We try to keep our website accurate and available at all times, but we do not guarantee that the Site will be uninterrupted, error-free, or free of viruses or other harmful components. We are not liable for any loss arising from your use of, or inability to access, the Site.</p>
+<h2 id="9-limitation-of-liability"><span class="num">09</span><span class="title">Limitation of Liability</span></h2>
+<p>To the maximum extent permitted by South African law, Mellow Tech Services excludes all liability for any direct, indirect, incidental, or consequential loss arising from your use of our website or services, except where such exclusion is not permitted by law, or where loss arises from our gross negligence or wilful misconduct. Nothing in this Disclaimer limits any rights you have under the Consumer Protection Act 68 of 2008, where applicable.</p>
+<h2 id="10-changes-to-this-disclaimer"><span class="num">10</span><span class="title">Changes to This Disclaimer</span></h2>
+<p>We may update this Disclaimer from time to time to reflect changes in our services or applicable law. The "Last Updated" date above indicates the most recent revision.</p>
+<h2 id="11-contact-us"><span class="num">11</span><span class="title">Contact Us</span></h2>
+<p>📧 <span class="todo">[Insert official contact email]</span>
+📱 +27 72 046 5993
+📍 <span class="todo">[Insert physical business address]</span></p>
+
+      <div class="doc-footer">
+        <div class="col">
+          <strong>Mellow Tech Services</strong>
+          [Insert physical business address]<br>
+          [Insert official contact email] &nbsp;·&nbsp; +27 72 046 5993
+          <br>
+          <a class="back-home" href="https://mellowtech.co.za">&larr; Back to mellowtech.co.za</a>
+        </div>
+        <div class="col">
+          <strong>Related documents</strong>
+          <nav><a href="mellowtech-privacy-policy.html">Privacy Policy</a>
+<a href="mellowtech-terms-of-service.html">Terms of Service</a></nav>
+        </div>
+      </div>
+    </main>
+
+  </div>
+</div>
+
+<script>
+  // scroll progress
+  const bar = document.getElementById('progressBar');
+  function updateProgress(){
+    const h = document.documentElement;
+    const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    bar.style.width = (isNaN(scrolled) ? 0 : scrolled) + '%';
+  }
+  document.addEventListener('scroll', updateProgress, {passive:true});
+  updateProgress();
+
+  // scrollspy for TOC
+  const sections = Array.from(document.querySelectorAll('.content h2[id]'));
+  const tocLinks = Array.from(document.querySelectorAll('.toc-desktop a, .toc-mobile a'));
+  function setActive(id){
+    tocLinks.forEach(a => a.classList.toggle('active', a.dataset.target === id));
+  }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){ setActive(entry.target.id); }
+    });
+  }, { rootMargin: '-15% 0px -70% 0px', threshold: 0 });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

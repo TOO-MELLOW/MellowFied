@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Terms of Service · Mellow Tech Services</title>
+<meta name="description" content="The terms that apply when you book or use any Mellow Tech Services offering.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F5F7FB;
+  --surface:#FFFFFF;
+  --ink:#17203D;
+  --ink-soft:#4B5573;
+  --ink-faint:#8891A8;
+  --accent:#1B8E82;
+  --accent-ink:#0F5E56;
+  --accent-soft:#E4F3F0;
+  --line:#E2E6ED;
+  --flag:#B4610F;
+  --flag-soft:#FBEEDF;
+  --radius:10px;
+  --maxw:1160px;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink-soft);
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  font-size:16px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{
+  font-family:'Space Grotesk',system-ui,sans-serif;
+  color:var(--ink);
+  margin:0;
+  letter-spacing:-0.01em;
+}
+a{color:var(--accent-ink);text-decoration-color:var(--accent);text-underline-offset:2px;}
+a:hover{color:var(--accent);}
+.mono{font-family:'IBM Plex Mono',monospace;}
+
+/* ---------- top bar ---------- */
+.topbar{
+  position:sticky; top:0; z-index:50;
+  background:rgba(245,247,251,0.92);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+}
+.topbar-inner{
+  max-width:var(--maxw); margin:0 auto;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:16px 28px;
+  gap:20px;
+}
+.brand{display:flex; align-items:baseline; gap:10px; text-decoration:none;}
+.brand-mark{
+  font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:1.05rem;
+  color:var(--ink);
+}
+.brand-tag{
+  font-family:'IBM Plex Mono',monospace; font-size:0.68rem; letter-spacing:0.08em;
+  color:var(--accent-ink); background:var(--accent-soft);
+  padding:3px 8px; border-radius:20px; text-transform:uppercase;
+}
+.doc-tabs{display:flex; gap:4px; flex-wrap:wrap;}
+.doc-tabs a{
+  font-size:0.85rem; font-weight:500; color:var(--ink-soft);
+  text-decoration:none; padding:8px 14px; border-radius:8px;
+  transition:background .15s, color .15s;
+  white-space:nowrap;
+}
+.doc-tabs a:hover{background:var(--accent-soft); color:var(--accent-ink);}
+.doc-tabs a.active{background:var(--ink); color:#fff;}
+.progress{height:3px; background:var(--line);}
+.progress-bar{height:100%; width:0%; background:var(--accent); transition:width .1s linear;}
+
+/* ---------- layout ---------- */
+.wrap{max-width:var(--maxw); margin:0 auto; padding:0 28px;}
+.layout{
+  display:grid; grid-template-columns:230px minmax(0,720px); gap:56px;
+  padding:44px 0 90px;
+  align-items:start;
+}
+@media (max-width:860px){
+  .layout{grid-template-columns:1fr; padding:28px 0 60px;}
+  .toc-desktop{display:none;}
+}
+
+/* ---------- hero ---------- */
+.doc-hero{grid-column:1/-1; padding-bottom:8px;}
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace; font-size:0.72rem; letter-spacing:0.1em;
+  text-transform:uppercase; color:var(--accent-ink); margin-bottom:12px; display:block;
+}
+h1.doc-title{font-size:clamp(1.9rem,3.2vw,2.6rem); font-weight:700; margin-bottom:10px;}
+.doc-meta{font-size:0.85rem; color:var(--ink-faint); font-family:'IBM Plex Mono',monospace;}
+
+/* ---------- toc ---------- */
+.toc-desktop{position:sticky; top:92px;}
+.toc-label{
+  font-family:'IBM Plex Mono',monospace; font-size:0.7rem; letter-spacing:0.08em;
+  text-transform:uppercase; color:var(--ink-faint); margin-bottom:14px; display:block;
+}
+.toc-desktop ul{list-style:none; margin:0; padding:0; border-left:2px solid var(--line);}
+.toc-desktop li{margin:0;}
+.toc-desktop a{
+  display:block; padding:7px 0 7px 16px; margin-left:-2px; border-left:2px solid transparent;
+  font-size:0.86rem; color:var(--ink-soft); text-decoration:none;
+  transition:color .15s, border-color .15s;
+}
+.toc-desktop a:hover{color:var(--accent-ink);}
+.toc-desktop a.active{color:var(--accent-ink); border-left-color:var(--accent); font-weight:600;}
+
+.toc-mobile{grid-column:1/-1; margin-bottom:8px;}
+.toc-mobile summary{
+  cursor:pointer; font-family:'Space Grotesk',sans-serif; font-weight:600;
+  padding:14px 16px; background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--radius); color:var(--ink); list-style:none;
+}
+.toc-mobile summary::-webkit-details-marker{display:none;}
+.toc-mobile[open] summary{border-radius:var(--radius) var(--radius) 0 0;}
+.toc-mobile ul{
+  list-style:none; margin:0; padding:8px; background:var(--surface);
+  border:1px solid var(--line); border-top:none; border-radius:0 0 var(--radius) var(--radius);
+}
+.toc-mobile a{display:block; padding:8px 10px; font-size:0.9rem; color:var(--ink-soft); text-decoration:none; border-radius:6px;}
+.toc-mobile a:hover{background:var(--accent-soft);}
+
+/* ---------- content ---------- */
+.content{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:40px 44px;}
+@media (max-width:640px){.content{padding:26px 22px;}}
+
+.content h2{
+  display:flex; align-items:baseline; gap:14px;
+  font-size:1.28rem; font-weight:600;
+  padding-top:34px; margin-top:34px; border-top:1px solid var(--line);
+  scroll-margin-top:90px;
+}
+.content > h2:first-child{margin-top:0; padding-top:0; border-top:none;}
+.content h2 .num{
+  font-family:'IBM Plex Mono',monospace; font-size:0.78rem; font-weight:600;
+  color:var(--accent-ink); background:var(--accent-soft);
+  border-radius:6px; padding:4px 9px; flex-shrink:0;
+}
+.content p{margin:0 0 16px;}
+.content ul,.content ol{margin:0 0 16px; padding-left:22px;}
+.content li{margin-bottom:6px;}
+.content strong{color:var(--ink); font-weight:600;}
+.content table{
+  width:100%; border-collapse:collapse; margin:18px 0 22px; font-size:0.92rem;
+}
+.content th,.content td{
+  border:1px solid var(--line); padding:10px 12px; text-align:left; vertical-align:top;
+}
+.content th{background:var(--accent-soft); color:var(--accent-ink); font-family:'IBM Plex Mono',monospace; font-size:0.78rem; text-transform:uppercase; letter-spacing:0.03em;}
+
+.todo{
+  background:var(--flag-soft); color:var(--flag); font-weight:600;
+  padding:2px 7px; border-radius:5px; font-size:0.94em;
+  border-bottom:1px dashed var(--flag);
+}
+
+/* ---------- footer ---------- */
+.doc-footer{
+  margin-top:36px; padding:26px 0 50px; border-top:1px solid var(--line);
+  display:flex; flex-wrap:wrap; justify-content:space-between; gap:20px;
+  font-size:0.86rem; color:var(--ink-faint);
+}
+.doc-footer .col{max-width:360px;}
+.doc-footer strong{color:var(--ink-soft); display:block; margin-bottom:6px; font-family:'Space Grotesk',sans-serif;}
+.doc-footer nav a{margin-right:14px; color:var(--ink-soft);}
+.back-home{
+  display:inline-flex; align-items:center; gap:6px; margin-top:10px;
+  font-size:0.85rem; font-weight:600; color:var(--accent-ink); text-decoration:none;
+}
+.back-home:hover{color:var(--accent);}
+
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="https://mellowtech.co.za">
+      <span class="brand-mark">Mellow Tech</span>
+      <span class="brand-tag">Legal</span>
+    </a>
+    <nav class="doc-tabs">
+      <a class="" href="mellowtech-privacy-policy.html">Privacy Policy</a>
+      <a class="active" href="mellowtech-terms-of-service.html">Terms of Service</a>
+      <a class="" href="mellowtech-disclaimer.html">Disclaimer</a>
+    </nav>
+  </div>
+  <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+</div>
+
+<div class="wrap">
+  <div class="layout">
+
+    <div class="doc-hero">
+      <span class="eyebrow">Legal · Agreement</span>
+      <h1 class="doc-title">Terms of Service</h1>
+      <div class="doc-meta"> &nbsp;·&nbsp; mellowtech.co.za</div>
+    </div>
+
+    <details class="toc-mobile">
+      <summary>On this page</summary>
+      <ul>
+        <li><a href="#1-acceptance-of-terms" class="active" data-target="1-acceptance-of-terms">01. Acceptance of Terms</a></li>
+<li><a href="#2-our-services" data-target="2-our-services">02. Our Services</a></li>
+<li><a href="#3-quotes-bookings-communication" data-target="3-quotes-bookings-communication">03. Quotes, Bookings &amp; Communication</a></li>
+<li><a href="#4-client-responsibilities" data-target="4-client-responsibilities">04. Client Responsibilities</a></li>
+<li><a href="#5-password-removal-frp-bypass-policy" data-target="5-password-removal-frp-bypass-policy">05. Password Removal &amp; FRP Bypass Policy</a></li>
+<li><a href="#6-payment-terms" data-target="6-payment-terms">06. Payment Terms</a></li>
+<li><a href="#7-ownership-intellectual-property" data-target="7-ownership-intellectual-property">07. Ownership &amp; Intellectual Property</a></li>
+<li><a href="#8-data-device-disclaimer" data-target="8-data-device-disclaimer">08. Data &amp; Device Disclaimer</a></li>
+<li><a href="#9-satisfaction-guarantee-warranty" data-target="9-satisfaction-guarantee-warranty">09. Satisfaction Guarantee &amp; Warranty</a></li>
+<li><a href="#10-limitation-of-liability" data-target="10-limitation-of-liability">10. Limitation of Liability</a></li>
+<li><a href="#11-cancellations-refunds" data-target="11-cancellations-refunds">11. Cancellations &amp; Refunds</a></li>
+<li><a href="#12-third-party-software-services" data-target="12-third-party-software-services">12. Third-Party Software &amp; Services</a></li>
+<li><a href="#13-governing-law-disputes" data-target="13-governing-law-disputes">13. Governing Law &amp; Disputes</a></li>
+<li><a href="#14-changes-to-these-terms" data-target="14-changes-to-these-terms">14. Changes to These Terms</a></li>
+<li><a href="#15-contact-us" data-target="15-contact-us">15. Contact Us</a></li>
+      </ul>
+    </details>
+
+    <aside class="toc-desktop">
+      <span class="toc-label">On this page</span>
+      <ul>
+        <li><a href="#1-acceptance-of-terms" class="active" data-target="1-acceptance-of-terms">01. Acceptance of Terms</a></li>
+<li><a href="#2-our-services" data-target="2-our-services">02. Our Services</a></li>
+<li><a href="#3-quotes-bookings-communication" data-target="3-quotes-bookings-communication">03. Quotes, Bookings &amp; Communication</a></li>
+<li><a href="#4-client-responsibilities" data-target="4-client-responsibilities">04. Client Responsibilities</a></li>
+<li><a href="#5-password-removal-frp-bypass-policy" data-target="5-password-removal-frp-bypass-policy">05. Password Removal &amp; FRP Bypass Policy</a></li>
+<li><a href="#6-payment-terms" data-target="6-payment-terms">06. Payment Terms</a></li>
+<li><a href="#7-ownership-intellectual-property" data-target="7-ownership-intellectual-property">07. Ownership &amp; Intellectual Property</a></li>
+<li><a href="#8-data-device-disclaimer" data-target="8-data-device-disclaimer">08. Data &amp; Device Disclaimer</a></li>
+<li><a href="#9-satisfaction-guarantee-warranty" data-target="9-satisfaction-guarantee-warranty">09. Satisfaction Guarantee &amp; Warranty</a></li>
+<li><a href="#10-limitation-of-liability" data-target="10-limitation-of-liability">10. Limitation of Liability</a></li>
+<li><a href="#11-cancellations-refunds" data-target="11-cancellations-refunds">11. Cancellations &amp; Refunds</a></li>
+<li><a href="#12-third-party-software-services" data-target="12-third-party-software-services">12. Third-Party Software &amp; Services</a></li>
+<li><a href="#13-governing-law-disputes" data-target="13-governing-law-disputes">13. Governing Law &amp; Disputes</a></li>
+<li><a href="#14-changes-to-these-terms" data-target="14-changes-to-these-terms">14. Changes to These Terms</a></li>
+<li><a href="#15-contact-us" data-target="15-contact-us">15. Contact Us</a></li>
+      </ul>
+    </aside>
+
+    <main class="content">
+      <p>Last Updated: 4 July 2026</p>
+<h2 id="1-acceptance-of-terms"><span class="num">01</span><span class="title">Acceptance of Terms</span></h2>
+<p>These Terms of Service ("<strong>Terms</strong>") govern your access to and use of the website mellowtech.co.za, and any services provided by Mellow Tech Services ("<strong>Mellow Tech</strong>," "<strong>we</strong>," "<strong>us</strong>," "<strong>our</strong>"), whether booked via our website, WhatsApp, phone, email, or social media. By requesting a quote, booking a service, or otherwise engaging us, you ("<strong>you</strong>," "<strong>the client</strong>") agree to be bound by these Terms.</p>
+<p>If you do not agree to these Terms, please do not use our services.</p>
+<h2 id="2-our-services"><span class="num">02</span><span class="title">Our Services</span></h2>
+<p>Mellow Tech provides technology and creative support services, including but not limited to:</p>
+<ul>
+<li>Windows installation and activation</li>
+<li>Microsoft Office installation and activation</li>
+<li>PC troubleshooting and virus removal</li>
+<li>Software and driver installation</li>
+<li>Graphic design (logos, flyers, social media graphics, branding)</li>
+<li>Web development</li>
+<li>CV design and revamps</li>
+<li>Assignment assistance (formatting, structuring, proofreading)</li>
+<li>Business digital setup (email, social media, Google Business, website)</li>
+<li>Password removal and FRP (Factory Reset Protection) bypass services</li>
+</ul>
+<p>Specific inclusions, exclusions, and pricing for each service are confirmed with you individually before work begins, whether via written quote, WhatsApp message, or invoice.</p>
+<h2 id="3-quotes-bookings-communication"><span class="num">03</span><span class="title">Quotes, Bookings &amp; Communication</span></h2>
+<ul>
+<li>Quotes are provided based on the information you give us. If the actual scope of work differs materially once we begin (e.g., additional faults discovered during troubleshooting), we will inform you before proceeding and may issue a revised quote.</li>
+<li>Bookings are typically arranged via our website contact form or WhatsApp (+27 72 046 5993).</li>
+<li>We aim to respond to enquiries within a few hours during business hours (Monday–Saturday, 8am–7pm) and to complete most jobs within 24 hours, though this is a target rather than a guarantee. Turnaround times may vary depending on job complexity, part/software availability, or circumstances outside our control.</li>
+</ul>
+<h2 id="4-client-responsibilities"><span class="num">04</span><span class="title">Client Responsibilities</span></h2>
+<p>By engaging our services, you confirm and agree that you will:</p>
+<ul>
+<li>Provide accurate contact and project information;</li>
+<li><strong>Back up your data before handing over a device for repair, troubleshooting, or any related service.</strong> See Section 8 (Data &amp; Device Disclaimer);</li>
+<li>Only request password removal, screen unlock, or FRP bypass services for a device that <strong>you personally own or are legally authorised to access</strong>, and provide reasonable proof of ownership (e.g., proof of purchase, ID matching device registration, or equivalent) if requested;</li>
+<li>Hold or obtain a valid, legitimately licensed copy of any operating system or software you ask us to install or activate. Mellow Tech installs and configures software; it does not supply pirated software or activation methods that circumvent legitimate licensing, and reserves the right to decline a job that requires this;</li>
+<li>For assignment assistance, remain solely responsible for ensuring that any formatting, structuring, or proofreading support you receive complies with your educational institution's academic integrity and originality policies. Mellow Tech provides assistance with presentation and structure, not ghost-written or plagiarised academic content, and does not guarantee any particular grade or academic outcome;</li>
+<li>Make timeous payment in accordance with Section 6.</li>
+</ul>
+<h2 id="5-password-removal-frp-bypass-policy"><span class="num">05</span><span class="title">Password Removal &amp; FRP Bypass Policy</span></h2>
+<p>Because device-unlocking services carry a risk of misuse (e.g., unlocking lost or stolen devices), Mellow Tech applies the following safeguards:</p>
+<ul>
+<li>We may request proof of ownership before performing password removal, screen lock removal, or FRP bypass services, and reserve the right to decline the job if ownership cannot be reasonably established.</li>
+<li>We will not knowingly unlock a device reported as lost, stolen, or blacklisted, and reserve the right to refuse service, retain the device, or report the matter to the South African Police Service if we reasonably suspect a device is not lawfully owned by the person requesting the service.</li>
+<li>By requesting this service, you warrant that you are the lawful owner of the device, or have the express authorisation of the lawful owner, and you indemnify Mellow Tech against any claim, loss, or liability arising from a breach of this warranty.</li>
+</ul>
+<h2 id="6-payment-terms"><span class="num">06</span><span class="title">Payment Terms</span></h2>
+<ul>
+<li>Pricing is transparent and confirmed with you before work begins, as reflected on our website or in your individual quote.</li>
+<li>For larger jobs (e.g., web development, business digital setup), we may require a deposit before starting, with the balance due on completion or delivery.</li>
+<li>Design files, website source files, or completed CVs/documents will only be released or published once payment has been received in full, unless otherwise agreed in writing.</li>
+<li>Accepted payment methods: <span class="todo">[Insert accepted payment methods — e.g., EFT, cash, mobile payment]</span>.</li>
+</ul>
+<h2 id="7-ownership-intellectual-property"><span class="num">07</span><span class="title">Ownership &amp; Intellectual Property</span></h2>
+<ul>
+<li>Once full payment has been received, ownership of the final deliverable (e.g., logo, website files, CV document) transfers to you, the client.</li>
+<li>Until full payment is received, all design files, source code, and drafts remain the property of Mellow Tech Services.</li>
+<li>Mellow Tech retains the right to showcase completed work (e.g., graphic design, websites) in its portfolio, website, or social media for promotional purposes, unless you request otherwise in writing (for example, where confidentiality is required).</li>
+<li>Any third-party assets used in a project (stock photos, fonts, plugins, licensed software) remain subject to their own licensing terms, and it is your responsibility to maintain any ongoing licences after project handover where applicable.</li>
+</ul>
+<h2 id="8-data-device-disclaimer"><span class="num">08</span><span class="title">Data &amp; Device Disclaimer</span></h2>
+<ul>
+<li><strong>You are responsible for backing up your own data before any device is handed over to us</strong> for repair, troubleshooting, installation, or unlocking services.</li>
+<li>While we take reasonable care, Mellow Tech is not liable for data loss, corruption, or the discovery of pre-existing hardware/software faults that occur during diagnosis or repair, except where caused by our gross negligence.</li>
+<li>We recommend removing or disabling any sensitive personal accounts not required for the job wherever practically possible.</li>
+</ul>
+<h2 id="9-satisfaction-guarantee-warranty"><span class="num">09</span><span class="title">Satisfaction Guarantee &amp; Warranty</span></h2>
+<p>Our "Satisfaction Guaranteed" commitment means:</p>
+<ul>
+<li>If the specific issue we were engaged to fix recurs within <strong>14 days</strong> of job completion, and the recurrence is due to our workmanship rather than a new, unrelated fault or misuse, we will correct it at no additional charge.</li>
+<li>This guarantee does not cover new issues, damage caused after the device leaves our care, user-caused faults, or hardware failures unrelated to the original job.</li>
+<li>For design and development work, we offer a reasonable number of revisions (as agreed per project) prior to final delivery; requests for substantial new work beyond the agreed scope may be quoted separately.</li>
+</ul>
+<h2 id="10-limitation-of-liability"><span class="num">10</span><span class="title">Limitation of Liability</span></h2>
+<p>To the maximum extent permitted by South African law:</p>
+<ul>
+<li>Mellow Tech's total liability for any claim arising from our services is limited to the amount paid by you for the specific service giving rise to the claim.</li>
+<li>We are not liable for indirect, incidental, or consequential loss, including loss of profits, loss of data, or business interruption, except where such exclusion is not permitted by law (including the Consumer Protection Act 68 of 2008, where applicable).</li>
+<li>Nothing in these Terms limits liability for death, personal injury, or fraud caused by our gross negligence or wilful misconduct.</li>
+</ul>
+<h2 id="11-cancellations-refunds"><span class="num">11</span><span class="title">Cancellations &amp; Refunds</span></h2>
+<ul>
+<li>You may cancel a booking before work begins without charge, unless a non-refundable deposit was agreed in advance for that service.</li>
+<li>Once work has commenced, you will be liable for payment for work already completed or costs already incurred (e.g., software licence purchased on your behalf).</li>
+<li>Refunds, where due, will be processed within a reasonable time using the original payment method where possible.</li>
+</ul>
+<h2 id="12-third-party-software-services"><span class="num">12</span><span class="title">Third-Party Software &amp; Services</span></h2>
+<p>Some services involve installing or activating third-party software (e.g., Microsoft Windows, Microsoft Office). Mellow Tech is not the manufacturer of this software and is not responsible for defects, bugs, or support issues arising from the third-party software itself once correctly installed — these fall under the relevant software provider's own terms and support channels.</p>
+<h2 id="13-governing-law-disputes"><span class="num">13</span><span class="title">Governing Law &amp; Disputes</span></h2>
+<p>These Terms are governed by the laws of the Republic of South Africa. Any dispute arising from these Terms or our services will first be addressed through good-faith direct engagement between the parties, and if unresolved, may be referred to mediation or the applicable South African courts or consumer protection body.</p>
+<h2 id="14-changes-to-these-terms"><span class="num">14</span><span class="title">Changes to These Terms</span></h2>
+<p>We may update these Terms from time to time. The version in effect at the time you book a service will apply to that booking. Continued use of our services after changes take effect constitutes acceptance of the revised Terms.</p>
+<h2 id="15-contact-us"><span class="num">15</span><span class="title">Contact Us</span></h2>
+<p>📧 <span class="todo">[Insert official contact email]</span>
+📱 +27 72 046 5993
+📍 <span class="todo">[Insert physical business address]</span></p>
+
+      <div class="doc-footer">
+        <div class="col">
+          <strong>Mellow Tech Services</strong>
+          [Insert physical business address]<br>
+          [Insert official contact email] &nbsp;·&nbsp; +27 72 046 5993
+          <br>
+          <a class="back-home" href="https://mellowtech.co.za">&larr; Back to mellowtech.co.za</a>
+        </div>
+        <div class="col">
+          <strong>Related documents</strong>
+          <nav><a href="mellowtech-privacy-policy.html">Privacy Policy</a>
+<a href="mellowtech-disclaimer.html">Disclaimer</a></nav>
+        </div>
+      </div>
+    </main>
+
+  </div>
+</div>
+
+<script>
+  // scroll progress
+  const bar = document.getElementById('progressBar');
+  function updateProgress(){
+    const h = document.documentElement;
+    const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    bar.style.width = (isNaN(scrolled) ? 0 : scrolled) + '%';
+  }
+  document.addEventListener('scroll', updateProgress, {passive:true});
+  updateProgress();
+
+  // scrollspy for TOC
+  const sections = Array.from(document.querySelectorAll('.content h2[id]'));
+  const tocLinks = Array.from(document.querySelectorAll('.toc-desktop a, .toc-mobile a'));
+  function setActive(id){
+    tocLinks.forEach(a => a.classList.toggle('active', a.dataset.target === id));
+  }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){ setActive(entry.target.id); }
+    });
+  }, { rootMargin: '-15% 0px -70% 0px', threshold: 0 });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
