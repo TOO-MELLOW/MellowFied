@@ -836,8 +836,8 @@
   window.startHeroCounter = startCounters;
 })();
 </script>  
-  <!-- COOKIE CONSENT BANNER -->
-<div id="cookieBanner" style="display:none; position:fixed; bottom:0; left:0; right:0; background:#0a0a0a; border-top:2px solid #D4AF37; padding:16px 24px; z-index:9999; box-shadow:0 -8px 30px rgba(0,0,0,0.6); font-family:'Montserrat',sans-serif; color:rgba(255,255,255,0.85);">
+  <!-- COOKIE CONSENT BANNER (fixed version) -->
+<div id="cookieBanner" style="display:none; position:fixed; bottom:0; left:0; right:0; background:#0a0a0a; border-top:2px solid #D4AF37; padding:16px 24px; z-index:10000; box-shadow:0 -8px 30px rgba(0,0,0,0.6); font-family:'Montserrat',sans-serif; color:rgba(255,255,255,0.85);">
   <div style="max-width:1260px; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px;">
     <div style="flex:1; min-width:200px;">
       <p style="margin:0; font-size:14px; line-height:1.5;">
@@ -845,7 +845,7 @@
         <a href="privacy.html" style="color:#D4AF37; text-decoration:underline;">Privacy Policy</a>.
       </p>
     </div>
-    <div style="display:flex; gap:12px; flex-shrink:0;">
+    <div style="display:flex; gap:12px; flex-shrink:0; flex-wrap:wrap;">
       <button id="cookieAcceptBtn" style="background:#D4AF37; border:none; color:#000; font-weight:600; padding:10px 28px; border-radius:40px; cursor:pointer; font-size:14px; transition:0.2s;">Accept</button>
       <button id="cookieRejectBtn" style="background:transparent; border:1px solid rgba(255,255,255,0.2); color:rgba(255,255,255,0.6); font-weight:500; padding:10px 20px; border-radius:40px; cursor:pointer; font-size:14px; transition:0.2s;">Decline</button>
       <a href="privacy.html" style="background:transparent; border:1px solid rgba(255,255,255,0.2); color:rgba(255,255,255,0.6); padding:10px 20px; border-radius:40px; font-size:14px; text-decoration:none; display:inline-flex; align-items:center; transition:0.2s;">Learn More →</a>
@@ -859,24 +859,27 @@
   const acceptBtn = document.getElementById('cookieAcceptBtn');
   const rejectBtn = document.getElementById('cookieRejectBtn');
 
-  // Check if user already made a choice
-  const choice = localStorage.getItem('cookieConsent');
-  if (choice === null) {
-    banner.style.display = 'block';
+  function showBanner() {
+    if (localStorage.getItem('cookieConsent') === null) {
+      banner.style.display = 'block';
+    }
   }
 
-  // Accept
+  // Wait until the loader is definitely gone
+  if (document.readyState === 'complete') {
+    showBanner();
+  } else {
+    window.addEventListener('load', showBanner);
+  }
+
   acceptBtn.addEventListener('click', function() {
     localStorage.setItem('cookieConsent', 'accepted');
     banner.style.display = 'none';
-    // You can optionally enable analytics/scripts here
   });
 
-  // Reject (still hide banner, but you may want to note that some features might be limited)
   rejectBtn.addEventListener('click', function() {
     localStorage.setItem('cookieConsent', 'rejected');
     banner.style.display = 'none';
-    // Disable any non‑essential scripts here if needed
   });
 })();
 </script>
