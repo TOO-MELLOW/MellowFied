@@ -91,6 +91,7 @@ footer{background:#080a0f;color:white;padding:80px 0 40px}
 .footer-col a:hover{color:var(--lime)}
 .footer-bottom{border-top:1px solid rgba(255,255,255,0.08);padding-top:32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
 .footer-bottom p{font-size:0.85rem;color:rgba(255,255,255,0.3)}
+.footer-bottom a{font-size:0.85rem;color:rgba(255,255,255,0.3)}
 .footer-social a{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.85rem;transition:var(--transition)}
 .footer-social a[title="Facebook"]{background:#1877F2;color:white}
 .footer-social a[title="Facebook"]:hover{background:#0d65d9;transform:translateY(-3px)}
@@ -280,7 +281,7 @@ footer{background:#080a0f;color:white;padding:80px 0 40px}
 .team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
 .team-card{background:white;border-radius:16px;padding:28px;text-align:center;transition:var(--transition)}
 .team-card:hover{transform:translateY(-4px);box-shadow:0 20px 50px rgba(13,15,20,0.1)}
-.team-avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--lime),var(--teal));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:var(--ink);margin:0 auto 16px}
+.team-avatar img{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--lime),var(--teal));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:var(--ink);margin:0 auto 16px}
 .team-name{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;margin-bottom:4px}
 .team-role{font-size:0.8rem;color:rgba(13,15,20,0.5)}
 
