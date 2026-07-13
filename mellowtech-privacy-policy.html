@@ -8,180 +8,184 @@
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#F5F7FB;
-  --surface:#FFFFFF;
-  --ink:#17203D;
-  --ink-soft:#4B5573;
-  --ink-faint:#8891A8;
-  --accent:#1B8E82;
-  --accent-ink:#0F5E56;
-  --accent-soft:#E4F3F0;
-  --line:#E2E6ED;
-  --flag:#B4610F;
-  --flag-soft:#FBEEDF;
-  --radius:10px;
-  --maxw:1160px;
+:root {
+  --bg: #f5f4f0;
+  --surface: #ffffff;
+  --ink: #0d0f14;
+  --ink-soft: #1e2230;
+  --ink-faint: rgba(13,15,20,0.4);
+  --accent: #00c2a8;
+  --accent-ink: #009e8a;
+  --accent-soft: rgba(0,194,168,0.1);
+  --line: rgba(13,15,20,0.1);
+  --lime: #c8f45a;
+  --lime-dark: #a8d43a;
+  --flag: #B4610F;
+  --flag-soft: #FBEEDF;
+  --radius: 16px;
+  --maxw: 1160px;
 }
-*{box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{
-  margin:0;
-  background:var(--bg);
-  color:var(--ink-soft);
-  font-family:'Inter',system-ui,-apple-system,sans-serif;
-  font-size:16px;
-  line-height:1.65;
-  -webkit-font-smoothing:antialiased;
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink-soft);
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
 }
-h1,h2,h3{
-  font-family:'Space Grotesk',system-ui,sans-serif;
-  color:var(--ink);
-  margin:0;
-  letter-spacing:-0.01em;
+h1, h2, h3 {
+  font-family: 'Syne', system-ui, sans-serif;
+  color: var(--ink);
+  margin: 0;
+  letter-spacing: -0.02em;
 }
-a{color:var(--accent-ink);text-decoration-color:var(--accent);text-underline-offset:2px;}
-a:hover{color:var(--accent);}
-.mono{font-family:'IBM Plex Mono',monospace;}
+a { color: var(--accent); text-decoration-color: var(--accent); text-underline-offset: 2px; }
+a:hover { color: var(--accent-ink); }
+.mono { font-family: 'DM Mono', monospace; }
 
 /* ---------- top bar ---------- */
-.topbar{
-  position:sticky; top:0; z-index:50;
-  background:rgba(245,247,251,0.92);
-  backdrop-filter:blur(8px);
-  border-bottom:1px solid var(--line);
+.topbar {
+  position: sticky; top: 0; z-index: 50;
+  background: var(--ink);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
 }
-.topbar-inner{
-  max-width:var(--maxw); margin:0 auto;
-  display:flex; align-items:center; justify-content:space-between;
-  padding:16px 28px;
-  gap:20px;
+.topbar-inner {
+  max-width: var(--maxw); margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 28px;
+  gap: 20px;
 }
-.brand{display:flex; align-items:baseline; gap:10px; text-decoration:none;}
-.brand-mark{
-  font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:1.05rem;
-  color:var(--ink);
+.brand { display: flex; align-items: baseline; gap: 10px; text-decoration: none; }
+.brand-mark {
+  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.05rem;
+  color: #ffffff;
 }
-.brand-tag{
-  font-family:'IBM Plex Mono',monospace; font-size:0.68rem; letter-spacing:0.08em;
-  color:var(--accent-ink); background:var(--accent-soft);
-  padding:3px 8px; border-radius:20px; text-transform:uppercase;
+.brand-tag {
+  font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.08em;
+  color: var(--ink); background: var(--lime);
+  padding: 3px 8px; border-radius: 20px; text-transform: uppercase;
 }
-.doc-tabs{display:flex; gap:4px; flex-wrap:wrap;}
-.doc-tabs a{
-  font-size:0.85rem; font-weight:500; color:var(--ink-soft);
-  text-decoration:none; padding:8px 14px; border-radius:8px;
-  transition:background .15s, color .15s;
-  white-space:nowrap;
+.doc-tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+.doc-tabs a {
+  font-size: 0.85rem; font-weight: 500; color: rgba(255,255,255,0.55);
+  font-family: 'Syne', sans-serif;
+  text-decoration: none; padding: 8px 14px; border-radius: 8px;
+  transition: background .15s, color .15s;
+  white-space: nowrap;
 }
-.doc-tabs a:hover{background:var(--accent-soft); color:var(--accent-ink);}
-.doc-tabs a.active{background:var(--ink); color:#fff;}
-.progress{height:3px; background:var(--line);}
-.progress-bar{height:100%; width:0%; background:var(--accent); transition:width .1s linear;}
+.doc-tabs a:hover { background: rgba(255,255,255,0.08); color: #fff; }
+.doc-tabs a.active { background: var(--lime); color: var(--ink); font-weight: 700; }
+.progress { height: 3px; background: rgba(255,255,255,0.1); }
+.progress-bar { height: 100%; width: 0%; background: var(--lime); transition: width .1s linear; }
 
 /* ---------- layout ---------- */
-.wrap{max-width:var(--maxw); margin:0 auto; padding:0 28px;}
-.layout{
-  display:grid; grid-template-columns:230px minmax(0,720px); gap:56px;
-  padding:44px 0 90px;
-  align-items:start;
+.wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 28px; }
+.layout {
+  display: grid; grid-template-columns: 230px minmax(0, 720px); gap: 56px;
+  padding: 44px 0 90px;
+  align-items: start;
 }
-@media (max-width:860px){
-  .layout{grid-template-columns:1fr; padding:28px 0 60px;}
-  .toc-desktop{display:none;}
+@media (max-width: 860px) {
+  .layout { grid-template-columns: 1fr; padding: 28px 0 60px; }
+  .toc-desktop { display: none; }
 }
 
 /* ---------- hero ---------- */
-.doc-hero{grid-column:1/-1; padding-bottom:8px;}
-.eyebrow{
-  font-family:'IBM Plex Mono',monospace; font-size:0.72rem; letter-spacing:0.1em;
-  text-transform:uppercase; color:var(--accent-ink); margin-bottom:12px; display:block;
+.doc-hero { grid-column: 1/-1; padding-bottom: 8px; }
+.eyebrow {
+  font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 12px; display: block;
 }
-h1.doc-title{font-size:clamp(1.9rem,3.2vw,2.6rem); font-weight:700; margin-bottom:10px;}
-.doc-meta{font-size:0.85rem; color:var(--ink-faint); font-family:'IBM Plex Mono',monospace;}
+h1.doc-title { font-size: clamp(1.9rem, 3.2vw, 2.6rem); font-weight: 700; margin-bottom: 10px; }
+.doc-meta { font-size: 0.85rem; color: var(--ink-faint); font-family: 'DM Mono', monospace; }
 
 /* ---------- toc ---------- */
-.toc-desktop{position:sticky; top:92px;}
-.toc-label{
-  font-family:'IBM Plex Mono',monospace; font-size:0.7rem; letter-spacing:0.08em;
-  text-transform:uppercase; color:var(--ink-faint); margin-bottom:14px; display:block;
+.toc-desktop { position: sticky; top: 76px; }
+.toc-label {
+  font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--ink-faint); margin-bottom: 14px; display: block;
 }
-.toc-desktop ul{list-style:none; margin:0; padding:0; border-left:2px solid var(--line);}
-.toc-desktop li{margin:0;}
-.toc-desktop a{
-  display:block; padding:7px 0 7px 16px; margin-left:-2px; border-left:2px solid transparent;
-  font-size:0.86rem; color:var(--ink-soft); text-decoration:none;
-  transition:color .15s, border-color .15s;
+.toc-desktop ul { list-style: none; margin: 0; padding: 0; border-left: 2px solid var(--line); }
+.toc-desktop li { margin: 0; }
+.toc-desktop a {
+  display: block; padding: 7px 0 7px 16px; margin-left: -2px; border-left: 2px solid transparent;
+  font-size: 0.86rem; color: var(--ink-soft); text-decoration: none;
+  transition: color .15s, border-color .15s;
 }
-.toc-desktop a:hover{color:var(--accent-ink);}
-.toc-desktop a.active{color:var(--accent-ink); border-left-color:var(--accent); font-weight:600;}
+.toc-desktop a:hover { color: var(--accent); }
+.toc-desktop a.active { color: var(--accent); border-left-color: var(--lime); font-weight: 600; }
 
-.toc-mobile{grid-column:1/-1; margin-bottom:8px;}
-.toc-mobile summary{
-  cursor:pointer; font-family:'Space Grotesk',sans-serif; font-weight:600;
-  padding:14px 16px; background:var(--surface); border:1px solid var(--line);
-  border-radius:var(--radius); color:var(--ink); list-style:none;
+.toc-mobile { grid-column: 1/-1; margin-bottom: 8px; }
+.toc-mobile summary {
+  cursor: pointer; font-family: 'Syne', sans-serif; font-weight: 600;
+  padding: 14px 16px; background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); color: var(--ink); list-style: none;
 }
-.toc-mobile summary::-webkit-details-marker{display:none;}
-.toc-mobile[open] summary{border-radius:var(--radius) var(--radius) 0 0;}
-.toc-mobile ul{
-  list-style:none; margin:0; padding:8px; background:var(--surface);
-  border:1px solid var(--line); border-top:none; border-radius:0 0 var(--radius) var(--radius);
+.toc-mobile summary::-webkit-details-marker { display: none; }
+.toc-mobile[open] summary { border-radius: var(--radius) var(--radius) 0 0; }
+.toc-mobile ul {
+  list-style: none; margin: 0; padding: 8px; background: var(--surface);
+  border: 1px solid var(--line); border-top: none; border-radius: 0 0 var(--radius) var(--radius);
 }
-.toc-mobile a{display:block; padding:8px 10px; font-size:0.9rem; color:var(--ink-soft); text-decoration:none; border-radius:6px;}
-.toc-mobile a:hover{background:var(--accent-soft);}
+.toc-mobile a { display: block; padding: 8px 10px; font-size: 0.9rem; color: var(--ink-soft); text-decoration: none; border-radius: 6px; }
+.toc-mobile a:hover { background: var(--accent-soft); color: var(--accent); }
 
 /* ---------- content ---------- */
-.content{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:40px 44px;}
-@media (max-width:640px){.content{padding:26px 22px;}}
+.content { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 40px 44px; }
+@media (max-width: 640px) { .content { padding: 26px 22px; } }
 
-.content h2{
-  display:flex; align-items:baseline; gap:14px;
-  font-size:1.28rem; font-weight:600;
-  padding-top:34px; margin-top:34px; border-top:1px solid var(--line);
-  scroll-margin-top:90px;
+.content h2 {
+  display: flex; align-items: baseline; gap: 14px;
+  font-size: 1.28rem; font-weight: 700;
+  padding-top: 34px; margin-top: 34px; border-top: 1px solid var(--line);
+  scroll-margin-top: 90px;
 }
-.content > h2:first-child{margin-top:0; padding-top:0; border-top:none;}
-.content h2 .num{
-  font-family:'IBM Plex Mono',monospace; font-size:0.78rem; font-weight:600;
-  color:var(--accent-ink); background:var(--accent-soft);
-  border-radius:6px; padding:4px 9px; flex-shrink:0;
+.content > h2:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+.content h2 .num {
+  font-family: 'DM Mono', monospace; font-size: 0.78rem; font-weight: 600;
+  color: var(--ink); background: var(--lime);
+  border-radius: 6px; padding: 4px 9px; flex-shrink: 0;
 }
-.content p{margin:0 0 16px;}
-.content ul,.content ol{margin:0 0 16px; padding-left:22px;}
-.content li{margin-bottom:6px;}
-.content strong{color:var(--ink); font-weight:600;}
-.content table{
-  width:100%; border-collapse:collapse; margin:18px 0 22px; font-size:0.92rem;
+.content p { margin: 0 0 16px; }
+.content ul, .content ol { margin: 0 0 16px; padding-left: 22px; }
+.content li { margin-bottom: 6px; }
+.content strong { color: var(--ink); font-weight: 600; }
+.content table {
+  width: 100%; border-collapse: collapse; margin: 18px 0 22px; font-size: 0.92rem;
 }
-.content th,.content td{
-  border:1px solid var(--line); padding:10px 12px; text-align:left; vertical-align:top;
+.content th, .content td {
+  border: 1px solid var(--line); padding: 10px 12px; text-align: left; vertical-align: top;
 }
-.content th{background:var(--accent-soft); color:var(--accent-ink); font-family:'IBM Plex Mono',monospace; font-size:0.78rem; text-transform:uppercase; letter-spacing:0.03em;}
-
-.todo{
-  background:var(--flag-soft); color:var(--flag); font-weight:600;
-  padding:2px 7px; border-radius:5px; font-size:0.94em;
-  border-bottom:1px dashed var(--flag);
+.content th {
+  background: var(--lime); color: var(--ink); font-family: 'DM Mono', monospace;
+  font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em;
+}
+.todo {
+  background: var(--flag-soft); color: var(--flag); font-weight: 600;
+  padding: 2px 7px; border-radius: 5px; font-size: 0.94em;
+  border-bottom: 1px dashed var(--flag);
 }
 
 /* ---------- footer ---------- */
-.doc-footer{
-  margin-top:36px; padding:26px 0 50px; border-top:1px solid var(--line);
-  display:flex; flex-wrap:wrap; justify-content:space-between; gap:20px;
-  font-size:0.86rem; color:var(--ink-faint);
+.doc-footer {
+  margin-top: 36px; padding: 26px 0 50px; border-top: 1px solid var(--line);
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20px;
+  font-size: 0.86rem; color: var(--ink-faint);
 }
-.doc-footer .col{max-width:360px;}
-.doc-footer strong{color:var(--ink-soft); display:block; margin-bottom:6px; font-family:'Space Grotesk',sans-serif;}
-.doc-footer nav a{margin-right:14px; color:var(--ink-soft);}
-.back-home{
-  display:inline-flex; align-items:center; gap:6px; margin-top:10px;
-  font-size:0.85rem; font-weight:600; color:var(--accent-ink); text-decoration:none;
+.doc-footer .col { max-width: 360px; }
+.doc-footer strong { color: var(--ink-soft); display: block; margin-bottom: 6px; font-family: 'Syne', sans-serif; }
+.doc-footer nav a { margin-right: 14px; color: var(--ink-soft); }
+.back-home {
+  display: inline-flex; align-items: center; gap: 6px; margin-top: 10px;
+  font-size: 0.85rem; font-weight: 700; color: var(--accent); text-decoration: none;
+  font-family: 'Syne', sans-serif;
 }
-.back-home:hover{color:var(--accent);}
-
+.back-home:hover { color: var(--accent-ink); }
 </style>
 </head>
 <body>
@@ -207,25 +211,25 @@ h1.doc-title{font-size:clamp(1.9rem,3.2vw,2.6rem); font-weight:700; margin-botto
     <div class="doc-hero">
       <span class="eyebrow">Legal · Privacy</span>
       <h1 class="doc-title">Privacy Policy</h1>
-      <div class="doc-meta"> &nbsp;·&nbsp; mellowtech.co.za</div>
+      <div class="doc-meta">&nbsp;·&nbsp; mellowtech.co.za</div>
     </div>
 
     <details class="toc-mobile">
       <summary>On this page</summary>
       <ul>
         <li><a href="#1-introduction" class="active" data-target="1-introduction">01. Introduction</a></li>
-<li><a href="#2-who-we-are-responsible-party" data-target="2-who-we-are-responsible-party">02. Who We Are (Responsible Party)</a></li>
-<li><a href="#3-personal-information-we-collect" data-target="3-personal-information-we-collect">03. Personal Information We Collect</a></li>
-<li><a href="#4-why-we-process-your-information" data-target="4-why-we-process-your-information">04. Why We Process Your Information</a></li>
-<li><a href="#5-cookies-and-tracking" data-target="5-cookies-and-tracking">05. Cookies and Tracking</a></li>
-<li><a href="#6-sharing-your-information" data-target="6-sharing-your-information">06. Sharing Your Information</a></li>
-<li><a href="#7-data-retention" data-target="7-data-retention">07. Data Retention</a></li>
-<li><a href="#8-security" data-target="8-security">08. Security</a></li>
-<li><a href="#9-childrens-privacy" data-target="9-childrens-privacy">09. Children's Privacy</a></li>
-<li><a href="#10-your-rights-under-popia" data-target="10-your-rights-under-popia">10. Your Rights Under POPIA</a></li>
-<li><a href="#11-data-breach-notification" data-target="11-data-breach-notification">11. Data Breach Notification</a></li>
-<li><a href="#12-changes-to-this-policy" data-target="12-changes-to-this-policy">12. Changes to This Policy</a></li>
-<li><a href="#13-contact-us" data-target="13-contact-us">13. Contact Us</a></li>
+        <li><a href="#2-who-we-are-responsible-party" data-target="2-who-we-are-responsible-party">02. Who We Are (Responsible Party)</a></li>
+        <li><a href="#3-personal-information-we-collect" data-target="3-personal-information-we-collect">03. Personal Information We Collect</a></li>
+        <li><a href="#4-why-we-process-your-information" data-target="4-why-we-process-your-information">04. Why We Process Your Information</a></li>
+        <li><a href="#5-cookies-and-tracking" data-target="5-cookies-and-tracking">05. Cookies and Tracking</a></li>
+        <li><a href="#6-sharing-your-information" data-target="6-sharing-your-information">06. Sharing Your Information</a></li>
+        <li><a href="#7-data-retention" data-target="7-data-retention">07. Data Retention</a></li>
+        <li><a href="#8-security" data-target="8-security">08. Security</a></li>
+        <li><a href="#9-childrens-privacy" data-target="9-childrens-privacy">09. Children's Privacy</a></li>
+        <li><a href="#10-your-rights-under-popia" data-target="10-your-rights-under-popia">10. Your Rights Under POPIA</a></li>
+        <li><a href="#11-data-breach-notification" data-target="11-data-breach-notification">11. Data Breach Notification</a></li>
+        <li><a href="#12-changes-to-this-policy" data-target="12-changes-to-this-policy">12. Changes to This Policy</a></li>
+        <li><a href="#13-contact-us" data-target="13-contact-us">13. Contact Us</a></li>
       </ul>
     </details>
 
@@ -233,159 +237,154 @@ h1.doc-title{font-size:clamp(1.9rem,3.2vw,2.6rem); font-weight:700; margin-botto
       <span class="toc-label">On this page</span>
       <ul>
         <li><a href="#1-introduction" class="active" data-target="1-introduction">01. Introduction</a></li>
-<li><a href="#2-who-we-are-responsible-party" data-target="2-who-we-are-responsible-party">02. Who We Are (Responsible Party)</a></li>
-<li><a href="#3-personal-information-we-collect" data-target="3-personal-information-we-collect">03. Personal Information We Collect</a></li>
-<li><a href="#4-why-we-process-your-information" data-target="4-why-we-process-your-information">04. Why We Process Your Information</a></li>
-<li><a href="#5-cookies-and-tracking" data-target="5-cookies-and-tracking">05. Cookies and Tracking</a></li>
-<li><a href="#6-sharing-your-information" data-target="6-sharing-your-information">06. Sharing Your Information</a></li>
-<li><a href="#7-data-retention" data-target="7-data-retention">07. Data Retention</a></li>
-<li><a href="#8-security" data-target="8-security">08. Security</a></li>
-<li><a href="#9-childrens-privacy" data-target="9-childrens-privacy">09. Children's Privacy</a></li>
-<li><a href="#10-your-rights-under-popia" data-target="10-your-rights-under-popia">10. Your Rights Under POPIA</a></li>
-<li><a href="#11-data-breach-notification" data-target="11-data-breach-notification">11. Data Breach Notification</a></li>
-<li><a href="#12-changes-to-this-policy" data-target="12-changes-to-this-policy">12. Changes to This Policy</a></li>
-<li><a href="#13-contact-us" data-target="13-contact-us">13. Contact Us</a></li>
+        <li><a href="#2-who-we-are-responsible-party" data-target="2-who-we-are-responsible-party">02. Who We Are (Responsible Party)</a></li>
+        <li><a href="#3-personal-information-we-collect" data-target="3-personal-information-we-collect">03. Personal Information We Collect</a></li>
+        <li><a href="#4-why-we-process-your-information" data-target="4-why-we-process-your-information">04. Why We Process Your Information</a></li>
+        <li><a href="#5-cookies-and-tracking" data-target="5-cookies-and-tracking">05. Cookies and Tracking</a></li>
+        <li><a href="#6-sharing-your-information" data-target="6-sharing-your-information">06. Sharing Your Information</a></li>
+        <li><a href="#7-data-retention" data-target="7-data-retention">07. Data Retention</a></li>
+        <li><a href="#8-security" data-target="8-security">08. Security</a></li>
+        <li><a href="#9-childrens-privacy" data-target="9-childrens-privacy">09. Children's Privacy</a></li>
+        <li><a href="#10-your-rights-under-popia" data-target="10-your-rights-under-popia">10. Your Rights Under POPIA</a></li>
+        <li><a href="#11-data-breach-notification" data-target="11-data-breach-notification">11. Data Breach Notification</a></li>
+        <li><a href="#12-changes-to-this-policy" data-target="12-changes-to-this-policy">12. Changes to This Policy</a></li>
+        <li><a href="#13-contact-us" data-target="13-contact-us">13. Contact Us</a></li>
       </ul>
     </aside>
 
     <main class="content">
       <p>Last Updated: 4 July 2026</p>
-<h2 id="1-introduction"><span class="num">01</span><span class="title">Introduction</span></h2>
-<p>Mellow Tech Services ("<strong>Mellow Tech</strong>," "<strong>we</strong>," "<strong>us</strong>," or "<strong>our</strong>") provides technology support, creative, and business digitisation services to clients in Polokwane and remotely across South Africa, including via our website at mellowtech.co.za (the "<strong>Site</strong>"), WhatsApp, email, and social media.</p>
-<p>We are committed to protecting your personal information in accordance with the <strong>Protection of Personal Information Act 4 of 2013 ("POPIA")</strong>. This Privacy Policy explains what personal information we collect, why we collect it, how we use and protect it, and what rights you have.</p>
-<p>By using our Site, contacting us, or engaging our services, you acknowledge that you have read and understood this Policy.</p>
-<h2 id="2-who-we-are-responsible-party"><span class="num">02</span><span class="title">Who We Are (Responsible Party)</span></h2>
-<p>Mellow Tech Services is the "responsible party" for personal information processed under this Policy.</p>
-<table>
-<thead>
-<tr>
-<th>Detail</th>
-<th>Information</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Trading name</td>
-<td>Mellow Tech Services</td>
-</tr>
-<tr>
-<td>Physical address</td>
-<td><span class="todo">Limpopo, Polokwane, Kalkspruit</span></td>
-</tr>
-<tr>
-<td>Information Officer</td>
-<td><span class="todo">Tumelo Matli</span></td>
-</tr>
-<tr>
-<td>Contact email</td>
-<td><span class="todo">info@mellowtech.co.za</span></td>
-</tr>
-<tr>
-<td>Contact phone</td>
-<td>072 046 5993</td>
-</tr>
-</tbody>
-</table>
-<h2 id="3-personal-information-we-collect"><span class="num">03</span><span class="title">Personal Information We Collect</span></h2>
-<p>Depending on how you interact with us, we may collect:</p>
-<p><strong>a) Information you give us directly</strong></p>
-<ul>
-<li>Full name</li>
-<li>Phone number / WhatsApp number</li>
-<li>Email address</li>
-<li>Service(s) requested and project/message details you submit via our contact form, WhatsApp, or email</li>
-<li>Payment-related information necessary to process a transaction (we do not store full card details — these are handled by our payment provider, if applicable)</li>
-</ul>
-<p><strong>b) Information collected when we perform services</strong>
-Certain services require us to access your device, accounts, or files. This may include:</p>
-<ul>
-<li>Device information (make, model, serial number/IMEI, condition)</li>
-<li>Login credentials or account access you provide for the purpose of completing a job (e.g., installing software, removing a password, troubleshooting)</li>
-<li>Files, documents, or data stored on a device brought in for repair, where incidental access is unavoidable while diagnosing or fixing the issue</li>
-<li>Proof-of-ownership documents where required for services such as password removal or FRP (Factory Reset Protection) bypass</li>
-</ul>
-<p>We only access what is reasonably necessary to complete the requested service and do not review, copy, or use your personal files for any purpose beyond the job itself.</p>
-<p><strong>c) Information collected automatically</strong></p>
-<ul>
-<li>Standard website usage data (pages visited, browser type, device type, approximate location based on IP address)</li>
-<li>Interactions with the on-site chat assistant ("MellowTech Assistant")</li>
-<li>Cookies and similar tracking technologies (see Section 5 below)</li>
-</ul>
-<p><strong>d) Information from third parties</strong></p>
-<ul>
-<li>Messages or enquiries received via Facebook, TikTok, or WhatsApp Business, which are subject to those platforms' own privacy terms in addition to this Policy</li>
-</ul>
-<h2 id="4-why-we-process-your-information"><span class="num">04</span><span class="title">Why We Process Your Information</span></h2>
-<p>We process your personal information to:</p>
-<ul>
-<li>Respond to enquiries and provide quotes</li>
-<li>Deliver the services you request (repairs, installations, design, development, CV/assignment assistance, business digitisation)</li>
-<li>Communicate with you about bookings, progress, and completed work</li>
-<li>Process payments and keep basic financial records as required by law</li>
-<li>Improve our Site and services</li>
-<li>Comply with legal, tax, and regulatory obligations</li>
-<li>Protect our business against fraud, misuse, or unlawful requests (e.g. verifying ownership before unlocking a device)</li>
-</ul>
-<p>We process your information on the basis of your <strong>consent</strong>, the <strong>necessity to perform a contract</strong> with you (i.e., delivering the service you requested), and our <strong>legitimate business interests</strong>, in each case only to the extent permitted under POPIA.</p>
-<h2 id="5-cookies-and-tracking"><span class="num">05</span><span class="title">Cookies and Tracking</span></h2>
-<p>Our Site may use cookies or similar technologies to remember basic preferences, understand how visitors use the Site, and support the on-site chat assistant.</p>
-<p>At present, our Site does not display a cookie consent banner. Where cookies that are not strictly necessary for the Site to function (such as analytics or marketing cookies) are used, we will implement a cookie consent mechanism so that you can accept or decline non-essential cookies before they are set. You can also control cookies through your browser settings at any time, including deleting existing cookies and blocking future ones — though this may affect how parts of the Site function.</p>
-<p><em><span class="todo"></span></em></p>
-<h2 id="6-sharing-your-information"><span class="num">06</span><span class="title">Sharing Your Information</span></h2>
-<p>We do not sell your personal information. We may share it with:</p>
-<ul>
-<li><strong>Service providers</strong> who help us operate (e.g., website hosting, email providers, WhatsApp Business/Meta, accounting software), bound by confidentiality obligations</li>
-<li><strong>Payment processors</strong>, where applicable, to complete transactions</li>
-<li><strong>Law enforcement or regulators</strong>, where required by law, or where we reasonably believe disclosure is necessary to prevent fraud, protect someone's safety, or address suspected unlawful device ownership</li>
-<li><strong>Professional advisors</strong> (e.g., accountant, attorney) where necessary for our legitimate business purposes</li>
-</ul>
-<p>Where information is transferred to a service provider located outside South Africa (for example, WhatsApp/Meta or cloud-hosting infrastructure), we take reasonable steps to ensure it receives a level of protection consistent with POPIA.</p>
-<h2 id="7-data-retention"><span class="num">07</span><span class="title">Data Retention</span></h2>
-<p>We retain personal information only for as long as necessary to:</p>
-<ul>
-<li>Fulfil the purpose for which it was collected,</li>
-<li>Meet our legal, accounting, or tax obligations, and</li>
-<li>Resolve disputes or enforce our agreements.</li>
-</ul>
-<p>Device data and files accessed during a repair or unlocking service are not retained after the job is completed and the device is returned, unless you separately request backup or storage services.</p>
-<h2 id="8-security"><span class="num">08</span><span class="title">Security</span></h2>
-<p>We take reasonable technical and organisational measures to protect personal information against loss, unauthorised access, alteration, or disclosure. No system is completely secure, and we cannot guarantee absolute security of information transmitted over the internet or messaging platforms such as WhatsApp.</p>
-<h2 id="9-childrens-privacy"><span class="num">09</span><span class="title">Children's Privacy</span></h2>
-<p>Our services (e.g., CV design, assignment assistance) may be used by students who are minors, typically with parental or guardian awareness. Where a client is under 18, we rely on the involvement or consent of a parent/guardian for the processing of that minor's personal information, in line with POPIA's requirements for processing children's information.</p>
-<h2 id="10-your-rights-under-popia"><span class="num">10</span><span class="title">Your Rights Under POPIA</span></h2>
-<p>You have the right to:</p>
-<ul>
-<li>Be informed about what personal information we hold and why</li>
-<li>Request access to the personal information we hold about you</li>
-<li>Request correction or deletion of inaccurate, irrelevant, or unlawfully processed information</li>
-<li>Object to the processing of your personal information in certain circumstances</li>
-<li>Withdraw consent, where processing is based on consent, at any time</li>
-<li>Lodge a complaint with the Information Regulator if you believe your rights have been infringed</li>
-</ul>
-<p>To exercise any of these rights, contact our Information Officer using the details in Section 2.</p>
-<p><strong>Information Regulator (South Africa)</strong>
-Website: https://inforegulator.org.za
-Email: complaints.IR@justice.gov.za</p>
-<h2 id="11-data-breach-notification"><span class="num">11</span><span class="title">Data Breach Notification</span></h2>
-<p>If we become aware of a security compromise that has resulted, or is reasonably likely to result, in unauthorised access to your personal information, we will notify the Information Regulator and affected individuals as required by POPIA.</p>
-<h2 id="12-changes-to-this-policy"><span class="num">12</span><span class="title">Changes to This Policy</span></h2>
-<p>We may update this Privacy Policy from time to time to reflect changes in our practices or legal requirements. The "Last Updated" date at the top will indicate the most recent revision. Continued use of our services after changes take effect constitutes acceptance of the updated Policy.</p>
-<h2 id="13-contact-us"><span class="num">13</span><span class="title">Contact Us</span></h2>
-<p>If you have questions about this Privacy Policy or how we handle your personal information, contact us at:</p>
-<p>📧 <span class="todo">info@mellowtech.co.za</span>
-📱 +27 72 046 5993
-📍 <span class="todo">Limpopo, Polokwane, Kalkspruit</span></p>
+
+      <h2 id="1-introduction"><span class="num">01</span><span class="title">Introduction</span></h2>
+      <p>Mellow Tech Services ("<strong>Mellow Tech</strong>," "<strong>we</strong>," "<strong>us</strong>," or "<strong>our</strong>") provides technology support, creative, and business digitisation services to clients in Polokwane and remotely across South Africa, including via our website at mellowtech.co.za (the "<strong>Site</strong>"), WhatsApp, email, and social media.</p>
+      <p>We are committed to protecting your personal information in accordance with the <strong>Protection of Personal Information Act 4 of 2013 ("POPIA")</strong>. This Privacy Policy explains what personal information we collect, why we collect it, how we use and protect it, and what rights you have.</p>
+      <p>By using our Site, contacting us, or engaging our services, you acknowledge that you have read and understood this Policy.</p>
+
+      <h2 id="2-who-we-are-responsible-party"><span class="num">02</span><span class="title">Who We Are (Responsible Party)</span></h2>
+      <p>Mellow Tech Services is the "responsible party" for personal information processed under this Policy.</p>
+      <table>
+        <thead>
+          <tr><th>Detail</th><th>Information</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Trading name</td><td>Mellow Tech Services</td></tr>
+          <tr><td>Physical address</td><td><span class="todo">Limpopo, Polokwane, Kalkspruit</span></td></tr>
+          <tr><td>Information Officer</td><td><span class="todo">Tumelo Matli</span></td></tr>
+          <tr><td>Contact email</td><td><span class="todo">info@mellowtech.co.za</span></td></tr>
+          <tr><td>Contact phone</td><td>072 046 5993</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="3-personal-information-we-collect"><span class="num">03</span><span class="title">Personal Information We Collect</span></h2>
+      <p>Depending on how you interact with us, we may collect:</p>
+      <p><strong>a) Information you give us directly</strong></p>
+      <ul>
+        <li>Full name</li>
+        <li>Phone number / WhatsApp number</li>
+        <li>Email address</li>
+        <li>Service(s) requested and project/message details you submit via our contact form, WhatsApp, or email</li>
+        <li>Payment-related information necessary to process a transaction (we do not store full card details — these are handled by our payment provider, if applicable)</li>
+      </ul>
+      <p><strong>b) Information collected when we perform services</strong><br>
+      Certain services require us to access your device, accounts, or files. This may include:</p>
+      <ul>
+        <li>Device information (make, model, serial number/IMEI, condition)</li>
+        <li>Login credentials or account access you provide for the purpose of completing a job (e.g., installing software, removing a password, troubleshooting)</li>
+        <li>Files, documents, or data stored on a device brought in for repair, where incidental access is unavoidable while diagnosing or fixing the issue</li>
+        <li>Proof-of-ownership documents where required for services such as password removal or FRP (Factory Reset Protection) bypass</li>
+      </ul>
+      <p>We only access what is reasonably necessary to complete the requested service and do not review, copy, or use your personal files for any purpose beyond the job itself.</p>
+      <p><strong>c) Information collected automatically</strong></p>
+      <ul>
+        <li>Standard website usage data (pages visited, browser type, device type, approximate location based on IP address)</li>
+        <li>Interactions with the on-site chat assistant ("MellowTech Assistant")</li>
+        <li>Cookies and similar tracking technologies (see Section 5 below)</li>
+      </ul>
+      <p><strong>d) Information from third parties</strong></p>
+      <ul>
+        <li>Messages or enquiries received via Facebook, TikTok, or WhatsApp Business, which are subject to those platforms' own privacy terms in addition to this Policy</li>
+      </ul>
+
+      <h2 id="4-why-we-process-your-information"><span class="num">04</span><span class="title">Why We Process Your Information</span></h2>
+      <p>We process your personal information to:</p>
+      <ul>
+        <li>Respond to enquiries and provide quotes</li>
+        <li>Deliver the services you request (repairs, installations, design, development, CV/assignment assistance, business digitisation)</li>
+        <li>Communicate with you about bookings, progress, and completed work</li>
+        <li>Process payments and keep basic financial records as required by law</li>
+        <li>Improve our Site and services</li>
+        <li>Comply with legal, tax, and regulatory obligations</li>
+        <li>Protect our business against fraud, misuse, or unlawful requests (e.g. verifying ownership before unlocking a device)</li>
+      </ul>
+      <p>We process your information on the basis of your <strong>consent</strong>, the <strong>necessity to perform a contract</strong> with you (i.e., delivering the service you requested), and our <strong>legitimate business interests</strong>, in each case only to the extent permitted under POPIA.</p>
+
+      <h2 id="5-cookies-and-tracking"><span class="num">05</span><span class="title">Cookies and Tracking</span></h2>
+      <p>Our Site may use cookies or similar technologies to remember basic preferences, understand how visitors use the Site, and support the on-site chat assistant.</p>
+      <p>At present, our Site does not display a cookie consent banner. Where cookies that are not strictly necessary for the Site to function (such as analytics or marketing cookies) are used, we will implement a cookie consent mechanism so that you can accept or decline non-essential cookies before they are set. You can also control cookies through your browser settings at any time, including deleting existing cookies and blocking future ones — though this may affect how parts of the Site function.</p>
+
+      <h2 id="6-sharing-your-information"><span class="num">06</span><span class="title">Sharing Your Information</span></h2>
+      <p>We do not sell your personal information. We may share it with:</p>
+      <ul>
+        <li><strong>Service providers</strong> who help us operate (e.g., website hosting, email providers, WhatsApp Business/Meta, accounting software), bound by confidentiality obligations</li>
+        <li><strong>Payment processors</strong>, where applicable, to complete transactions</li>
+        <li><strong>Law enforcement or regulators</strong>, where required by law, or where we reasonably believe disclosure is necessary to prevent fraud, protect someone's safety, or address suspected unlawful device ownership</li>
+        <li><strong>Professional advisors</strong> (e.g., accountant, attorney) where necessary for our legitimate business purposes</li>
+      </ul>
+      <p>Where information is transferred to a service provider located outside South Africa (for example, WhatsApp/Meta or cloud-hosting infrastructure), we take reasonable steps to ensure it receives a level of protection consistent with POPIA.</p>
+
+      <h2 id="7-data-retention"><span class="num">07</span><span class="title">Data Retention</span></h2>
+      <p>We retain personal information only for as long as necessary to:</p>
+      <ul>
+        <li>Fulfil the purpose for which it was collected,</li>
+        <li>Meet our legal, accounting, or tax obligations, and</li>
+        <li>Resolve disputes or enforce our agreements.</li>
+      </ul>
+      <p>Device data and files accessed during a repair or unlocking service are not retained after the job is completed and the device is returned, unless you separately request backup or storage services.</p>
+
+      <h2 id="8-security"><span class="num">08</span><span class="title">Security</span></h2>
+      <p>We take reasonable technical and organisational measures to protect personal information against loss, unauthorised access, alteration, or disclosure. No system is completely secure, and we cannot guarantee absolute security of information transmitted over the internet or messaging platforms such as WhatsApp.</p>
+
+      <h2 id="9-childrens-privacy"><span class="num">09</span><span class="title">Children's Privacy</span></h2>
+      <p>Our services (e.g., CV design, assignment assistance) may be used by students who are minors, typically with parental or guardian awareness. Where a client is under 18, we rely on the involvement or consent of a parent/guardian for the processing of that minor's personal information, in line with POPIA's requirements for processing children's information.</p>
+
+      <h2 id="10-your-rights-under-popia"><span class="num">10</span><span class="title">Your Rights Under POPIA</span></h2>
+      <p>You have the right to:</p>
+      <ul>
+        <li>Be informed about what personal information we hold and why</li>
+        <li>Request access to the personal information we hold about you</li>
+        <li>Request correction or deletion of inaccurate, irrelevant, or unlawfully processed information</li>
+        <li>Object to the processing of your personal information in certain circumstances</li>
+        <li>Withdraw consent, where processing is based on consent, at any time</li>
+        <li>Lodge a complaint with the Information Regulator if you believe your rights have been infringed</li>
+      </ul>
+      <p>To exercise any of these rights, contact our Information Officer using the details in Section 2.</p>
+      <p><strong>Information Regulator (South Africa)</strong><br>
+      Website: https://inforegulator.org.za<br>
+      Email: complaints.IR@justice.gov.za</p>
+
+      <h2 id="11-data-breach-notification"><span class="num">11</span><span class="title">Data Breach Notification</span></h2>
+      <p>If we become aware of a security compromise that has resulted, or is reasonably likely to result, in unauthorised access to your personal information, we will notify the Information Regulator and affected individuals as required by POPIA.</p>
+
+      <h2 id="12-changes-to-this-policy"><span class="num">12</span><span class="title">Changes to This Policy</span></h2>
+      <p>We may update this Privacy Policy from time to time to reflect changes in our practices or legal requirements. The "Last Updated" date at the top will indicate the most recent revision. Continued use of our services after changes take effect constitutes acceptance of the updated Policy.</p>
+
+      <h2 id="13-contact-us"><span class="num">13</span><span class="title">Contact Us</span></h2>
+      <p>If you have questions about this Privacy Policy or how we handle your personal information, contact us at:</p>
+      <p>📧 <span class="todo">info@mellowtech.co.za</span><br>
+      📱 +27 72 046 5993<br>
+      📍 <span class="todo">Limpopo, Polokwane, Kalkspruit</span></p>
 
       <div class="doc-footer">
         <div class="col">
           <strong>Mellow Tech Services</strong>
-        
           <a class="back-home" href="https://mellowtech.co.za">&larr; Back to mellowtech.co.za</a>
         </div>
         <div class="col">
           <strong>Related documents</strong>
-          <nav><a href="mellowtech-terms-of-service.html">Terms of Service</a>
-<a href="mellowtech-disclaimer.html">Disclaimer</a></nav>
+          <nav>
+            <a href="mellowtech-terms-of-service.html">Terms of Service</a>
+            <a href="mellowtech-disclaimer.html">Disclaimer</a>
+          </nav>
         </div>
       </div>
     </main>
@@ -394,26 +393,22 @@ Email: complaints.IR@justice.gov.za</p>
 </div>
 
 <script>
-  // scroll progress
   const bar = document.getElementById('progressBar');
-  function updateProgress(){
+  function updateProgress() {
     const h = document.documentElement;
     const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
     bar.style.width = (isNaN(scrolled) ? 0 : scrolled) + '%';
   }
-  document.addEventListener('scroll', updateProgress, {passive:true});
+  document.addEventListener('scroll', updateProgress, { passive: true });
   updateProgress();
 
-  // scrollspy for TOC
   const sections = Array.from(document.querySelectorAll('.content h2[id]'));
   const tocLinks = Array.from(document.querySelectorAll('.toc-desktop a, .toc-mobile a'));
-  function setActive(id){
+  function setActive(id) {
     tocLinks.forEach(a => a.classList.toggle('active', a.dataset.target === id));
   }
   const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if(entry.isIntersecting){ setActive(entry.target.id); }
-    });
+    entries.forEach(entry => { if (entry.isIntersecting) { setActive(entry.target.id); } });
   }, { rootMargin: '-15% 0px -70% 0px', threshold: 0 });
   sections.forEach(s => observer.observe(s));
 </script>
