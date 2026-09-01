@@ -5,4 +5,4 @@ Allow: /
 Disallow: /admin/
 Disallow: /wp-admin/
 
-Sitemap: https://mellowtech.co.za//sitemap.xml
+Sitemap: https://mellowtech.co.za/sitemap.xml

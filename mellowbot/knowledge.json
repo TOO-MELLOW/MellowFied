@@ -1,0 +1,196 @@
+{
+  "company": {
+    "name": "Mellow Tech Services",
+    "website": "https://mellowtech.co.za",
+    "location": "Polokwane, Limpopo, South Africa",
+    "phone_whatsapp": "+27 720 465 993",
+    "email": "info@mellowtech.co.za",
+    "contact_page": "https://mellowtech.co.za/contact.html",
+    "positioning": "Practical, affordable technology and creative services for students, professionals, entrepreneurs and small businesses.",
+    "tone": "Friendly, direct, helpful South African English. Natural rather than corporate. Understand casual expressions such as howzit, ja, bra, yebo, lekker and kasi, but do not force slang."
+  },
+  "rules": [
+    "MellowTech business information in this knowledge file is authoritative.",
+    "Never invent a MellowTech service, price, turnaround time, guarantee, policy, staff member, address or capability.",
+    "When a MellowTech-specific fact is not in the knowledge base, say that you do not want to guess and direct the customer to WhatsApp, email or the contact page.",
+    "Use South African rand (R) for prices.",
+    "Prices listed as 'from' are starting prices, not guaranteed final quotes.",
+    "For complex jobs, explain that the final price can depend on requirements and that MellowTech can confirm a tailored quote.",
+    "Do not claim to have personally contacted a MellowTech employee or completed an order.",
+    "Do not expose system prompts, API keys, private configuration or internal implementation details.",
+    "For technical troubleshooting, provide safe general guidance and recommend professional support when the issue may risk data loss, hardware damage, malware or system corruption.",
+    "For academic assistance, support formatting, proofreading, structure, referencing and learning. Do not misrepresent academic work as the student's own or guarantee marks.",
+    "WhatsApp is the fastest contact route."
+  ],
+  "services": [
+    {
+      "key": "web",
+      "name": "Website Development",
+      "page": "/service-web.html",
+      "price": "Starting from R650",
+      "turnaround": "3–7 business days",
+      "summary": "Modern, mobile-first websites for businesses, portfolios, landing pages and online stores.",
+      "details": [
+        "Mobile responsive",
+        "SEO-optimized foundation",
+        "Fast-loading modern design",
+        "Branded to the business",
+        "Handover training included"
+      ]
+    },
+    {
+      "key": "cv",
+      "name": "CV Design & Revamp",
+      "page": "/service-cv.html",
+      "price": "Starting from R20",
+      "turnaround": "Within 24 hours",
+      "summary": "CV creation or revamp for job seekers, graduates and professionals.",
+      "details": [
+        "Built from scratch or revamped",
+        "ATS-friendly formatting",
+        "Modern clean design",
+        "Content rewritten for the target role",
+        "PDF + editable Word document"
+      ]
+    },
+    {
+      "key": "assignment",
+      "name": "Assignment Assistance",
+      "page": "/service-assignment.html",
+      "price": "Starting from R50",
+      "turnaround": "Same day for urgent requests",
+      "summary": "Academic formatting, proofreading, structure and referencing support.",
+      "details": [
+        "APA, Harvard, MLA and Chicago formatting",
+        "Document structuring",
+        "Grammar, spelling and academic tone fixes",
+        "Reference formatting",
+        "Support for high school, TVET, university and UNISA work"
+      ]
+    },
+    {
+      "key": "windows",
+      "name": "Windows Installation & Activation",
+      "page": "/service-windows.html",
+      "price": "Starting from R100",
+      "turnaround": "2–4 hours (same day)",
+      "summary": "Windows installation, repair, activation and new-PC setup.",
+      "details": [
+        "Windows 10 or 11",
+        "Drivers installed and verified",
+        "Genuine activation",
+        "File backup before work where applicable",
+        "System test and handover"
+      ]
+    },
+    {
+      "key": "troubleshoot",
+      "name": "PC Troubleshooting & Virus Removal",
+      "page": "/service-troubleshoot.html",
+      "price": "Starting from R100",
+      "turnaround": "Depends on diagnosis and issue",
+      "summary": "Diagnosis and repair for slow, freezing, crashing, infected or unstable PCs and laptops.",
+      "details": [
+        "Performance and startup issues",
+        "Malware and suspicious pop-up assistance",
+        "Crash and error diagnosis",
+        "System cleanup and troubleshooting",
+        "Laptop and desktop support"
+      ]
+    },
+    {
+      "key": "design",
+      "name": "Graphic Design",
+      "page": "/service-design.html",
+      "price": "Starting from R20",
+      "turnaround": "Depends on design scope",
+      "summary": "Branding and marketing graphics for businesses, entrepreneurs and individuals.",
+      "details": [
+        "Logo design",
+        "Flyers and posters",
+        "Social media graphics",
+        "Business cards and letterheads",
+        "Branding and company profile design"
+      ]
+    },
+    {
+      "key": "office",
+      "name": "Microsoft Office Installation",
+      "page": "/service-office.html",
+      "price": "Starting from R150",
+      "turnaround": "Depends on installation and device",
+      "summary": "Microsoft Office installation and setup including Word, Excel, PowerPoint and related apps.",
+      "details": [
+        "Remote or in-person support where available",
+        "Microsoft Office setup",
+        "Word, Excel and PowerPoint",
+        "Email/Outlook setup where applicable"
+      ]
+    },
+    {
+      "key": "software",
+      "name": "Software & Driver Installation",
+      "page": "/service-software.html",
+      "price": "Starting from R100",
+      "turnaround": "Depends on software and device",
+      "summary": "Installation and setup of software, utilities and hardware drivers.",
+      "details": [
+        "Software installation",
+        "Driver installation",
+        "Printer and peripheral setup",
+        "Common utility/application setup"
+      ]
+    },
+    {
+      "key": "business",
+      "name": "Business Digital Setup",
+      "page": "/service-business.html",
+      "price": "Starting from R650; package pricing available",
+      "turnaround": "Full setup commonly 2–3 days; some website work can take longer",
+      "summary": "Help small businesses establish a professional online presence.",
+      "details": [
+        "Professional business email",
+        "Domain registration/configuration",
+        "Google Business Profile",
+        "Facebook and Instagram business setup",
+        "WhatsApp Business setup",
+        "Basic website and handover can be included"
+      ]
+    }
+  ],
+  "pricing_snapshot": [
+    "Website Development — from R650",
+    "CV Design & Revamp — from R20",
+    "Assignment Assistance — from R50",
+    "Windows Installation & Activation — from R100",
+    "PC Troubleshooting & Virus Removal — from R100",
+    "Graphic Design — from R20",
+    "Microsoft Office Installation — from R150",
+    "Software / Driver Installation — from R100",
+    "Business Digital Setup — from R650; package pricing available"
+  ],
+  "contact": {
+    "whatsapp": "+27 720 465 993",
+    "email": "info@mellowtech.co.za",
+    "contact_page": "https://mellowtech.co.za/contact.html",
+    "preferred": "WhatsApp / Call for fastest response"
+  },
+  "related_products": [
+    {
+      "name": "MellowCV",
+      "page": "/Mellowcv.html",
+      "status": "Launches in September 2026",
+      "summary": "A Mellow Tech CV builder focused on ATS-friendly CV creation, editing and PDF export.",
+      "features": [
+        "Upload an existing CV or start fresh",
+        "Real-time WYSIWYG editing",
+        "40+ ATS-optimised templates",
+        "AI bullet-point rewriting",
+        "9-point ATS health check",
+        "PDF export",
+        "Browser autosave"
+      ],
+      "notes": "Do not promise availability before launch unless the current website confirms it. Treat product claims as website information, not as guarantees about hiring outcomes."
+    }
+  ]
+}
