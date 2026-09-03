@@ -1,6 +1,6 @@
 const {
   MODEL, MAX_BODY_BYTES, json, getBody, cleanString, cleanSessionId, cleanMessages, cleanPage,
-  knowledgeText, findService, pageMap, upsertSession, insertMessage, createLead
+  knowledgeText, findService, findPage, pageMap, upsertSession, insertMessage, createLead
 } = require('./_mellowbot');
 
 const RESPONSE_SCHEMA = {
@@ -94,6 +94,7 @@ RULES
 ACTION POLICY
 Use get_service_details before quoting service details or prices.
 Use find_service_page when the customer wants to view a relevant MellowTech service.
+Use get_page_details if the site_pages index above isn't enough to answer (e.g. the customer asks something specific about the Terms, Privacy Policy, Disclaimer, homepage testimonials, or About page). Never state legal/policy specifics from memory — fetch the page or point the customer to it.
 Use prepare_whatsapp_handoff when the customer wants to continue via WhatsApp.
 Use create_lead only when the customer explicitly asks to submit/save an enquiry or request follow-up, and the customer has provided enough contact information plus explicit consent.
 Use create_quote_request only when the customer explicitly asks for a quote/enquiry and has provided enough information plus explicit consent.
@@ -103,6 +104,7 @@ Never treat merely mentioning a phone number or email as consent to save it.`;
 const TOOLS = [
   { type: 'function', function: { name: 'get_service_details', description: 'Return authoritative MellowTech details for one service.', parameters: { type: 'object', additionalProperties: false, properties: { service: { type: 'string' } }, required: ['service'] } } },
   { type: 'function', function: { name: 'find_service_page', description: 'Find a MellowTech service page and return its path.', parameters: { type: 'object', additionalProperties: false, properties: { service: { type: 'string' } }, required: ['service'] } } },
+  { type: 'function', function: { name: 'get_page_details', description: 'Fetch the full authoritative content (headings + text) of one MellowTech website page, e.g. Terms of Service, Privacy Policy, Disclaimer, or About. Use this instead of guessing when a customer asks something page-specific that the lightweight site index does not cover.', parameters: { type: 'object', additionalProperties: false, properties: { page: { type: 'string', description: 'A page path (e.g. /mellowtech-terms-of-service.html) or a short description of the page (e.g. "privacy policy").' } }, required: ['page'] } } },
   { type: 'function', function: { name: 'prepare_whatsapp_handoff', description: 'Create a prefilled WhatsApp link when the customer is ready to contact MellowTech.', parameters: { type: 'object', additionalProperties: false, properties: { customer_name: { type: 'string' }, need: { type: 'string' }, extra: { type: 'string' } }, required: ['customer_name', 'need', 'extra'] } } },
   { type: 'function', function: { name: 'create_lead', description: 'Save a MellowTech lead only after explicit customer consent.', parameters: { type: 'object', additionalProperties: false, properties: { customer_name: { type: 'string' }, email: { type: 'string' }, phone: { type: 'string' }, service: { type: 'string' }, need: { type: 'string' }, details: { type: 'string' }, consent: { type: 'boolean' } }, required: ['customer_name', 'email', 'phone', 'service', 'need', 'details', 'consent'] } } },
   { type: 'function', function: { name: 'create_quote_request', description: 'Save an explicit quote request after customer consent. Use the same fields as create_lead.', parameters: { type: 'object', additionalProperties: false, properties: { customer_name: { type: 'string' }, email: { type: 'string' }, phone: { type: 'string' }, service: { type: 'string' }, need: { type: 'string' }, details: { type: 'string' }, consent: { type: 'boolean' } }, required: ['customer_name', 'email', 'phone', 'service', 'need', 'details', 'consent'] } } }
@@ -121,6 +123,21 @@ async function executeTool(name, args, context) {
     const directKey = typeof record?.key === 'string' ? record.key.toLowerCase().trim() : '';
     const key = pageMap[directKey] ? directKey : Object.keys(pageMap).find((k) => JSON.stringify(record || args || '').toLowerCase().includes(k));
     return { ok: Boolean(key), url: key ? pageMap[key] : '/services.html', service: record || null };
+  }
+  if (name === 'get_page_details') {
+    const page = findPage(args?.page);
+    if (!page) return { ok: false, message: 'No matching MellowTech page was found.' };
+    const content = Array.isArray(page.content) ? page.content.join(' ') : '';
+    return {
+      ok: true,
+      path: page.path,
+      title: page.title || '',
+      h1: page.h1 || '',
+      headings: page.headings || [],
+      // Capped so one on-demand lookup can't itself blow the token budget;
+      // still far more than the customer needs to quote back accurately.
+      content: content.slice(0, 2500)
+    };
   }
   if (name === 'prepare_whatsapp_handoff') {
     const number = '27720465993';
