@@ -20,7 +20,7 @@ function firstSentence(text, limit = 160) {
   return (match ? match[0] : clean.slice(0, limit)).trim();
 }
 
-// Lightweight site index: only path and title (desc is dropped to save tokens)
+// Lightweight site index: only path and title
 const SITE_INDEX = sitePages.map((page) => ({
   path: page.path,
   title: page.title || ''
@@ -51,7 +51,7 @@ const TRANSCRIBE_MODEL = process.env.MELLOWBOT_TRANSCRIBE_MODEL || 'whisper-larg
 const MAX_MESSAGES = 12;
 const MAX_MESSAGE_CHARS = 4000;
 const MAX_BODY_BYTES = 12000;
-const MAX_HISTORY_MESSAGES = 6;  // reduced to save tokens
+const MAX_HISTORY_MESSAGES = 4;
 const MAX_PAGE_CONTEXT_CHARS = 500;
 const MAX_SESSION_ID_CHARS = 80;
 
@@ -105,31 +105,22 @@ function cleanPage(pageContext) {
   };
 }
 
-// Compact full knowledge: include only essential fields, trim descriptions.
-function knowledgeText() {
-  const { company, rules, contact, services } = knowledge;
-  const compactServices = Array.isArray(services)
-    ? services.map(s => ({
-        name: s.name || s.service || '',
-        short_desc: (s.description || s.short_desc || '').slice(0, 120),
-        price: s.price_from || s.price || ''
-      }))
-    : [];
-  // Site pages: only path and title (desc dropped)
-  const compactSitePages = SITE_INDEX.map(p => ({ path: p.path, title: p.title }));
-  return JSON.stringify({
-    company,
-    rules,
-    contact,
-    services: compactServices,
-    site_pages: compactSitePages
-  });
+// ULTRA-COMPACT: only company name (used for tool routing).
+function knowledgeTextLight() {
+  const { company } = knowledge;
+  return JSON.stringify({ company: company || 'Mellow Tech Services' });
 }
 
-// Very light version for tool routing: only company, rules, contact
-function knowledgeTextLight() {
+// Same minimal knowledge but used for the FINAL answer call.
+// The tool results already contain specific service/page facts.
+function knowledgeTextFinal() {
   const { company, rules, contact } = knowledge;
   return JSON.stringify({ company, rules, contact });
+}
+
+// (kept for backward compatibility, but not used in the main flow)
+function knowledgeText() {
+  return knowledgeTextFinal();
 }
 
 function serviceRecords() {
@@ -276,6 +267,7 @@ module.exports = {
   cleanPage,
   knowledgeText,
   knowledgeTextLight,
+  knowledgeTextFinal,
   serviceRecords,
   findService,
   findPage,
