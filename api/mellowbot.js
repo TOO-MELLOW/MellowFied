@@ -233,7 +233,20 @@ module.exports = async function handler(req, res) {
   if (rawLength > MAX_BODY_BYTES) return json(res, 413, { ok: false, error: 'Request too large.' });
 
   let body;
-  try { body = getBody(req); } catch { return json(res, 400, { ok: false, error: 'Invalid JSON.' }); }
+  try { body = getBody(req); }
+  catch (err) {
+    // PATCH: previously swallowed the actual parse failure. Now logged so
+    // Vercel function logs show exactly what was received — content-type,
+    // the JS type of req.body, and a safe truncated preview — instead of
+    // just the generic client-facing message.
+    console.error('MellowBot invalid JSON body:', {
+      contentType: req.headers['content-type'] || null,
+      bodyType: Buffer.isBuffer(req.body) ? 'buffer' : typeof req.body,
+      bodyPreview: typeof req.body === 'string' ? req.body.slice(0, 200) : Buffer.isBuffer(req.body) ? req.body.toString('utf8').slice(0, 200) : undefined,
+      message: err?.message
+    });
+    return json(res, 400, { ok: false, error: 'Invalid JSON.' });
+  }
   const messages = cleanMessages(body.messages);
   if (!messages.length || messages[messages.length - 1].role !== 'user') return json(res, 400, { ok: false, error: 'A user message is required.' });
   if (Buffer.byteLength(JSON.stringify(body || {}), 'utf8') > MAX_BODY_BYTES) return json(res, 413, { ok: false, error: 'Request too large.' });
