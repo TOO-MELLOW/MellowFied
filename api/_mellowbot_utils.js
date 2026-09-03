@@ -20,13 +20,10 @@ function firstSentence(text, limit = 160) {
   return (match ? match[0] : clean.slice(0, limit)).trim();
 }
 
+// Lightweight site index: only path and title (desc is dropped to save tokens)
 const SITE_INDEX = sitePages.map((page) => ({
   path: page.path,
-  title: page.title || '',
-  h1: page.h1 || '',
-  desc: LEGAL_PAGES.has(page.path)
-    ? 'Full legal document — do not recite from memory; direct the customer to this page for the complete text.'
-    : firstSentence((page.content && page.content[0]) || page.h1 || page.title)
+  title: page.title || ''
 }));
 
 function findPage(pathOrQuery) {
@@ -54,7 +51,7 @@ const TRANSCRIBE_MODEL = process.env.MELLOWBOT_TRANSCRIBE_MODEL || 'whisper-larg
 const MAX_MESSAGES = 12;
 const MAX_MESSAGE_CHARS = 4000;
 const MAX_BODY_BYTES = 12000;
-const MAX_HISTORY_MESSAGES = 10;
+const MAX_HISTORY_MESSAGES = 6;  // reduced to save tokens
 const MAX_PAGE_CONTEXT_CHARS = 500;
 const MAX_SESSION_ID_CHARS = 80;
 
@@ -108,13 +105,31 @@ function cleanPage(pageContext) {
   };
 }
 
+// Compact full knowledge: include only essential fields, trim descriptions.
 function knowledgeText() {
-  return JSON.stringify({ ...knowledge, site_pages: SITE_INDEX });
+  const { company, rules, contact, services } = knowledge;
+  const compactServices = Array.isArray(services)
+    ? services.map(s => ({
+        name: s.name || s.service || '',
+        short_desc: (s.description || s.short_desc || '').slice(0, 120),
+        price: s.price_from || s.price || ''
+      }))
+    : [];
+  // Site pages: only path and title (desc dropped)
+  const compactSitePages = SITE_INDEX.map(p => ({ path: p.path, title: p.title }));
+  return JSON.stringify({
+    company,
+    rules,
+    contact,
+    services: compactServices,
+    site_pages: compactSitePages
+  });
 }
 
+// Very light version for tool routing: only company, rules, contact
 function knowledgeTextLight() {
-  const { company, rules, contact, pricing_snapshot } = knowledge;
-  return JSON.stringify({ company, rules, contact, pricing_snapshot });
+  const { company, rules, contact } = knowledge;
+  return JSON.stringify({ company, rules, contact });
 }
 
 function serviceRecords() {
@@ -158,15 +173,15 @@ async function supabaseRequest(table, options = {}) {
   let response;
   try {
     response = await fetch(`${url}/rest/v1/${table}`, {
-    method: options.method || 'POST',
-    headers: {
-      apikey: key,
-      ...(key.startsWith('sb_secret_') ? {} : { Authorization: `Bearer ${key}` }),
-      'Content-Type': 'application/json',
-      Prefer: options.prefer || 'return=minimal'
-    },
-    body: options.body === undefined ? undefined : JSON.stringify(options.body),
-    signal: controller.signal
+      method: options.method || 'POST',
+      headers: {
+        apikey: key,
+        ...(key.startsWith('sb_secret_') ? {} : { Authorization: `Bearer ${key}` }),
+        'Content-Type': 'application/json',
+        Prefer: options.prefer || 'return=minimal'
+      },
+      body: options.body === undefined ? undefined : JSON.stringify(options.body),
+      signal: controller.signal
     });
   } finally { clearTimeout(timeout); }
   const text = await response.text();
