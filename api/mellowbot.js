@@ -1,6 +1,6 @@
 const {
   MODEL, MAX_BODY_BYTES, json, getBody, cleanString, cleanSessionId, cleanMessages, cleanPage,
-  knowledgeText, findService, findPage, pageMap, upsertSession, insertMessage, createLead
+  knowledgeText, knowledgeTextLight, findService, findPage, pageMap, upsertSession, insertMessage, createLead
 } = require('./_mellowbot');
 
 const RESPONSE_SCHEMA = {
@@ -66,7 +66,14 @@ function needsResearch(text) {
   return true;
 }
 
-function buildSystemPrompt(page) {
+// PATCH: `light` builds the cheap system prompt used only for the internal
+// tool-routing rounds (deciding whether/which tool to call). It swaps the
+// full knowledge dump for knowledgeTextLight() and tells the model plainly
+// that service/page specifics aren't loaded here — fetch them via a tool
+// instead of guessing. The customer-facing answer always comes from the
+// separate final call, which gets the full knowledge base (see below), so
+// answer accuracy is unaffected.
+function buildSystemPrompt(page, { light = false } = {}) {
   return `You are MellowBot, the AI customer assistant for Mellow Tech Services in South Africa.
 
 MISSION
@@ -78,8 +85,8 @@ Title: ${page.title || 'Mellow Tech Services'}
 H1: ${page.h1 || ''}
 
 MELLOWTECH KNOWLEDGE (AUTHORITATIVE)
-${knowledgeText()}
-
+${light ? knowledgeTextLight() : knowledgeText()}
+${light ? '\nThis is a reduced routing view — full service details, pricing and site pages are NOT loaded here. If you need them to decide on a tool, use get_service_details, find_service_page or get_page_details rather than guessing. Do not compose the final customer-facing answer in this step.\n' : ''}
 RULES
 - Use South African English naturally; understand local expressions without forcing slang.
 - Prices marked 'from' are starting prices.
@@ -164,6 +171,17 @@ async function executeTool(name, args, context) {
   return { ok: false, message: `Unknown tool: ${name}` };
 }
 
+// PATCH: TPM fix. A single user turn can fire up to 3 sequential Groq calls
+// (2 tool rounds + 1 final structured call). All 3 used to request the same
+// reasoning_effort:'medium' + max_completion_tokens:1400, which on a
+// reasoning model like gpt-oss-20b means every call — even a "just pick a
+// tool" round — could burn up to 1400 completion tokens on hidden reasoning
+// alone. Combined with the ~3k-token knowledge base resent as the system
+// prompt on every call, one turn could need ~10k tokens against an
+// 8000/min budget. Tool-calling rounds now get a much smaller budget and
+// lower reasoning effort, since they only need to emit a tool call, not
+// prose. The final call is trimmed too, since the structured answer rarely
+// needs the full 1400.
 async function callGroq(messages, useSchema, tools = TOOLS) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 7000);
@@ -177,9 +195,9 @@ async function callGroq(messages, useSchema, tools = TOOLS) {
       ...(useSchema ? { response_format: RESPONSE_SCHEMA } : {}),
       tools: useSchema ? undefined : tools,
       tool_choice: useSchema ? 'none' : 'auto',
-      reasoning_effort: 'medium',
+      reasoning_effort: 'low',
       temperature: 0.2,
-      max_completion_tokens: 1400,
+      max_completion_tokens: useSchema ? 900 : 500,
       parallel_tool_calls: false,
       stream: false
     }),
