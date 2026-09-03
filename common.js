@@ -101,7 +101,13 @@ window.switchTab = function(id, e){
     };
     const EXPANSIONS = Object.entries(RAW_EXP).sort(([a], [b]) => b.length - a.length);
     function normalize(text) {
-      let t = String(text).toLowerCase().replace(/[''`]/g,"").replace(/[^\w\s]/g," ").replace(/\s+/g," ").trim();
+      let t = String(text)
+        .replace(/\p{Extended_Pictographic}\uFE0F?/gu, " ") // strip emoji BEFORE lowercasing/word-char pass
+        .toLowerCase()
+        .replace(/[''`]/g, "")
+        .replace(/[^\w\s]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
       for(const [term, expansion] of EXPANSIONS){ if(t.includes(term)) t = t.split(term).join(expansion); }
       return t;
     }
@@ -217,13 +223,32 @@ window.switchTab = function(id, e){
 
   function contactResponse(){return{html:buildHTML({text:"**Reach the Mellow Tech team directly — we respond fast:**",details:["📱 **WhatsApp / Call: +27 720 465 993** ← *fastest response*","📧 **Email: info@mellowtech.co.za**","🌐 **[Contact form →](https://mellowtech.co.za/contact.html)**"],note:"💬 WhatsApp is always fastest. We typically reply within a few hours."}),suggestions:["💰 Check Pricing","🛠️ Browse Services","⏱ Turnaround Times"]};}
 
-  function fallback(input){
-    Memory.push("bot","",null);
-    const norm=NLP.normalize(input);
-    const hints=NLP.extractPartialHints(norm);
-    const snippet=input.length>55?input.slice(0,55)+"…":input;
-    if(hints.length>0){const top=hints[0];const svc=KB[top.intent];return{html:buildHTML({text:snippet?`Not 100% sure about *"${escHtml(snippet)}"* — did you mean something about **${svc?.emoji||""} ${svc?.name||top.intent}**?`:`Let me point you in the right direction — are you looking for **${svc?.name||top.intent}**?`,details:["📱 **WhatsApp: +27 720 465 993** ← fastest way to get an answer"],followUp:"Or pick what fits best:"}),suggestions:[svc?`${svc.emoji} ${svc.name}`:"🛠️ This Service","🛠️ All Services","💰 Pricing","📞 Talk to a Person"]};}
-    return{html:buildHTML({text:snippet?`Not sure about *"${escHtml(snippet)}"* — let's get you to the right place.`:"Not sure about that one — let me help you find the right service 👇",details:["📱 **WhatsApp: +27 720 465 993** ← fastest way to get an answer","📧 **Email: info@mellowtech.co.za**"],followUp:"Or pick one of these:"}),suggestions:["🛠️ All Services","💰 Pricing","🌐 Websites","📄 CV Help"]};}
+  // FIX 4 — Softened fallback wording
+  function fallback(input) {
+    Memory.push("bot", "", null);
+    const norm = NLP.normalize(input);
+    const hints = NLP.extractPartialHints(norm);
+    if (hints.length > 0) {
+      const top = hints[0];
+      const svc = KB[top.intent];
+      return {
+        html: buildHTML({
+          text: svc ? `${svc.emoji} Sounds like you're after **${svc.name}** — here's the quick version:` : "Let me point you in the right direction.",
+          details: svc ? svc.details.slice(0, 3) : ["📱 **WhatsApp: +27 720 465 993** ← fastest way to get an answer"],
+          followUp: svc ? `${svc.turnaround} · ${svc.price}. Want the full details, or ready to get started?` : "Or pick what fits best:"
+        }),
+        suggestions: svc ? ["Tell Me More", "Pricing", "Let's Go", "Other Services"] : ["All Services", "Pricing", "Talk to a Person"]
+      };
+    }
+    return {
+      html: buildHTML({
+        text: "Hmm, let's find the right fit — could you tell me a bit more about what you need?",
+        details: ["📱 **WhatsApp: +27 720 465 993** ← fastest way to get an answer", "📧 **info@mellowtech.co.za**"],
+        followUp: "Or pick one of these:"
+      }),
+      suggestions: ["All Services", "Pricing", "Websites", "CV Help"]
+    };
+  }
 
   const SERVICE_INTENTS=new Set(["web","cv","assignment","windows","troubleshoot","design","office","software","business"]);
   const PRICE_TRIGGER_WORDS=["how much","how much is","how much for","how much does","how much do","what does it cost","what is the cost","what is the price","what's the price","whats the price","what are your prices","what do you charge","how much to","price for","price of","cost of","cost for","fee for","charge for","rates for","how expensive","is it expensive","affordable","how cheap","how much would","how much will","what will it cost","quote for","rand","rands","r150","r200","r250","r300","r800","r80","r100"];
@@ -293,7 +318,16 @@ window.switchTab = function(id, e){
     const priceCheck=detectPriceQuery(rawInput,scores);
     if(priceCheck.isPriceQuery){const intentKey=priceCheck.intentKey||Memory.getLast();if(intentKey&&SERVICE_INTENTS.has(intentKey)){Memory.push("bot","","pricing");return inlinePriceResponse(intentKey);}Memory.push("bot","","pricing");return pricingResponse();}
     if(sent===-1&&(ranked.length===0||ranked[0].score<THRESHOLD)){Memory.push("bot","","contact");return{html:buildHTML({text:"I can hear this is frustrating — let's get you to the right person right away. 😔",details:["📱 **WhatsApp: +27 720 465 993** ← fastest","📧 **Email: info@mellowtech.co.za**"],note:"They'll get you sorted quickly."}),suggestions:["📞 Contact Team Now","🛠️ Browse Services"]};}
-    if(ranked.length===0||ranked[0].score<THRESHOLD){if(Memory.isShortOrAffirm(rawInput)&&Memory.getLast())return resolveService(Memory.getLast(),entities,sent);return fallback(rawInput);}
+    // FIX 3 — decisive classify
+    if (ranked.length === 0 || ranked[0].score < THRESHOLD) {
+      if (Memory.isShortOrAffirm(rawInput) && Memory.getLast()) return resolveService(Memory.getLast(), entities, sent);
+      // NEW: if partial-hint matching is confident, just resolve it directly
+      const hints = NLP.extractPartialHints(NLP.normalize(rawInput));
+      if (hints.length && hints[0].matches >= 1 && rawInput.trim().split(/\s+/).length <= 4) {
+        return resolveService(hints[0].intent, entities, sent);
+      }
+      return fallback(rawInput);
+    }
     const topIntent=ranked[0].intent;
     if(topIntent==="greeting"){Memory.setStage("discovery");const html=`<p>${rand(GREETINGS)}</p>`;Memory.push("bot",html,"greeting");return{html,suggestions:["🌐 Website","📄 CV","💻 PC Repair","🎨 Design","📝 Assignment","💰 Pricing"]};}
     if(topIntent==="pricing"){Memory.push("bot","","pricing");const lastIntent=Memory.getLast();if(lastIntent&&SERVICE_INTENTS.has(lastIntent))return contextAwarePricingResponse(lastIntent);return pricingResponse();}
@@ -358,10 +392,7 @@ window.UI=(function(){
       if(!panel||!input||!button){console.warn("MellowTech Chat: UI elements missing");return;}
       addAdvancedControls();
       const openBtn=$(SEL.openBtn);
-      // Existing chatbot markup uses inline handlers on most pages; index.html uses none.
-      // openPanel() itself owns the one-time welcome so both wiring styles behave identically.
       if(openBtn&&!openBtn.getAttribute('onclick'))openBtn.addEventListener('click',openPanel);
-
       const closeBtn=$(SEL.closeBtn); if(closeBtn&&!closeBtn.getAttribute('onclick'))closeBtn.addEventListener("click",closePanel);
       if(button&&!button.getAttribute('onclick'))button.addEventListener("click",send);
       if(input&&!input.getAttribute('onkeydown'))input.addEventListener("keydown",(e)=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send();}});
@@ -423,8 +454,21 @@ window.UI=(function(){
     user(text,image);typing(true);
     const result=image?await askMellowBotVision(text,image):await askMellowBotAI(text);
     if(result&&result.ok){typing(false);aiTurnCount++;aiMessages.push({role:'user',content:text});aiMessages.push({role:'assistant',content:result.content});if(aiMessages.length>10)aiMessages=aiMessages.slice(-10);botHTML(renderAIText(result.content),result.suggestions||buildAISuggestions(result),result.action);return;}
-    typing(false);
-    let res;try{res=window.MellowTechBot.process(text);}catch(err){console.error("MellowTechBot error:",err);botHTML("<p>Something went wrong — please try again or WhatsApp us at +27 720 465 993 📱</p>",[]);return;}botHTML(res.html,res.suggestions||[]);
+    // FIX 5 — add human-like delay to local fallback
+    let res;
+    try {
+      res = window.MellowTechBot.process(text);
+    } catch (err) {
+      console.error("MellowTechBot error:", err);
+      typing(false);
+      botHTML("<p>Something went wrong — please try again or WhatsApp us at +27 720 465 993 📱</p>", []);
+      return;
+    }
+    const delay = 500 + Math.random() * 700;
+    setTimeout(() => {
+      typing(false);
+      botHTML(res.html, res.suggestions || []);
+    }, delay);
   }
   async function askMellowBotAI(text){
     try{const response=await fetch('/api/mellowbot',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[...aiMessages,{role:'user',content:text}],sessionId:sessionId(),page:{path:window.location.pathname,title:document.title,h1:(document.querySelector('h1')?.textContent||'').trim(),turn:aiTurnCount}})});const data=await response.json().catch(()=>null);if(!response.ok||!data?.ok||!data.content)return null;return data;}catch(err){console.warn('MellowBot AI unavailable; using local assistant:',err);return null;}}
@@ -433,7 +477,8 @@ window.UI=(function(){
   function buildAISuggestions(result){const out=[];if(result?.cta&&!/^https?:\/\//.test(result.cta))out.push(result.cta);if(result?.service)out.push('View '+result.service);if(result?.intent==='pricing')out.push('Get an exact quote');if(result?.intent==='contact')out.push('WhatsApp Mellow Tech');return [...new Set(out)].slice(0,4);}
   function renderAIText(text){let safe=esc(String(text||''));safe=safe.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');safe=safe.replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,'<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');safe=safe.replace(/^[-•] (.+)$/gm,'<span class="mwt-ai-bullet">• $1</span>');safe=safe.replace(/\n\n+/g,'</p><p>').replace(/\n/g,'<br>');return `<p>${safe}</p>`;}
   function user(text,image){const box=$(SEL.messages);if(!box)return;const imageTag=image?'<div class="mwt-user-attachment">🖼️ Screenshot attached</div>':'';box.insertAdjacentHTML('beforeend',`<div class="mwt-msg mwt-user"><div class="mwt-bubble">${esc(text)}${imageTag}</div></div>`);scroll();}
-  function botHTML(html,suggestions=[],action=null){const box=$(SEL.messages);if(!box)return;box.insertAdjacentHTML("beforeend",`<div class="mwt-msg mwt-bot"><div class="mwt-bubble">${html}</div></div>`);if(action&&action.url){const label=esc(action.label||"Continue"),url=esc(action.url),cls=action.type==='navigate'?'mwt-action mwt-nav':'mwt-action';box.insertAdjacentHTML("beforeend",`<div class="mwt-action-row"><a class="${cls}" href="${url}" ${action.type==='whatsapp'?'target="_blank" rel="noopener noreferrer"':''}>${label} →</a></div>`);}else if(action?.type==='success'){box.insertAdjacentHTML("beforeend",`<div class="mwt-action-row"><span class="mwt-action success">✓ ${esc(action.label||'Done')}</span></div>`);}if(suggestions?.length){const chips=suggestions.map(s=>`<button class="mt-chip" data-chip="${esc(s)}">${esc(s)}</button>`).join("");box.insertAdjacentHTML("beforeend",`<div class="mwt-suggestions">${chips}</div>`);}scroll();}
+  // FIX 1 — strip emoji from data-chip while keeping display emoji
+  function botHTML(html,suggestions=[],action=null){const box=$(SEL.messages);if(!box)return;box.insertAdjacentHTML("beforeend",`<div class="mwt-msg mwt-bot"><div class="mwt-bubble">${html}</div></div>`);if(action&&action.url){const label=esc(action.label||"Continue"),url=esc(action.url),cls=action.type==='navigate'?'mwt-action mwt-nav':'mwt-action';box.insertAdjacentHTML("beforeend",`<div class="mwt-action-row"><a class="${cls}" href="${url}" ${action.type==='whatsapp'?'target="_blank" rel="noopener noreferrer"':''}>${label} →</a></div>`);}else if(action?.type==='success'){box.insertAdjacentHTML("beforeend",`<div class="mwt-action-row"><span class="mwt-action success">✓ ${esc(action.label||'Done')}</span></div>`);}if(suggestions?.length){const chips=suggestions.map(s=>{const clean=s.replace(/^\p{Extended_Pictographic}\uFE0F?\s*/u, '').trim()||s;return `<button class="mt-chip" data-chip="${esc(clean)}">${esc(s)}</button>`;}).join("");box.insertAdjacentHTML("beforeend",`<div class="mwt-suggestions">${chips}</div>`);}scroll();}
   function typing(show){const t=$(SEL.typing);if(t)t.style.display=show?"flex":"none";}
   function scroll(){const box=$(SEL.messages);if(box)setTimeout(()=>{box.scrollTop=box.scrollHeight;},20);}
   function openPanel(){const panel=$(SEL.panel),open=$(SEL.openBtn);if(panel){panel.classList.add('mt-visible');panel.style.display='flex';if(open)open.style.display='none';if(!welcomed){welcomed=true;botHTML(`<p>Hey! 👋 Welcome to <strong>Mellow Tech</strong>.</p><p>I can answer MellowTech questions, help you choose a service, and now I can also understand screenshots and voice messages.</p>`,WELCOME_CHIPS);}const input=$(SEL.input);if(input)setTimeout(()=>input.focus(),80);}}
@@ -475,4 +520,3 @@ window.UI=(function(){
     }catch(err){console.error('Contact form failed:',err);alert('We could not submit your message. Please WhatsApp us directly at +27 720 465 993.');setLoad(false);sending=false;}
   });
 })();
-
