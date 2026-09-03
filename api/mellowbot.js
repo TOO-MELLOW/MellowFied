@@ -28,6 +28,24 @@ globalThis.__mellowBotRateBuckets = BUCKETS;
 const WINDOW_MS = 60_000;
 const LIMIT = 20;
 
+// ─────────────────────────────────────────────────────────────
+// PATCH: DB/logging calls must never be able to take down an
+// otherwise-healthy AI response. Any failure here (missing env
+// vars, Supabase outage, schema mismatch) is now logged and
+// swallowed instead of bubbling up to the outer try/catch, which
+// previously turned a harmless logging failure into a full 500
+// and silently pushed every single conversation onto the local
+// rule-based fallback bot.
+// ─────────────────────────────────────────────────────────────
+async function safeDb(fn, label) {
+  try {
+    return await fn();
+  } catch (err) {
+    console.error(`MellowBot DB step failed (${label}):`, err?.message || err);
+    return null;
+  }
+}
+
 function clientKey(req) {
   const forwarded = req.headers['x-forwarded-for'];
   return String(forwarded || req.headers['x-real-ip'] || 'anonymous').split(',')[0].trim();
@@ -90,7 +108,10 @@ const TOOLS = [
   { type: 'function', function: { name: 'create_quote_request', description: 'Save an explicit quote request after customer consent. Use the same fields as create_lead.', parameters: { type: 'object', additionalProperties: false, properties: { customer_name: { type: 'string' }, email: { type: 'string' }, phone: { type: 'string' }, service: { type: 'string' }, need: { type: 'string' }, details: { type: 'string' }, consent: { type: 'boolean' } }, required: ['customer_name', 'email', 'phone', 'service', 'need', 'details', 'consent'] } } }
 ];
 
-function executeTool(name, args, context) {
+// PATCH: now async, and create_lead / create_quote_request are try/caught
+// so a Supabase problem returns a soft failure message the model can relay
+// gracefully, instead of throwing and killing the whole AI turn.
+async function executeTool(name, args, context) {
   if (name === 'get_service_details') {
     const record = findService(args?.service);
     return record ? { ok: true, service: record } : { ok: false, message: 'No authoritative service record was found.' };
@@ -111,11 +132,17 @@ function executeTool(name, args, context) {
   }
   if (name === 'create_lead') {
     if (!context.leadConsent) return { ok: false, message: 'Explicit user confirmation is required before saving an enquiry.' };
-    return createLead({ args: { ...args, consent: true }, sessionId: context.sessionId, source: 'mellowbot', requestId: context.requestId, consentRequired: true });
+    return safeDb(
+      () => createLead({ args: { ...args, consent: true }, sessionId: context.sessionId, source: 'mellowbot', requestId: context.requestId, consentRequired: true }),
+      'create_lead'
+    ).then((result) => result || { ok: false, message: 'We could not save that automatically right now — please confirm via WhatsApp instead.' });
   }
   if (name === 'create_quote_request') {
     if (!context.leadConsent) return { ok: false, message: 'Explicit user confirmation is required before saving a quote request.' };
-    return createLead({ args: { ...args, consent: true }, sessionId: context.sessionId, source: 'mellowbot_quote', requestId: context.requestId, consentRequired: true });
+    return safeDb(
+      () => createLead({ args: { ...args, consent: true }, sessionId: context.sessionId, source: 'mellowbot_quote', requestId: context.requestId, consentRequired: true }),
+      'create_quote_request'
+    ).then((result) => result || { ok: false, message: 'We could not save that automatically right now — please confirm via WhatsApp instead.' });
   }
   return { ok: false, message: `Unknown tool: ${name}` };
 }
@@ -205,13 +232,17 @@ module.exports = async function handler(req, res) {
         ...messages
       ];
       const result = await research(prompt);
-      await upsertSession({ sessionId, page, req });
+      // PATCH: was `await upsertSession(...)` unguarded — a DB failure here
+      // used to throw all the way out and 500 an otherwise-successful
+      // research answer.
+      await safeDb(() => upsertSession({ sessionId, page, req }), 'upsertSession/research');
       const answer = result?.choices?.[0]?.message?.content;
       if (!answer) return json(res, 502, { ok: false, error: 'The research service returned no answer.' });
       return json(res, 200, { ok: true, requestId, content: answer, mode: 'research', suggestions: ['Ask about MellowTech', 'WhatsApp Mellow Tech'], action: null, model: result.model || MODEL, usage: result.usage || null });
     }
 
-    await upsertSession({ sessionId, page, req });
+    // PATCH: same guard on the main path's session upsert.
+    await safeDb(() => upsertSession({ sessionId, page, req }), 'upsertSession/main');
     const workingMessages = [
       { role: 'system', content: buildSystemPrompt(page) },
       ...messages
@@ -292,9 +323,12 @@ module.exports = async function handler(req, res) {
       model: finalData.model || MODEL,
       usage: finalData.usage || null
     };
+    // PATCH: message logging is now best-effort. A DB hiccup here no longer
+    // costs the user their answer — it just means that one turn doesn't get
+    // logged, which is silently acceptable.
     if (context.leadConsent) {
-      await insertMessage({ sessionId, role: 'user', content: lastUserText, page, requestId });
-      await insertMessage({ sessionId, role: 'assistant', content: result.content, page, intent: result.intent, service: result.service, requestId });
+      await safeDb(() => insertMessage({ sessionId, role: 'user', content: lastUserText, page, requestId }), 'insertMessage/user');
+      await safeDb(() => insertMessage({ sessionId, role: 'assistant', content: result.content, page, intent: result.intent, service: result.service, requestId }), 'insertMessage/assistant');
     }
     return json(res, 200, result);
   } catch (error) {
