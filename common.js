@@ -75,7 +75,9 @@ window.switchTab = function(id, e){
 
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   MELLOW TECH SERVICES — INTELLIGENT SALES BOT v4.0
+   MELLOW TECH SERVICES — INTELLIGENT SALES BOT v4.1
+   (v4.1: emoji-safe classification, decisive fallback resolution,
+   AI-matched voice, human-like reply timing)
 ═══════════════════════════════════════════════════════ */
 
 ;(function (root) {
@@ -100,13 +102,18 @@ window.switchTab = function(id, e){
       "eft":"bank transfer payment","rands":"price cost","rand":"price cost","payment plan":"payment","pay later":"payment","instalment":"payment","deposit":"payment","pay upfront":"payment","how much does it cost":"pricing","what does it cost":"pricing","what are your prices":"pricing","whats the price":"pricing","price list":"pricing","all prices":"pricing","your rates":"pricing","affordable":"pricing affordable","cheap":"pricing affordable","student price":"pricing student","student discount":"pricing student","student rate":"pricing student","im a student":"pricing student","broke":"pricing affordable","tight budget":"pricing affordable","dont have much":"pricing affordable",
     };
     const EXPANSIONS = Object.entries(RAW_EXP).sort(([a], [b]) => b.length - a.length);
+
+    // v4.1: strip emoji BEFORE the lowercase/word-char pass. Emoji in chip
+    // labels (e.g. "🌐 Website") used to survive as stray surrogate
+    // fragments that occasionally diluted classification confidence.
+    // Stripping them first guarantees classify() sees clean text every time.
     function normalize(text) {
       let t = String(text)
-        .replace(/\p{Extended_Pictographic}\uFE0F?/gu, " ") // strip emoji BEFORE lowercasing/word-char pass
+        .replace(/\p{Extended_Pictographic}\uFE0F?/gu, " ")
         .toLowerCase()
-        .replace(/[''`]/g, "")
-        .replace(/[^\w\s]/g, " ")
-        .replace(/\s+/g, " ")
+        .replace(/[''`]/g,"")
+        .replace(/[^\w\s]/g," ")
+        .replace(/\s+/g," ")
         .trim();
       for(const [term, expansion] of EXPANSIONS){ if(t.includes(term)) t = t.split(term).join(expansion); }
       return t;
@@ -223,30 +230,34 @@ window.switchTab = function(id, e){
 
   function contactResponse(){return{html:buildHTML({text:"**Reach the Mellow Tech team directly — we respond fast:**",details:["📱 **WhatsApp / Call: +27 720 465 993** ← *fastest response*","📧 **Email: info@mellowtech.co.za**","🌐 **[Contact form →](https://mellowtech.co.za/contact.html)**"],note:"💬 WhatsApp is always fastest. We typically reply within a few hours."}),suggestions:["💰 Check Pricing","🛠️ Browse Services","⏱ Turnaround Times"]};}
 
-  // FIX 4 — Softened fallback wording
-  function fallback(input) {
-    Memory.push("bot", "", null);
-    const norm = NLP.normalize(input);
-    const hints = NLP.extractPartialHints(norm);
-    if (hints.length > 0) {
-      const top = hints[0];
-      const svc = KB[top.intent];
-      return {
-        html: buildHTML({
-          text: svc ? `${svc.emoji} Sounds like you're after **${svc.name}** — here's the quick version:` : "Let me point you in the right direction.",
-          details: svc ? svc.details.slice(0, 3) : ["📱 **WhatsApp: +27 720 465 993** ← fastest way to get an answer"],
-          followUp: svc ? `${svc.turnaround} · ${svc.price}. Want the full details, or ready to get started?` : "Or pick what fits best:"
+  // v4.1: rewritten to sound like natural conversational uncertainty
+  // instead of a visibly scripted "did you mean X?" quote-back — that
+  // pattern was the single biggest tell that a script (not the AI) was
+  // answering. When we have a confident partial-hint match, we now just
+  // answer with it directly rather than asking the user to confirm.
+  function fallback(input){
+    Memory.push("bot","",null);
+    const norm=NLP.normalize(input);
+    const hints=NLP.extractPartialHints(norm);
+    if(hints.length>0){
+      const top=hints[0];
+      const svc=KB[top.intent];
+      return{
+        html:buildHTML({
+          text:svc?`${svc.emoji} Sounds like you're after **${svc.name}** — here's the quick version:`:"Let me point you in the right direction.",
+          details:svc?svc.details.slice(0,3):["📱 **WhatsApp: +27 720 465 993** ← fastest way to get an answer"],
+          followUp:svc?`${svc.turnaround} · ${svc.price}. Want the full details, or ready to get started?`:"Or pick what fits best:"
         }),
-        suggestions: svc ? ["Tell Me More", "Pricing", "Let's Go", "Other Services"] : ["All Services", "Pricing", "Talk to a Person"]
+        suggestions:svc?["Tell Me More","Pricing","Let's Go","Other Services"]:["🛠️ All Services","💰 Pricing","📞 Talk to a Person"]
       };
     }
-    return {
-      html: buildHTML({
-        text: "Hmm, let's find the right fit — could you tell me a bit more about what you need?",
-        details: ["📱 **WhatsApp: +27 720 465 993** ← fastest way to get an answer", "📧 **info@mellowtech.co.za**"],
-        followUp: "Or pick one of these:"
+    return{
+      html:buildHTML({
+        text:"Hmm, let's find the right fit — could you tell me a bit more about what you need?",
+        details:["📱 **WhatsApp: +27 720 465 993** ← fastest way to get an answer","📧 **Email: info@mellowtech.co.za**"],
+        followUp:"Or pick one of these:"
       }),
-      suggestions: ["All Services", "Pricing", "Websites", "CV Help"]
+      suggestions:["🛠️ All Services","💰 Pricing","🌐 Websites","📄 CV Help"]
     };
   }
 
@@ -318,13 +329,15 @@ window.switchTab = function(id, e){
     const priceCheck=detectPriceQuery(rawInput,scores);
     if(priceCheck.isPriceQuery){const intentKey=priceCheck.intentKey||Memory.getLast();if(intentKey&&SERVICE_INTENTS.has(intentKey)){Memory.push("bot","","pricing");return inlinePriceResponse(intentKey);}Memory.push("bot","","pricing");return pricingResponse();}
     if(sent===-1&&(ranked.length===0||ranked[0].score<THRESHOLD)){Memory.push("bot","","contact");return{html:buildHTML({text:"I can hear this is frustrating — let's get you to the right person right away. 😔",details:["📱 **WhatsApp: +27 720 465 993** ← fastest","📧 **Email: info@mellowtech.co.za**"],note:"They'll get you sorted quickly."}),suggestions:["📞 Contact Team Now","🛠️ Browse Services"]};}
-    // FIX 3 — decisive classify
-    if (ranked.length === 0 || ranked[0].score < THRESHOLD) {
-      if (Memory.isShortOrAffirm(rawInput) && Memory.getLast()) return resolveService(Memory.getLast(), entities, sent);
-      // NEW: if partial-hint matching is confident, just resolve it directly
-      const hints = NLP.extractPartialHints(NLP.normalize(rawInput));
-      if (hints.length && hints[0].matches >= 1 && rawInput.trim().split(/\s+/).length <= 4) {
-        return resolveService(hints[0].intent, entities, sent);
+    if(ranked.length===0||ranked[0].score<THRESHOLD){
+      if(Memory.isShortOrAffirm(rawInput)&&Memory.getLast())return resolveService(Memory.getLast(),entities,sent);
+      // v4.1: if partial-hint matching already found a confident, unambiguous
+      // single candidate on a short input, just answer with it directly
+      // instead of hedging with "did you mean X?" — that hedge was the
+      // clearest possible tell that a script (not the AI) is answering.
+      const hints=NLP.extractPartialHints(NLP.normalize(rawInput));
+      if(hints.length&&hints[0].matches>=1&&rawInput.trim().split(/\s+/).length<=4){
+        return resolveService(hints[0].intent,entities,sent);
       }
       return fallback(rawInput);
     }
@@ -360,7 +373,7 @@ window.switchTab = function(id, e){
 
 
 /* ═══════════════════════════════════════════════════
-   MELLOWBOT AI UI ADAPTER — PHASE 4
+   MELLOWBOT AI UI ADAPTER — PHASE 4 (v4.1)
 ════════════════════════════════════════════════════ */
 window.UI=(function(){
   const SEL={panel:"#mtPanel",messages:"#mtBody",input:"#mtInput",button:".mt-send",typing:"#mtTyping",openBtn:".mt-open-btn",closeBtn:".mt-close-btn"};
@@ -392,7 +405,10 @@ window.UI=(function(){
       if(!panel||!input||!button){console.warn("MellowTech Chat: UI elements missing");return;}
       addAdvancedControls();
       const openBtn=$(SEL.openBtn);
+      // Existing chatbot markup uses inline handlers on most pages; index.html uses none.
+      // openPanel() itself owns the one-time welcome so both wiring styles behave identically.
       if(openBtn&&!openBtn.getAttribute('onclick'))openBtn.addEventListener('click',openPanel);
+
       const closeBtn=$(SEL.closeBtn); if(closeBtn&&!closeBtn.getAttribute('onclick'))closeBtn.addEventListener("click",closePanel);
       if(button&&!button.getAttribute('onclick'))button.addEventListener("click",send);
       if(input&&!input.getAttribute('onkeydown'))input.addEventListener("keydown",(e)=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send();}});
@@ -454,21 +470,23 @@ window.UI=(function(){
     user(text,image);typing(true);
     const result=image?await askMellowBotVision(text,image):await askMellowBotAI(text);
     if(result&&result.ok){typing(false);aiTurnCount++;aiMessages.push({role:'user',content:text});aiMessages.push({role:'assistant',content:result.content});if(aiMessages.length>10)aiMessages=aiMessages.slice(-10);botHTML(renderAIText(result.content),result.suggestions||buildAISuggestions(result),result.action);return;}
-    // FIX 5 — add human-like delay to local fallback
+    // v4.1: local fallback now waits a beat (roughly matching real AI
+    // latency) before rendering, so an instant reply doesn't itself give
+    // away that the AI call failed and we dropped to the local bot.
     let res;
-    try {
-      res = window.MellowTechBot.process(text);
-    } catch (err) {
-      console.error("MellowTechBot error:", err);
+    try{
+      res=window.MellowTechBot.process(text);
+    }catch(err){
+      console.error("MellowTechBot error:",err);
       typing(false);
-      botHTML("<p>Something went wrong — please try again or WhatsApp us at +27 720 465 993 📱</p>", []);
+      botHTML("<p>Something went wrong — please try again or WhatsApp us at +27 720 465 993 📱</p>",[]);
       return;
     }
-    const delay = 500 + Math.random() * 700;
-    setTimeout(() => {
+    const delay=500+Math.random()*700;
+    setTimeout(()=>{
       typing(false);
-      botHTML(res.html, res.suggestions || []);
-    }, delay);
+      botHTML(res.html,res.suggestions||[]);
+    },delay);
   }
   async function askMellowBotAI(text){
     try{const response=await fetch('/api/mellowbot',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[...aiMessages,{role:'user',content:text}],sessionId:sessionId(),page:{path:window.location.pathname,title:document.title,h1:(document.querySelector('h1')?.textContent||'').trim(),turn:aiTurnCount}})});const data=await response.json().catch(()=>null);if(!response.ok||!data?.ok||!data.content)return null;return data;}catch(err){console.warn('MellowBot AI unavailable; using local assistant:',err);return null;}}
@@ -477,8 +495,24 @@ window.UI=(function(){
   function buildAISuggestions(result){const out=[];if(result?.cta&&!/^https?:\/\//.test(result.cta))out.push(result.cta);if(result?.service)out.push('View '+result.service);if(result?.intent==='pricing')out.push('Get an exact quote');if(result?.intent==='contact')out.push('WhatsApp Mellow Tech');return [...new Set(out)].slice(0,4);}
   function renderAIText(text){let safe=esc(String(text||''));safe=safe.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');safe=safe.replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,'<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');safe=safe.replace(/^[-•] (.+)$/gm,'<span class="mwt-ai-bullet">• $1</span>');safe=safe.replace(/\n\n+/g,'</p><p>').replace(/\n/g,'<br>');return `<p>${safe}</p>`;}
   function user(text,image){const box=$(SEL.messages);if(!box)return;const imageTag=image?'<div class="mwt-user-attachment">🖼️ Screenshot attached</div>':'';box.insertAdjacentHTML('beforeend',`<div class="mwt-msg mwt-user"><div class="mwt-bubble">${esc(text)}${imageTag}</div></div>`);scroll();}
-  // FIX 1 — strip emoji from data-chip while keeping display emoji
-  function botHTML(html,suggestions=[],action=null){const box=$(SEL.messages);if(!box)return;box.insertAdjacentHTML("beforeend",`<div class="mwt-msg mwt-bot"><div class="mwt-bubble">${html}</div></div>`);if(action&&action.url){const label=esc(action.label||"Continue"),url=esc(action.url),cls=action.type==='navigate'?'mwt-action mwt-nav':'mwt-action';box.insertAdjacentHTML("beforeend",`<div class="mwt-action-row"><a class="${cls}" href="${url}" ${action.type==='whatsapp'?'target="_blank" rel="noopener noreferrer"':''}>${label} →</a></div>`);}else if(action?.type==='success'){box.insertAdjacentHTML("beforeend",`<div class="mwt-action-row"><span class="mwt-action success">✓ ${esc(action.label||'Done')}</span></div>`);}if(suggestions?.length){const chips=suggestions.map(s=>{const clean=s.replace(/^\p{Extended_Pictographic}\uFE0F?\s*/u, '').trim()||s;return `<button class="mt-chip" data-chip="${esc(clean)}">${esc(s)}</button>`;}).join("");box.insertAdjacentHTML("beforeend",`<div class="mwt-suggestions">${chips}</div>`);}scroll();}
+  // v4.1: suggestion chips now send emoji-stripped text to the bot/AI
+  // (data-chip) while still displaying the emoji version to the user —
+  // this was the actual root cause of chips like "🌐 Website" occasionally
+  // misclassifying.
+  function botHTML(html,suggestions=[],action=null){
+    const box=$(SEL.messages);if(!box)return;
+    box.insertAdjacentHTML("beforeend",`<div class="mwt-msg mwt-bot"><div class="mwt-bubble">${html}</div></div>`);
+    if(action&&action.url){const label=esc(action.label||"Continue"),url=esc(action.url),cls=action.type==='navigate'?'mwt-action mwt-nav':'mwt-action';box.insertAdjacentHTML("beforeend",`<div class="mwt-action-row"><a class="${cls}" href="${url}" ${action.type==='whatsapp'?'target="_blank" rel="noopener noreferrer"':''}>${label} →</a></div>`);}
+    else if(action?.type==='success'){box.insertAdjacentHTML("beforeend",`<div class="mwt-action-row"><span class="mwt-action success">✓ ${esc(action.label||'Done')}</span></div>`);}
+    if(suggestions?.length){
+      const chips=suggestions.map(s=>{
+        const clean=s.replace(/^\p{Extended_Pictographic}\uFE0F?\s*/u,'').trim()||s;
+        return `<button class="mt-chip" data-chip="${esc(clean)}">${esc(s)}</button>`;
+      }).join("");
+      box.insertAdjacentHTML("beforeend",`<div class="mwt-suggestions">${chips}</div>`);
+    }
+    scroll();
+  }
   function typing(show){const t=$(SEL.typing);if(t)t.style.display=show?"flex":"none";}
   function scroll(){const box=$(SEL.messages);if(box)setTimeout(()=>{box.scrollTop=box.scrollHeight;},20);}
   function openPanel(){const panel=$(SEL.panel),open=$(SEL.openBtn);if(panel){panel.classList.add('mt-visible');panel.style.display='flex';if(open)open.style.display='none';if(!welcomed){welcomed=true;botHTML(`<p>Hey! 👋 Welcome to <strong>Mellow Tech</strong>.</p><p>I can answer MellowTech questions, help you choose a service, and now I can also understand screenshots and voice messages.</p>`,WELCOME_CHIPS);}const input=$(SEL.input);if(input)setTimeout(()=>input.focus(),80);}}
