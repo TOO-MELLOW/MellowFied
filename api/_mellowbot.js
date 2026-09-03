@@ -8,6 +8,56 @@ const SITE_PATH = path.join(process.cwd(), 'mellowbot', 'site_pages.json');
 const knowledge = JSON.parse(fs.readFileSync(KNOWLEDGE_PATH, 'utf8'));
 const sitePages = JSON.parse(fs.readFileSync(SITE_PATH, 'utf8'));
 
+// Full legal documents (Terms, Privacy, Disclaimer) are long, low-signal for
+// the model's per-turn prompt, and reciting them from a stale in-context copy
+// is a legal-accuracy risk anyway — the bot should point people to the live
+// page instead of paraphrasing law from memory.
+const LEGAL_PAGES = new Set([
+  '/mellowtech-disclaimer.html',
+  '/mellowtech-privacy-policy.html',
+  '/mellowtech-terms-of-service.html'
+]);
+
+function firstSentence(text, limit = 160) {
+  const clean = String(text || '').trim();
+  const match = clean.match(new RegExp(`^.{20,${limit}}?[.!]`, 's'));
+  return (match ? match[0] : clean.slice(0, limit)).trim();
+}
+
+// PATCH: knowledgeText() used to JSON.stringify the ENTIRE site_pages.json
+// (full heading lists + full paragraph content for every page, including the
+// ~9.7k/8.4k/5.4k-char Terms/Privacy/Disclaimer pages) into every single
+// system prompt. That alone pushed each request to ~11-13k tokens against an
+// 8k TPM cap on the Groq free tier -> every message failed with a 502.
+// SITE_INDEX replaces the raw dump with a lightweight per-page index (path,
+// title, h1, one-line description). Full page content is fetched on demand
+// via the get_page_details tool only when a customer actually needs it.
+const SITE_INDEX = sitePages.map((page) => ({
+  path: page.path,
+  title: page.title || '',
+  h1: page.h1 || '',
+  desc: LEGAL_PAGES.has(page.path)
+    ? 'Full legal document — do not recite from memory; direct the customer to this page for the complete text.'
+    : firstSentence((page.content && page.content[0]) || page.h1 || page.title)
+}));
+
+function findPage(pathOrQuery) {
+  const q = cleanString(pathOrQuery, 200).toLowerCase();
+  if (!q) return null;
+  const byPath = sitePages.find((p) => p.path.toLowerCase() === q || p.path.toLowerCase() === `/${q}`.replace('//', '/'));
+  if (byPath) return byPath;
+  const words = q.split(/[^a-z0-9]+/).filter((w) => w.length > 2);
+  let best = null;
+  let bestScore = 0;
+  for (const p of sitePages) {
+    const hay = `${p.path} ${p.title} ${p.h1} ${(p.headings || []).join(' ')}`.toLowerCase();
+    let score = 0;
+    for (const w of words) if (hay.includes(w)) score += 1;
+    if (score > bestScore) { bestScore = score; best = p; }
+  }
+  return best;
+}
+
 const GROQ_URL = 'https://api.groq.com/openai/v1';
 const MODEL = process.env.MELLOWBOT_GROQ_MODEL || 'openai/gpt-oss-20b';
 const VISION_MODEL = process.env.MELLOWBOT_VISION_MODEL || 'qwen/qwen3.8-27b';
@@ -70,7 +120,7 @@ function cleanPage(pageContext) {
 }
 
 function knowledgeText() {
-  return JSON.stringify({ ...knowledge, site_pages: sitePages });
+  return JSON.stringify({ ...knowledge, site_pages: SITE_INDEX });
 }
 
 function serviceRecords() {
@@ -218,6 +268,7 @@ module.exports = {
   knowledgeText,
   serviceRecords,
   findService,
+  findPage,
   pageMap,
   supabaseRequest,
   upsertSession,
