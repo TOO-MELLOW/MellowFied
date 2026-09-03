@@ -320,7 +320,7 @@ footer{background:#080a0f;color:white;padding:80px 0 40px}
 }
 .mt-open-btn{position:fixed;bottom:28px;right:28px;z-index:8000;width:58px;height:58px;background:linear-gradient(135deg,var(--mt-accent),var(--mt-accent2));border:none;border-radius:16px;cursor:pointer;font-size:22px;box-shadow:0 8px 32px rgba(0,229,160,0.35);display:flex;align-items:center;justify-content:center;transition:transform 0.25s,box-shadow 0.25s}
 .mt-open-btn:hover{transform:scale(1.08);box-shadow:0 12px 40px rgba(0,229,160,0.45)}
-.mt-panel{position:fixed;bottom:28px;right:28px;width:400px;height:min(680px,calc(100vh - 56px));background:var(--mt-surface);border:1px solid var(--mt-border);border-radius:20px;display:overflow;flex-direction:column;overflow:hidden;z-index:8001;box-shadow:0 0 0 1px rgba(0,229,160,0.05),0 40px 80px rgba(0,0,0,0.65),inset 0 1px 0 rgba(255,255,255,0.04)}
+.mt-panel{position:fixed;bottom:28px;right:28px;width:400px;height:min(680px,calc(100vh - 56px));background:var(--mt-surface);border:1px solid var(--mt-border);border-radius:20px;display:none;flex-direction:column;overflow:hidden;z-index:8001;box-shadow:0 0 0 1px rgba(0,229,160,0.05),0 40px 80px rgba(0,0,0,0.65),inset 0 1px 0 rgba(255,255,255,0.04)}
 .mt-panel.mt-visible{display:flex;animation:mtPanelIn 0.4s cubic-bezier(0.16,1,0.3,1) both}
 @keyframes mtPanelIn{from{opacity:0;transform:translateY(24px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 .mt-header{padding:14px 18px;background:var(--mt-surface2);border-bottom:1px solid var(--mt-border);display:flex;align-items:center;gap:12px;flex-shrink:0}
