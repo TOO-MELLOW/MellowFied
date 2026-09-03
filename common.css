@@ -41,7 +41,7 @@ h1,h2,h3,h4,h5{font-family:'Syne',sans-serif;line-height:1.1;letter-spacing:-0.0
 .btn-outline:hover{background:var(--ink);color:var(--lime);transform:translateY(-2px)}
 .btn-lime{background:var(--lime);color:var(--ink)}
 .btn-lime:hover{background:var(--lime-dark);transform:translateY(-2px);box-shadow:0 16px 40px rgba(200,244,90,0.4)}
-#mtPanel, .mt-open-btn { display: none !important; }
+
 /* ── NAV ── */
 nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);z-index:1000;transition:var(--transition),transform 0.3s ease}
 .nav-inner{height:100%;max-width:1260px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between}
