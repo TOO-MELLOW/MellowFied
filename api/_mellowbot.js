@@ -124,6 +124,20 @@ function knowledgeText() {
   return JSON.stringify({ ...knowledge, site_pages: SITE_INDEX });
 }
 
+// PATCH: a turn can fire up to 3 sequential Groq calls (2 tool-routing
+// rounds + 1 final structured answer), each resending the system prompt.
+// The tool-routing rounds only need to decide WHETHER/WHICH tool to call —
+// they don't compose the customer-facing answer (that's always the
+// separate final call), so they don't need the full services/site_pages
+// catalog in-context. knowledgeTextLight() drops the bulky, retrievable-
+// via-tool fields (services, site_pages, related_products) and keeps only
+// what's needed to route correctly, cutting the resent prompt from ~3.2k
+// tokens to well under half that on every tool round.
+function knowledgeTextLight() {
+  const { company, rules, contact, pricing_snapshot } = knowledge;
+  return JSON.stringify({ company, rules, contact, pricing_snapshot });
+}
+
 function serviceRecords() {
   const candidates = knowledge.services || knowledge.service_catalog || knowledge.pricing || [];
   if (Array.isArray(candidates)) return candidates;
@@ -267,6 +281,7 @@ module.exports = {
   cleanMessages,
   cleanPage,
   knowledgeText,
+  knowledgeTextLight,
   serviceRecords,
   findService,
   findPage,
