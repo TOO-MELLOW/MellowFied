@@ -1,7 +1,7 @@
 const {
   MODEL, MAX_BODY_BYTES, json, getBody, cleanString, cleanSessionId, cleanMessages, cleanPage,
   knowledgeText, knowledgeTextLight, findService, findPage, pageMap, upsertSession, insertMessage, createLead
-} = require('./_mellowbot');
+} = require('./_mellowbot_utils');
 
 const RESPONSE_SCHEMA = {
   type: 'json_schema',
@@ -28,15 +28,6 @@ globalThis.__mellowBotRateBuckets = BUCKETS;
 const WINDOW_MS = 60_000;
 const LIMIT = 20;
 
-// ─────────────────────────────────────────────────────────────
-// PATCH: DB/logging calls must never be able to take down an
-// otherwise-healthy AI response. Any failure here (missing env
-// vars, Supabase outage, schema mismatch) is now logged and
-// swallowed instead of bubbling up to the outer try/catch, which
-// previously turned a harmless logging failure into a full 500
-// and silently pushed every single conversation onto the local
-// rule-based fallback bot.
-// ─────────────────────────────────────────────────────────────
 async function safeDb(fn, label) {
   try {
     return await fn();
@@ -66,13 +57,6 @@ function needsResearch(text) {
   return true;
 }
 
-// PATCH: `light` builds the cheap system prompt used only for the internal
-// tool-routing rounds (deciding whether/which tool to call). It swaps the
-// full knowledge dump for knowledgeTextLight() and tells the model plainly
-// that service/page specifics aren't loaded here — fetch them via a tool
-// instead of guessing. The customer-facing answer always comes from the
-// separate final call, which gets the full knowledge base (see below), so
-// answer accuracy is unaffected.
 function buildSystemPrompt(page, { light = false } = {}) {
   return `You are MellowBot, the AI customer assistant for Mellow Tech Services in South Africa.
 
@@ -117,9 +101,6 @@ const TOOLS = [
   { type: 'function', function: { name: 'create_quote_request', description: 'Save an explicit quote request after customer consent. Use the same fields as create_lead.', parameters: { type: 'object', additionalProperties: false, properties: { customer_name: { type: 'string' }, email: { type: 'string' }, phone: { type: 'string' }, service: { type: 'string' }, need: { type: 'string' }, details: { type: 'string' }, consent: { type: 'boolean' } }, required: ['customer_name', 'email', 'phone', 'service', 'need', 'details', 'consent'] } } }
 ];
 
-// PATCH: now async, and create_lead / create_quote_request are try/caught
-// so a Supabase problem returns a soft failure message the model can relay
-// gracefully, instead of throwing and killing the whole AI turn.
 async function executeTool(name, args, context) {
   if (name === 'get_service_details') {
     const record = findService(args?.service);
@@ -141,8 +122,6 @@ async function executeTool(name, args, context) {
       title: page.title || '',
       h1: page.h1 || '',
       headings: page.headings || [],
-      // Capped so one on-demand lookup can't itself blow the token budget;
-      // still far more than the customer needs to quote back accurately.
       content: content.slice(0, 2500)
     };
   }
@@ -171,17 +150,6 @@ async function executeTool(name, args, context) {
   return { ok: false, message: `Unknown tool: ${name}` };
 }
 
-// PATCH: TPM fix. A single user turn can fire up to 3 sequential Groq calls
-// (2 tool rounds + 1 final structured call). All 3 used to request the same
-// reasoning_effort:'medium' + max_completion_tokens:1400, which on a
-// reasoning model like gpt-oss-20b means every call — even a "just pick a
-// tool" round — could burn up to 1400 completion tokens on hidden reasoning
-// alone. Combined with the ~3k-token knowledge base resent as the system
-// prompt on every call, one turn could need ~10k tokens against an
-// 8000/min budget. Tool-calling rounds now get a much smaller budget and
-// lower reasoning effort, since they only need to emit a tool call, not
-// prose. The final call is trimmed too, since the structured answer rarely
-// needs the full 1400.
 async function callGroq(messages, useSchema, tools = TOOLS) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 7000);
@@ -253,10 +221,6 @@ module.exports = async function handler(req, res) {
   let body;
   try { body = getBody(req); }
   catch (err) {
-    // PATCH: previously swallowed the actual parse failure. Now logged so
-    // Vercel function logs show exactly what was received — content-type,
-    // the JS type of req.body, and a safe truncated preview — instead of
-    // just the generic client-facing message.
     console.error('MellowBot invalid JSON body:', {
       contentType: req.headers['content-type'] || null,
       bodyType: Buffer.isBuffer(req.body) ? 'buffer' : typeof req.body,
@@ -280,21 +244,26 @@ module.exports = async function handler(req, res) {
         ...messages
       ];
       const result = await research(prompt);
-      // PATCH: was `await upsertSession(...)` unguarded — a DB failure here
-      // used to throw all the way out and 500 an otherwise-successful
-      // research answer.
       await safeDb(() => upsertSession({ sessionId, page, req }), 'upsertSession/research');
       const answer = result?.choices?.[0]?.message?.content;
       if (!answer) return json(res, 502, { ok: false, error: 'The research service returned no answer.' });
       return json(res, 200, { ok: true, requestId, content: answer, mode: 'research', suggestions: ['Ask about MellowTech', 'WhatsApp Mellow Tech'], action: null, model: result.model || MODEL, usage: result.usage || null });
     }
 
-    // PATCH: same guard on the main path's session upsert.
     await safeDb(() => upsertSession({ sessionId, page, req }), 'upsertSession/main');
-    const workingMessages = [
-      { role: 'system', content: buildSystemPrompt(page) },
+
+    // --- TPM FIX START ---
+    // Build two versions of the system prompt: full for final answer, light for tool rounds.
+    const fullSystem = buildSystemPrompt(page);
+    const lightSystem = buildSystemPrompt(page, { light: true });
+
+    // Use the light system prompt during tool-calling iterations.
+    const toolMessages = [
+      { role: 'system', content: lightSystem },
       ...messages
     ];
+    // --- TPM FIX END ---
+
     let finalData = null;
     let lastToolResult = null;
     const priorAssistant = messages.length > 1 ? messages[messages.length - 2] : null;
@@ -307,7 +276,7 @@ module.exports = async function handler(req, res) {
     // Allow up to two tool rounds, then always issue one final structured-response call.
     // This guarantees a final answer even when the model needs two sequential tools.
     for (let iteration = 0; iteration < 2; iteration += 1) {
-      const response = await callGroq(workingMessages, false, availableTools);
+      const response = await callGroq(toolMessages, false, availableTools);
       const data = await response.json();
       if (!response.ok) {
         console.error('Groq API error:', response.status, data);
@@ -315,21 +284,25 @@ module.exports = async function handler(req, res) {
       }
       const message = data?.choices?.[0]?.message;
       if (!message) return json(res, 502, { ok: false, error: 'The AI returned no message.' });
-      workingMessages.push({ role: 'assistant', content: message.content || '', ...(message.tool_calls ? { tool_calls: message.tool_calls } : {}) });
+      toolMessages.push({ role: 'assistant', content: message.content || '', ...(message.tool_calls ? { tool_calls: message.tool_calls } : {}) });
       if (Array.isArray(message.tool_calls) && message.tool_calls.length) {
         for (const toolCall of message.tool_calls.slice(0, 3)) {
           let args = {};
           try { args = JSON.parse(toolCall.function?.arguments || '{}'); } catch { args = {}; }
           const result = await executeTool(toolCall.function?.name, args, context);
           lastToolResult = { name: toolCall.function?.name, result };
-          workingMessages.push({ role: 'tool', tool_call_id: toolCall.id, name: toolCall.function?.name, content: JSON.stringify(result) });
+          toolMessages.push({ role: 'tool', tool_call_id: toolCall.id, name: toolCall.function?.name, content: JSON.stringify(result) });
         }
         continue;
       }
       break;
     }
 
-    const finalResponse = await callGroq(workingMessages, true);
+    // --- TPM FIX: Replace the system prompt with the full version for the final answer ---
+    const finalMessages = toolMessages.slice(); // copy the conversation history
+    finalMessages[0] = { role: 'system', content: fullSystem }; // swap system prompt
+
+    const finalResponse = await callGroq(finalMessages, true);
     const final = await finalResponse.json();
     if (!finalResponse.ok) {
       console.error('Groq structured response error:', finalResponse.status, final);
@@ -371,9 +344,6 @@ module.exports = async function handler(req, res) {
       model: finalData.model || MODEL,
       usage: finalData.usage || null
     };
-    // PATCH: message logging is now best-effort. A DB hiccup here no longer
-    // costs the user their answer — it just means that one turn doesn't get
-    // logged, which is silently acceptable.
     if (context.leadConsent) {
       await safeDb(() => insertMessage({ sessionId, role: 'user', content: lastUserText, page, requestId }), 'insertMessage/user');
       await safeDb(() => insertMessage({ sessionId, role: 'assistant', content: result.content, page, intent: result.intent, service: result.service, requestId }), 'insertMessage/assistant');
