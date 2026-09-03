@@ -79,8 +79,9 @@ function json(res, status, body) {
 }
 
 function getBody(req) {
+  if (Buffer.isBuffer(req.body)) return JSON.parse(req.body.toString('utf8').trim() || '{}') || {};
   if (typeof req.body === 'object' && req.body !== null) return req.body;
-  if (typeof req.body === 'string') return JSON.parse(req.body || '{}') || {};
+  if (typeof req.body === 'string') return JSON.parse(req.body.trim() || '{}') || {};
   return {};
 }
 
